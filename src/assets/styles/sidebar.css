@@ -1,0 +1,141 @@
+.css-tyf2fs  {
+  position: relative;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-color: #efefef;
+  transition: width, left, right, 300ms;
+  width: 250px;
+  min-width: 250px;
+  color: #666666;
+  height: 100vh;
+  position: fixed;
+}
+.css-hdjfc8 {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 3;
+  background-color: rgba(244, 245, 245, 1);
+}
+.css-1tj4r57 {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #111111;
+}
+.css-14shbgo {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 30px;
+  font-weight: 400;
+  color: #6A6A6A;
+  font-size: 14px;
+}
+.css-c7rm69 {
+  height: -moz-fit-content;
+  height: fit-content;
+  display: -ms-flexbox;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+.css-ewdv3l {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.css-16mkknz {
+  width: 100%;
+  position: relative;
+  font-size: 15px;
+  font-weight: 500;
+}
+.css-16mkknz >.ps-menu-button {
+  display: -ms-flexbox;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-transition: all;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding-right: 20px;
+  padding-left: 20px;
+  border-radius: 10px;
+  transition: all;
+}
+.css-c7rm69 >div {
+  width: 100%;
+  overflow: hidden;
+}
+.css-16mkknz >.ps-menu-button:focus {
+  background-color: rgba(224, 224, 224, 1);
+  color: #111111;
+}
+.css-16mkknz >.ps-menu-button:hover {
+  background-color: rgba(232, 234, 235, 1);
+  color: #111111;
+}
+.css-6vrklx {
+  width: 35px;
+  min-width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  color: #666666;
+}
+.css-12w9als {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.css-dbbc33.ps-collapsed {
+  width: 80px;
+  min-width: 80px;
+}
+.css-dbbc33.ps-broken {
+  position: fixed; 
+  height: 100%;
+  top: 0px;
+  z-index: 100;
+  left: -250px;
+}
+.css-dbbc33.ps-broken.ps-toggled {
+  left: 0;
+}
+.css-49v479 {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  background: linear-gradient(45deg, rgb(21 87 205) 0%, rgb(90 225 255) 100%);
+}

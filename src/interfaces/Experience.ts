@@ -1,9 +1,10 @@
 export default interface Experience {
-  init_year: Date,
-  end_year: Date,
+  initYear: Date,
+  endYear: Date,
   position: string,
-  company_name: string,
+  companyName: string,
   details: string,
   link: string,
+  present: boolean,
   content: string,
 }

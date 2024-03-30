@@ -3,6 +3,6 @@ export default interface Testimonial {
   position: string,
   project: string,
   testimonial: string,
-  photo: string,
-
+  photo: {node:{mediaItemUrl: string}},
+  linkedin_url: string
 }

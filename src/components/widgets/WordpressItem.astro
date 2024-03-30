@@ -1,0 +1,22 @@
+---
+import Image from "astro/components/Image.astro"
+
+const {path, item } = Astro.props
+const {slug,thumbnail ,name,type} = item
+---
+<a class="w-full space-y-4 " href={path + '/' + slug}>
+    <div class="w-full overflow-hidden rounded-xl">
+      <Image class='shadow-md transition-transform w-full hover:scale-110 rounded-xl' src={thumbnail.node.mediaItemUrl} width={200} height={100} alt={`Image of item: ${type}`} />
+    </div>
+    <div class="flex items-center justify-between ">
+      <div class="">
+        <p class="font-medium  text-title text-[#101010] dark:text-[#E5ECF6]">{name}</p>
+        <p class="text-sm">{type}</p>
+      </div>
+      {item.currency && 
+        <div class="px-3 py-2 bg-[#EFEFF0] dark:bg-[#282828] rounded-xl ">
+           ${item.price? item.price : 0}
+        </div>
+      }
+  </div>
+</a>

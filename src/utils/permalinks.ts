@@ -67,6 +67,10 @@ export const getPermalink = (slug = '', type = 'page'): string => {
 /** */
 export const getHomePermalink = (): string => getPermalink('/');
 
+export const getProjectsPermaLink = (): string => getPermalink('/projects');
+
+export const getStorePermaLink = (): string => getPermalink('/store');
+
 /** */
 export const getBlogPermalink = (): string => getPermalink(BLOG_BASE);
 

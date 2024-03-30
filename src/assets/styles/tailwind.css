@@ -19,18 +19,41 @@
     color: var(--aw-color-text-muted);
   }
 }
-
+.text-subtitle {
+  @apply text-[#666666] dark:text-[#A3A3A3]
+}
+p {
+  @apply text-[#717171] dark:text-[#9A9A9A]
+}
+.color-brand {
+  @apply text-[#A30000] fill-[#A30000] dark:text-[#ffa9a9] dark:fill-[#ffa9a9]
+}
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
+    @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-base text-page leading-snug transition py-2.5 px-4  ease-in duration-200   hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
   }
 
   .btn-primary {
-    @apply btn font-semibold bg-primary text-white border-primary hover:bg-secondary hover:border-secondary hover:text-white dark:text-white dark:bg-primary dark:border-primary dark:hover:border-secondary dark:hover:bg-secondary;
+    @apply btn transition shadow-md text-sm xl:text-xs;
+    background-color: #303236;
+    border-radius: 12px;
+    opacity: 1;
+    height: 100%;
+    font: 500;
+    color: white;
+   
   }
-
+  .btn-primary:hover{
+    background-color: #1a1b1d;
+  }
   .btn-secondary {
-    @apply btn;
+    @apply btn transition shadow-md text-sm xl:text-xs;
+    background-color:transparent;
+    border-radius: 12px;
+    opacity: 1;
+    font: 500;
+    color: #303236;
+    border: 1px solid #9EA1A8
   }
 
   .btn-tertiary {

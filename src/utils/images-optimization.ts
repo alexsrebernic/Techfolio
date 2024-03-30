@@ -231,7 +231,6 @@ export const unpicOptimizer: ImagesOptimizer = async (image, breakpoints, width,
   if (!image || typeof image !== 'string') {
     return [];
   }
-
   const urlParsed = parseUrl(image);
   if (!urlParsed) {
     return [];
@@ -301,7 +300,6 @@ export async function getImagesOptimized(
   const srcset = (await transform(image, breakpoints, Number(width) || undefined, Number(height) || undefined))
     .map(({ src, width }) => `${src} ${width}w`)
     .join(', ');
-
   return {
     src: typeof image === 'string' ? image : image.src,
     attributes: {

@@ -19,8 +19,6 @@ const StyledSidebarFooter = styled.div`
   padding: 20px;
   border-radius: 8px;
   color: white;
-  background: linear-gradient(45deg, rgb(21 87 205) 0%, rgb(90 225 255) 100%);
-  /* background: #0098e5; */
 `;
 
 const StyledCollapsedSidebarFooter = styled.a`
@@ -33,12 +31,15 @@ const StyledCollapsedSidebarFooter = styled.a`
   cursor: pointer;
   border-radius: 50%;
   color: white;
-  background: linear-gradient(45deg, rgb(21 87 205) 0%, rgb(90 225 255) 100%);
-  /* background: #0098e5; */
 `;
 
 
 export const SidebarFooter: React.FC<SidebarFooterProps> = ({ children, collapsed, ...rest }) => {
+  function toggleTheme(){
+    document.documentElement.classList.toggle('dark');
+    localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    window.dispatchEvent(new Event("storage"));
+  }
   return (
     <div
       style={{
@@ -49,9 +50,15 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ children, collapse
     >
       {collapsed ? (
         <StyledCollapsedSidebarFooter >
+          <span onClick={toggleTheme}>
+          {children}
+          </span>
         </StyledCollapsedSidebarFooter>
       ) : (
         <StyledSidebarFooter {...rest}>
+           <span onClick={toggleTheme}>
+          {children}
+          </span>
         </StyledSidebarFooter>
       )}
     </div>

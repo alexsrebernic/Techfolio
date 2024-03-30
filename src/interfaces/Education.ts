@@ -1,7 +1,11 @@
 export default interface Education {
-  init_year: Date,
-  end_year: Date,
   degree: string,
   establishment: string,
+  initYear: Date,
+  endYear: Date,
+  position: string,
   details: string,
+  link: string,
+  present: boolean,
+  content: string,
 }

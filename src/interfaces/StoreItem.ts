@@ -1,0 +1,16 @@
+export default interface StoreItem {
+  name: string,
+  type: string,
+  thumbnail: {node:{mediaItemUrl: string}},
+  price: number,
+  currency: string,
+  content: string,
+  link: string,
+  slug: string,
+  excerpt: string,
+  title: string,
+  status: string,
+  date: Date,
+  id: string,
+  modified: Date,
+}

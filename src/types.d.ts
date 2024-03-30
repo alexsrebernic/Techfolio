@@ -184,6 +184,7 @@ export interface CallToAction extends HTMLAttributes<a> {
 }
 
 export interface ItemGrid {
+  title? : string;
   items?: Array<Item>;
   columns?: number;
   defaultIcon?: string;

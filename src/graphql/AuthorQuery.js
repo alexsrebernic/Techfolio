@@ -1,40 +1,40 @@
-export default  `query Author {
-  languages {
-    nodes {
-      languageItem {
-        language
-        level
-      }
-    }
-  }
+export default  `query Owner {
   owners {
     edges {
       node {
         author {
+          availableForWork
+          briefIntroduction
+          currentSituation
           email
           facebookUrl
           fieldGroupName
-          githubUrl
           firstName
+          githubUrl
           instagramUrl
-          linkedinUrl
           lastName
-          photo {
-            node {
-              mediaItemUrl
-            }
-          }
+          linkedinUrl
           pinterestUrl
+          role
           services
           stackoverflowUrl
-          telephoneNumber
+          phonenumber
           tools
           twitchUrl
           twitterUrl
           whatsappUrl
           youtubeUrl
+          photo {
+            node {
+              slug
+              sourceUrl(size: LARGE)
+              srcSet(size: LARGE)
+              mediaItemUrl
+            }
+          }
+          ubication
+          slogan
         }
-        content(format: RENDERED)
       }
     }
   }

@@ -23,6 +23,85 @@ export interface I18NConfig {
   dateFormatter?: Intl.DateTimeFormat;
 }
 export interface AppBlogConfig {
+  isWordpressEnabled: boolean;
+  isEnabled: boolean;
+  postsPerPage: number;
+  isRelatedPostsEnabled: boolean;
+  relatedPostsCount: number;
+  post: {
+    isEnabled: boolean;
+    permalink: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+  list: {
+    isEnabled: boolean;
+    pathname: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+  category: {
+    isEnabled: boolean;
+    pathname: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+  tag: {
+    isEnabled: boolean;
+    pathname: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+}
+export interface AppProjectsConfig {
+  isWordpressEnabled: boolean;
+  isEnabled: boolean;
+  postsPerPage: number;
+  isRelatedPostsEnabled: boolean;
+  relatedPostsCount: number;
+  post: {
+    isEnabled: boolean;
+    permalink: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+  list: {
+    isEnabled: boolean;
+    pathname: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+  category: {
+    isEnabled: boolean;
+    pathname: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+  tag: {
+    isEnabled: boolean;
+    pathname: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
+}
+export interface AppItemShopConfig {
+  isWordpressEnabled: boolean;
   isEnabled: boolean;
   postsPerPage: number;
   isRelatedPostsEnabled: boolean;
@@ -136,6 +215,7 @@ const getI18N = () => {
 
 const getAppBlog = () => {
   const _default = {
+    isWordpressEnabled: false,
     isEnabled: false,
     postsPerPage: 6,
     isRelatedPostsEnabled: false,
@@ -173,10 +253,92 @@ const getAppBlog = () => {
       },
     },
   };
-
   return merge({}, _default, config?.apps?.blog ?? {}) as AppBlogConfig;
 };
-
+const getAppProjects = () => {
+  const _default = {
+    isWordpressEnabled: false,
+    isEnabled: false,
+    postsPerPage: 6,
+    isRelatedPostsEnabled: false,
+    relatedPostsCount: 4,
+    post: {
+      isEnabled: true,
+      permalink: '/blog/%slug%',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    list: {
+      isEnabled: true,
+      pathname: 'blog',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    category: {
+      isEnabled: true,
+      pathname: 'category',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    tag: {
+      isEnabled: true,
+      pathname: 'tag',
+      robots: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
+  return merge({}, _default, config?.apps?.blog ?? {}) as AppBlogConfig;
+};
+const getAppStore = () => {
+  const _default = {
+    isWordpressEnabled: false,
+    isEnabled: false,
+    postsPerPage: 6,
+    isRelatedPostsEnabled: false,
+    relatedPostsCount: 4,
+    post: {
+      isEnabled: true,
+      permalink: '/blog/%slug%',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    list: {
+      isEnabled: true,
+      pathname: 'blog',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    category: {
+      isEnabled: true,
+      pathname: 'category',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    tag: {
+      isEnabled: true,
+      pathname: 'tag',
+      robots: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
+  return merge({}, _default, config?.apps?.blog ?? {}) as AppBlogConfig;
+};
 const getUI = () => {
   const _default = {
     theme: 'system',
@@ -204,5 +366,7 @@ export const SITE = getSite();
 export const I18N = getI18N();
 export const METADATA = getMetadata();
 export const APP_BLOG = getAppBlog();
+export const APP_PROJECTS = getAppProjects();
+export const APP_STORE = getAppStore();
 export const UI = getUI();
 export const ANALYTICS = getAnalytics();

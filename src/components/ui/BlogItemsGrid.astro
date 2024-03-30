@@ -1,0 +1,12 @@
+---
+import BlogItem from "../widgets/BlogItem.astro"
+const {items, title} = Astro.props
+---
+<div class="space-y-14">
+  <div>
+    <h2 class="text-2xl font-[500]">{title && title}</h2>
+  </div>
+  {items.map(item => (
+    <BlogItem post={item}/>
+  ))}
+</div>

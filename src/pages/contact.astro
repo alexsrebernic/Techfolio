@@ -1,78 +1,70 @@
 ---
 import Layout from '@/layouts/PageLayout.astro';
-import HeroText from '@/components/widgets/HeroText.astro';
-import ContactUs from '@/components/widgets/Contact.astro';
-import Features2 from '@/components/widgets/Features2.astro';
+import AuthorQuery from '@/graphql/AuthorQuery';
+import { wpquery } from '@/data/wordpress';
+import Button from '@/components/ui/Button.astro';
+import type Author from '@/interfaces/Author';
+import Form from '@/components/ui/Form.astro';
 
 const metadata = {
-  title: 'Contact',
+  title: "Contact | Alex's Portfolio",
+  ignoreTitleTemplate: true,
 };
+const { email,phonenumber } : Author = (await wpquery({query: AuthorQuery})).owners.edges[0].node.author
+const inputs = [
+  {
+    type: 'text',
+    placeholder: 'Name',
+    name: 'Name'
+  },
+  {
+    type: 'email',
+    placeholder: 'Email',
+    name: 'Email'
+  },
+]
+const textarea = {
+  placeholder:'Message'
+}
 ---
 
 <Layout metadata={metadata}>
-  <!-- HeroText Widget ******************* -->
-
-  <HeroText tagline="Contact" title="Let's Connect!" />
-
-  <ContactUs
-    title="Drop us a message today!"
-    subtitle="For quicker answers, explore our FAQs section. You may find the solution you're looking  for right there! If not, our support team is delighted to help you."
-    inputs={[
-      {
-        type: 'text',
-        name: 'name',
-        label: 'Name',
-      },
-      {
-        type: 'email',
-        name: 'email',
-        label: 'Email',
-      },
-    ]}
-    textarea={{
-      label: 'Message',
-    }}
-    disclaimer={{
-      label:
-        'By submitting this contact form, you acknowledge and agree to the collection of your personal information.',
-    }}
-    description="Our support team typically responds within 24 business hours."
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="We are here to help!"
-    items={[
-      {
-        title: 'General support',
-        description: `Chat with us for inquiries related to account management, website navigation, payment issues, accessing purchased templates or general questions about the website's functionality.`,
-      },
-      {
-        title: 'Contact sales',
-        description:
-          'Chat with us for questions about purchases, customization options, licensing for commercial use, inquiries about specific template, etc.',
-      },
-      {
-        title: 'Technical support',
-        description:
-          'Chat with us when facing issues like template installation, problems editing difficulties, compatibility issues with software or download errors, or other technical challenges related to using the templates.',
-      },
-      {
-        title: 'Phone',
-        description: '+1 (234) 567-890',
-        icon: 'tabler:headset',
-      },
-      {
-        title: 'Email',
-        description: 'contact@support.com',
-        icon: 'tabler:mail',
-      },
-      {
-        title: 'Location',
-        description: '1234 Lorem Ipsum St, 12345, Miami, EEUU',
-        icon: 'tabler:map-pin',
-      },
-    ]}
-  />
+  <section class="border-b py-5 dark:border-b-[#424242]">
+    <div class="space-y-4 font-[600]">
+      <h1 class="text-3xl font-[600] ">
+        Contact
+      </h1>
+      <p class="text-sm font-[400] text-subtitle">
+        Get in touch for web development inquiries
+      </p>
+    </div>
+  </section>
+  <section>
+    <div class="flex space-y-4 md:space-y-0 md:flex-row md:items-center justify-between py-8 flex-col items-start">
+      <div class="flex-1">
+        <p class="text-[#111111] ">
+          {email}
+        </p>
+        <p class="text-xs text-subtitle">
+          E-mail
+        </p>
+      </div>
+      <div class="flex-1">
+        <p class="text-[#111111]">
+          {phonenumber}
+        </p>
+        <p class="text-xs text-subtitle">
+          Phone number
+        </p>
+      </div>
+    </div>
+    <div>
+      <Button href="/about"  variant="primary" text="Schedule a call" />
+      <Button id="copyEmailButton" type="button" icon="copy" variant="secondary" text="Copy email"/>
+    </div>
+  </section>
+  <section class="py-10 space-y-6">
+    <h2 class="text-2xl font-[500]">Send a message</h2>
+    <Form inputs={inputs} textarea={textarea}/>
+  </section>
 </Layout>
