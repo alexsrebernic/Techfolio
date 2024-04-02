@@ -4,27 +4,187 @@ import { Icon } from 'astro-icon/components';
 import Image from '@/components/common/Image.astro';
 import PostTags from '@/components/blog/Tags.astro';
 import SocialShare from '@/components/common/SocialShare.astro';
-
-import { getPermalink } from '@/utils/permalinks';
+import TestimonialItem from '@/components/widgets/TestimonialItem.astro'
+import { getPermaProjectsLink } from '@/utils/permalinks';
 import { getFormattedDate } from '@/utils/utils';
-
-import type Project from '@/interfaces/Project';
+import Button from '../ui/Button.astro';
+import type NormalizedProject from '@/interfaces/NormalizedProject';
 
 export interface Props {
-  project: Project;
+  project: NormalizedProject;
   url: string | URL;
 }
 
 const { project, url } = Astro.props;
-const { content } = project;
+const {title,tags} = project
 ---
 
 <section class="   mx-auto">
-  <article>
-     
+  <article class="">
+    <header class={project.image ? 'space-y-10' : ''}>
+      <PostTags tags={tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
+
+    <div class="space-y-6">
+        <h1
+        class=" mx-auto text-4xl md:text-5xl font-medium leading-tighter tracking-tighter font-heading break-all"
+      >
+        {project.title}
+      </h1>
+      <p
+        class=" mx-auto mt-4 mb-8  text-md   dark:text-slate-400 text-justify"
+      >
+      {project.excerpt && project.excerpt.replace(/<\/?p>/g, '')    }
+
+      </p>
+      <Button variant="primary" text="Live preview" href={project.url}/>
+    </div>
+    
+
+      {
+        project.image ? (
+          <Image
+            src={project.image}
+            class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+            widths={[400, 900]}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={project?.excerpt || ''}
+            width={900}
+            height={506}
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="border-t dark:border-slate-700" />
+          </div>
+        )
+      }
+    </header>
+    <main>
+      <div class="grid md:grid-cols-2  rounded-xl gap-1 pt-10">
+        <div class="bg-[#EFEFF0] dark:bg-[#282828] rounded-xl md:rounded-none md:rounded-tl-xl  md:rounded-bl-xl py-7 px-8 flex items-center justify-center flex-col space-y-2">
+          <Icon class='color-brand-light'  size={20} name='calendar'/>
+          <time datetime={String(project.init_year)} class="inline-block">{new Date(project.init_year).toLocaleString('en-US', {month: 'long',year: 'numeric'})} -  {project.present? 'Present' : new Date(project.end_year).toLocaleString('en-US', {month: 'long',year: 'numeric'}) }</time>
+          <p class="text-sm">Timeline</p>
+        </div>
+        <div class="bg-[#EFEFF0] dark:bg-[#282828]  rounded-xl md:rounded-none md:rounded-tr-xl  md:rounded-br-xl py-7 px-8 flex items-center justify-center flex-col space-y-2">
+          <Icon class='color-brand-light' size={20} name="user"/>
+          <span>{project.role}</span>
+          <p class="text-sm">Role</p>
+        </div>
+      </div>
+      <div class="flex items-start justify-center py-10  flex-col space-y-3 md:space-y-0 md:flex-row">
+        <div class="flex-initial min-w-[250px]">
+          <h3 class="text-xl font-medium">Background</h3>
+        </div>
+        <div class="flex-1">
+          <p>
+            {project.background}
+          </p>
+        </div>
+      </div>
+      <hr>
+      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
+        <div class="flex-initial min-w-[250px]">
+          <h3 class="text-xl font-medium">Goals</h3>
+        </div>
+        <div class="flex-1 space-y-6">
+          {project.goals.map((item,index) => (
+            <div class="flex gap-4 flex-col md:flex-row">
+              <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+                <span class="color-brand">
+                  {index + 1}
+                </span>
+              </div>
+              <div class="flex-1 space-y-3">
+                <span>
+                  {item.title}
+                  </span>
+                <p class="text-sm">
+                  {item.paragraph}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {
+        project.image_1 ? (
+          <Image
+            src={project.image_1}
+            class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+            widths={[400, 900]}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={project?.excerpt || ''}
+            width={900}
+            height={506}
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="border-t dark:border-slate-700" />
+          </div>
+        )
+      }
+      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
+        <div class="flex-initial min-w-[250px]">
+          <h3 class="text-xl font-medium">Solutions</h3>
+        </div>
+        <div class="flex-1 space-y-6">
+          {project.solutions.map((item,index) => (
+            <div class="flex gap-4 flex-col md:flex-row">
+              <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+                <span class="color-brand">
+                  {index + 1}
+                </span>
+              </div>
+              <div class="flex-1 space-y-3">
+                <span>
+                  {item.title}
+                  </span>
+                <p class="text-sm">
+                  {item.paragraph}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <hr>
+      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row ">
+        <div class="flex-initial min-w-[250px]">
+          <h3 class="text-xl font-medium">Tools</h3>
+        </div>
+        <div class="flex-1 gap-1 rounded-xl grid grid-cols-2 ">
+          {project.tools.map((item) => (
+            <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828] ">
+              <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/${item.toLowerCase().replaceAll(' ', '')}`}/>
+              <span class="flex-1">
+                {item}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div>
+        <TestimonialItem item={project.testimonial}/>
+      </div>
+      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
+        <div class="flex-initial min-w-[250px]">
+          <h3 class="text-xl font-medium">Conclusion</h3>
+        </div>
+        <div class="flex-1 space-y-6">
+          <p class="text-sm">
+            {project.conclusion}
+          </p>
+        </div>
+      </div>
+      <hr>
+    </main>
     <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
-      <PostTags tags={project.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
-      <SocialShare url={url} text={project.title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
+      <PostTags tags={tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
+      <SocialShare url={url} text={title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
     </div>
   </article>
 </section>

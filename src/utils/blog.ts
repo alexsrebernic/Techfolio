@@ -245,12 +245,11 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
   posts.map((post) => {
     Array.isArray(post.tags) && post.tags.map((tag) => tags.add(tag.toLowerCase()));
   });
-
   return Array.from(tags).flatMap((tag) =>
     paginate(
       posts.filter((post) => Array.isArray(post.tags) && post.tags.find((elem) => elem.toLowerCase() === tag)),
       {
-        params: { tag: tag, blog: TAG_BASE || undefined },
+        params: { tag: tag, store: TAG_BASE || undefined },
         pageSize: blogPostsPerPage,
         props: { tag },
       }

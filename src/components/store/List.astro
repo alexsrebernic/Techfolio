@@ -1,0 +1,20 @@
+---
+import Item from '@/components/store/ListItem.astro';
+import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
+
+export interface Props {
+  posts: Array<NormalizedStoreItem>;
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="grid md:grid-cols-2">
+  {
+    posts.map((post) => (
+      <li class="mb-12 md:mb-20">
+        <Item post={post} />
+      </li>
+    ))
+  }
+</ul>

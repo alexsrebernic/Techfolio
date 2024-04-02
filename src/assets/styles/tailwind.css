@@ -26,7 +26,19 @@ p {
   @apply text-[#717171] dark:text-[#9A9A9A]
 }
 .color-brand {
-  @apply text-[#A30000] fill-[#A30000] dark:text-[#ffa9a9] dark:fill-[#ffa9a9]
+  @apply text-[#A30000] fill-[#A30000] dark:text-[#ff5c5c] dark:fill-[#ff5c5c]
+}
+.color-brand-light {
+  @apply text-[#a3000073] fill-[#a3000073] dark:text-[#ffc9c9] dark:fill-[#ffc9c9]
+}
+.bg-color-brand {
+  @apply bg-[#A30000] dark:bg-[#ff5c5c]
+}
+.bg-color-brand-light {
+  @apply bg-[#a3000073] dark:bg-[#ffc9c9]
+}
+hr {
+  @apply dark:border-[#272727]
 }
 @layer components {
   .btn {

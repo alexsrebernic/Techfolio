@@ -1,11 +1,12 @@
 import type { PaginateFunction } from 'astro';
 
-import type Post from '@/interfaces/Post';
-import { APP_BLOG } from '@/utils/config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
+import type StoreItem from '@/interfaces/StoreItem';
+import { APP_STORE } from '@/utils/config';
+import { cleanSlug, trimSlash, STORE_BASE, STORE_ITEM_PERMALINK_PATTERN, CATEGORY_STORE_BASE, TAG_STORE_BASE } from './permalinks';
 import { wpquery } from '@/data/wordpress';
-import PostQuery from '@/graphql/PostQuery';
-import type NormalizedPost from '@/interfaces/NormalizedPost';
+import StoreItemQuery from '@/graphql/StoreItemQuery';
+import parseHTMLToListObjects from '@/helpers/parseHTMLToObject';
 
 const generatePermalink = async ({
   id,
@@ -25,7 +26,7 @@ const generatePermalink = async ({
   const minute = String(publishDate.getMinutes()).padStart(2, '0');
   const second = String(publishDate.getSeconds()).padStart(2, '0');
 
-  const permalink = POST_PERMALINK_PATTERN.replace('%slug%', slug)
+  const permalink = STORE_ITEM_PERMALINK_PATTERN.replace('%slug%', slug)
     .replace('%id%', id)
     .replace('%category%', category || '')
     .replace('%year%', year)
@@ -42,29 +43,27 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: Post): Promise<NormalizedPost> => {
-  const _tags = post.tags.edges.map(item => item.node.name)
-  const categories = post.categories.edges.map(item => item.node.name)
+const getNormalizedStoreItem = async (storeItem: StoreItem): Promise<NormalizedStoreItem> => {
+  console.log(storeItem)
+  const _tags = [storeItem.type]
   const _data = {
-    publishDate: post.date,
-    title: post.title,
-    excerpt: post.excerpt,
-    image: post.featuredImage.node.mediaItemUrl,
+    publishDate: storeItem.date,
+    title: storeItem.title,
+    excerpt: storeItem.briefDescription,
+    image: storeItem.thumbnail.node.mediaItemUrl,
     tags: _tags,
-    category : categories[0],
-    author: post.author.node.name,
-    updateDate: post.modified,
-    draft: post.draft,
+    updateDate: storeItem.modified,
+    draft: storeItem.draft,
+    price: storeItem.price 
   }
-  const _post = {
+  const _storeItem = {
     data: _data,
-    body: post.content,
-    collection: 'post',
-    id: post.id,
-    slug: post.slug,
-    author: post.author
+    body: storeItem.content,
+    collection: 'storeItem',
+    id: storeItem.id,
+    slug: storeItem.slug,
   }
-  const { id, slug: rawSlug = '', data } = _post;
+  const { id, slug: rawSlug = '', data } = _storeItem;
 
   const {
     publishDate: rawPublishDate = new Date(),
@@ -73,43 +72,44 @@ const getNormalizedPost = async (post: Post): Promise<NormalizedPost> => {
     excerpt,
     image,
     tags: rawTags = [],
-    category: rawCategory,
-    author,
     draft = false,
     metadata = {},
+    price = 0,
   } = data;
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
-  const category = rawCategory ? cleanSlug(rawCategory) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
 
   return {
     id: id,
     slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category }),
-
+    permalink: await generatePermalink({ id, slug, publishDate, category: '' }),
+    price,
     publishDate: publishDate,
     updateDate: updateDate,
-
     title: title,
     excerpt: excerpt,
     image: image,
-
-    category: category,
+    currency: storeItem.currency,
+    items: storeItem.items.split('\r\n'),
+    image_1: storeItem.image1 && storeItem.image1.node.mediaItemUrl,
+    image_2: storeItem.image2 &&storeItem.image2.node.mediaItemUrl,
+    image_3: storeItem.image3 && storeItem.image3.node.mediaItemUrl,
+    image_4: storeItem.image4 && storeItem.image4.node.mediaItemUrl,
+    preview_url: storeItem.preview_link,
+    buy_url: storeItem.buy_link, 
     tags: tags,
-    author: author,
-    content: post.content,
+    content: storeItem.content && parseHTMLToListObjects(storeItem.content) ,
     draft: draft,
+    description: storeItem.description,
     metadata,
-
-    readingTime: post?.readingTime,
   };
 
 };
 
-const getRandomizedPosts = (array: NormalizedPost[], num: number) => {
-  const newArray: NormalizedPost[] = [];
+const getRandomizedStoreItems = (array: NormalizedStoreItem[], num: number) => {
+  const newArray: NormalizedStoreItem[] = [];
 
   while (newArray.length < num && array.length > 0) {
     const randomIndex = Math.floor(Math.random() * array.length);
@@ -120,97 +120,106 @@ const getRandomizedPosts = (array: NormalizedPost[], num: number) => {
   return newArray;
 };
 
-const load = async function (): Promise<Array<NormalizedPost>> {
-  const posts = (await wpquery({query : PostQuery})).posts.nodes ;
-  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
+const load = async function (): Promise<Array<NormalizedStoreItem>> {
+  const storeItems = (await wpquery({query : StoreItemQuery})).shopItems.nodes.map(item => {
+    return {
+          ...item.itemShop,
+          slug: item.slug,
+          status: item.status,
+          title: item.title,
+          modified: item.modified,
+          date: item.date
+    };
+  }); 
+  const normalizedStoreItems = storeItems.map(async (storeItem) => await getNormalizedStoreItem(storeItem));
 
-  const results = (await Promise.all(normalizedPosts))
+  const results = (await Promise.all(normalizedStoreItems))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((post) => !post.draft);
+    .filter((storeItem) => !storeItem.draft);
 
   return results;
 };
 
-let _posts: Array<NormalizedPost>;
+let _storeItems: Array<NormalizedStoreItem>;
 
 /** */
-export const isWordpressEnabled = APP_BLOG.isWordpressEnabled;
-export const isBlogEnabled = APP_BLOG.isEnabled;
-export const isRelatedPostsEnabled = APP_BLOG.isRelatedPostsEnabled;
-export const isBlogListRouteEnabled = APP_BLOG.list.isEnabled;
-export const isBlogPostRouteEnabled = APP_BLOG.post.isEnabled;
-export const isBlogCategoryRouteEnabled = APP_BLOG.category.isEnabled;
-export const isBlogTagRouteEnabled = APP_BLOG.tag.isEnabled;
+export const isWordpressEnabled = APP_STORE.isWordpressEnabled;
+export const isBlogEnabled = APP_STORE.isEnabled;
+export const isRelatedStoreItemsEnabled = APP_STORE.isRelatedPostsEnabled;
+export const isBlogListRouteEnabled = APP_STORE.list.isEnabled;
+export const isBlogNormalizedStoreItemRouteEnabled = APP_STORE.post.isEnabled;
+export const isBlogCategoryRouteEnabled = APP_STORE.category.isEnabled;
+export const isBlogTagRouteEnabled = APP_STORE.tag.isEnabled;
 
-export const blogListRobots = APP_BLOG.list.robots;
-export const blogPostRobots = APP_BLOG.post.robots;
-export const blogCategoryRobots = APP_BLOG.category.robots;
-export const blogTagRobots = APP_BLOG.tag.robots;
+export const storeListRobots = APP_STORE.list.robots;
+export const storeNormalizedStoreItemRobots = APP_STORE.post.robots;
+export const storeCategoryRobots = APP_STORE.category.robots;
+export const storeTagRobots = APP_STORE.tag.robots;
 
-export const blogPostsPerPage = APP_BLOG?.postsPerPage;
+export const storeStoreItemsPerPage = APP_STORE?.postsPerPage;
 
 /** */
-export const fetchPosts = async (): Promise<Array<NormalizedPost>> => {
-  if (!_posts) {
-    _posts = await load();
+export const fetchStoreItems = async (): Promise<Array<NormalizedStoreItem>> => {
+  if (!_storeItems) {
+    _storeItems = await load();
   }
 
-  return _posts;
+  return _storeItems;
 };
 
 /** */
-export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<NormalizedPost>> => {
+export const findStoreItemsBySlugs = async (slugs: Array<string>): Promise<Array<NormalizedStoreItem>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const posts = await fetchPosts();
+  const storeItems = await fetchStoreItems();
 
-  return slugs.reduce(function (r: Array<NormalizedPost>, slug: string) {
-    posts.some(function (post: NormalizedPost) {
-      return slug === post.slug && r.push(post);
+  return slugs.reduce(function (r: Array<NormalizedStoreItem>, slug: string) {
+    storeItems.some(function (storeItem: NormalizedStoreItem) {
+      return slug === storeItem.slug && r.push(storeItem);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findPostsByIds = async (ids: Array<string>): Promise<Array<NormalizedPost>> => {
+export const findStoreItemsByIds = async (ids: Array<string>): Promise<Array<NormalizedStoreItem>> => {
   if (!Array.isArray(ids)) return [];
 
-  const posts = await fetchPosts();
+  const storeItems = await fetchStoreItems();
 
-  return ids.reduce(function (r: Array<NormalizedPost>, id: string) {
-    posts.some(function (post: NormalizedPost) {
-      return id === post.id && r.push(post);
+  return ids.reduce(function (r: Array<NormalizedStoreItem>, id: string) {
+    storeItems.some(function (storeItem: NormalizedStoreItem) {
+      return id === storeItem.id && r.push(storeItem);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findLatestPosts = async ({ count }: { count?: number }): Promise<Array<NormalizedPost>> => {
+export const findLatestStoreItems = async ({ count }: { count?: number }): Promise<Array<NormalizedStoreItem>> => {
   const _count = count || 4;
-  const posts = await fetchPosts();
+  const storeItems = await fetchStoreItems();
 
-  return posts ? posts.slice(0, _count) : [];
+  return storeItems ? storeItems.slice(0, _count) : [];
 };
 
 /** */
 export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchPosts(), {
-    params: { blog: BLOG_BASE || undefined },
-    pageSize: blogPostsPerPage,
+  return paginate(await fetchStoreItems(), {
+    params: { store: STORE_BASE || undefined },
+    pageSize: storeStoreItemsPerPage,
   });
 };
 
 /** */
-export const getStaticPathsBlogPost = async () => {
-  if (!isBlogEnabled || !isBlogPostRouteEnabled) return [];
-  return (await fetchPosts()).flatMap((post) => ({
+export const getStaticPathsBlogNormalizedStoreItem = async () => {
+  if (!isBlogEnabled || !isBlogNormalizedStoreItemRouteEnabled) return [];
+  return (await fetchStoreItems()).flatMap((storeItem) => ({
     params: {
-      blog: post.permalink,
+      store: storeItem.permalink,
     },
-    props: { post },
+    props: { storeItem },
   }));
 };
 
@@ -218,18 +227,18 @@ export const getStaticPathsBlogPost = async () => {
 export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogCategoryRouteEnabled) return [];
 
-  const posts = await fetchPosts();
+  const storeItems = await fetchStoreItems();
   const categories = new Set<string>();
-  posts.map((post) => {
-    typeof post.category === 'string' && categories.add(post.category.toLowerCase());
+  storeItems.map((storeItem) => {
+    typeof storeItem.category === 'string' && categories.add(storeItem.category.toLowerCase());
   });
 
   return Array.from(categories).flatMap((category) =>
     paginate(
-      posts.filter((post) => typeof post.category === 'string' && category === post.category.toLowerCase()),
+      storeItems.filter((storeItem) => typeof storeItem.category === 'string' && category === storeItem.category.toLowerCase()),
       {
-        params: { category: category, blog: CATEGORY_BASE || undefined },
-        pageSize: blogPostsPerPage,
+        params: { category: category, store: CATEGORY_STORE_BASE || undefined },
+        pageSize: storeStoreItemsPerPage,
         props: { category },
       }
     )
@@ -240,18 +249,18 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
 export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogTagRouteEnabled) return [];
 
-  const posts = await fetchPosts();
+  const storeItems = await fetchStoreItems();
   const tags = new Set<string>();
-  posts.map((post) => {
-    Array.isArray(post.tags) && post.tags.map((tag) => tags.add(tag.toLowerCase()));
+  storeItems.map((storeItem) => {
+    Array.isArray(storeItem.tags) && storeItem.tags.map((tag) => tags.add(tag.toLowerCase()));
   });
 
   return Array.from(tags).flatMap((tag) =>
     paginate(
-      posts.filter((post) => Array.isArray(post.tags) && post.tags.find((elem) => elem.toLowerCase() === tag)),
+      storeItems.filter((storeItem) => Array.isArray(storeItem.tags) && storeItem.tags.find((elem) => elem.toLowerCase() === tag)),
       {
-        params: { tag: tag, blog: TAG_BASE || undefined },
-        pageSize: blogPostsPerPage,
+        params: { tag: tag, store: TAG_STORE_BASE || undefined },
+        pageSize: storeStoreItemsPerPage,
         props: { tag },
       }
     )
@@ -259,21 +268,21 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 };
 
 /** */
-export function getRelatedPosts(allPosts: NormalizedPost[], currentSlug: string, currentTags: string[]) {
-  if (!isBlogEnabled || !isRelatedPostsEnabled) return [];
+export function getRelatedStoreItems(allStoreItems: NormalizedStoreItem[], currentSlug: string, currentTags: string[]) {
+  if (!isBlogEnabled || !isRelatedStoreItemsEnabled) return [];
 
-  const relatedPosts = getRandomizedPosts(
-    allPosts.filter((post) => post.slug !== currentSlug && post.tags?.some((tag) => currentTags.includes(tag))),
-    APP_BLOG.relatedPostsCount
+  const relatedStoreItems = getRandomizedStoreItems(
+    allStoreItems.filter((storeItem) => storeItem.slug !== currentSlug && storeItem.tags?.some((tag) => currentTags.includes(tag))),
+    APP_STORE.relatedPostsCount
   );
 
-  if (relatedPosts.length < APP_BLOG.relatedPostsCount) {
-    const morePosts = getRandomizedPosts(
-      allPosts.filter((post) => post.slug !== currentSlug && !post.tags?.some((tag) => currentTags.includes(tag))),
-      APP_BLOG.relatedPostsCount - relatedPosts.length
+  if (relatedStoreItems.length < APP_STORE.relatedPostsCount) {
+    const moreStoreItems = getRandomizedStoreItems(
+      allStoreItems.filter((storeItem) => storeItem.slug !== currentSlug && !storeItem.tags?.some((tag) => currentTags.includes(tag))),
+      APP_STORE.relatedPostsCount - relatedStoreItems.length
     );
-    relatedPosts.push(...morePosts);
+    relatedStoreItems.push(...moreStoreItems);
   }
 
-  return relatedPosts;
+  return relatedStoreItems;
 }

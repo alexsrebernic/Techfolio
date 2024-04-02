@@ -9,7 +9,7 @@ import icon from 'astro-icon';
 import compress from 'astro-compress';
 import tasks from './src/utils/tasks';
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter.mjs';
-import { ANALYTICS, SITE } from './src/utils/config.ts';
+import { ANALYTICS, SITE, I18N } from './src/utils/config.ts';
 import react from "@astrojs/react";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) => ANALYTICS.vendors.googleAnalytics.id && ANALYTICS.vendors.googleAnalytics.partytown ? Array.isArray(items) ? items.map(item => item()) : [items()] : [];
@@ -20,6 +20,13 @@ export default defineConfig({
   base: SITE.base,
   trailingSlash: SITE.trailingSlash ? 'always' : 'never',
   output: 'static',
+  i18n: {
+    defaultLocale: I18N.language,
+    locales: I18N.languages,
+    routing: {
+      prefixDefaultLocale: true,
+    }
+  },
   integrations: [tailwind({
     applyBaseStyles: false
   }), sitemap(), mdx(), icon({

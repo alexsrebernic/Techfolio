@@ -19,6 +19,7 @@ export interface MetaDataConfig extends Omit<MetaData, 'title'> {
 }
 export interface I18NConfig {
   language: string;
+  languages: string[];
   textDirection: string;
   dateFormatter?: Intl.DateTimeFormat;
 }
@@ -154,12 +155,14 @@ const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   i18n?: I18NConfig;
   apps?: {
     blog?: AppBlogConfig;
+    projects?: AppProjectsConfig;
+    store?: AppItemShopConfig;
   };
   ui?: unknown;
   analytics?: unknown;
 };
 
-const DEFAULT_SITE_NAME = 'Website';
+const DEFAULT_SITE_NAME = "Alex Srebernic's portfolio";
 
 const getSite = () => {
   const _default = {
@@ -167,7 +170,6 @@ const getSite = () => {
     site: undefined,
     base: '/',
     trailingSlash: false,
-
     googleSiteVerificationId: '',
   };
 
@@ -198,6 +200,7 @@ const getMetadata = () => {
 const getI18N = () => {
   const _default = {
     language: 'en',
+    languages: ['en','es'],
     textDirection: 'ltr',
   };
 
@@ -238,7 +241,7 @@ const getAppBlog = () => {
     },
     category: {
       isEnabled: true,
-      pathname: 'category',
+      pathname: 'blog-category',
       robots: {
         index: true,
         follow: true,
@@ -246,9 +249,9 @@ const getAppBlog = () => {
     },
     tag: {
       isEnabled: true,
-      pathname: 'tag',
+      pathname: 'blog-tag',
       robots: {
-        index: false,
+        index: true,
         follow: true,
       },
     },
@@ -264,7 +267,7 @@ const getAppProjects = () => {
     relatedPostsCount: 4,
     post: {
       isEnabled: true,
-      permalink: '/blog/%slug%',
+      permalink: '/projects/%slug%',
       robots: {
         index: true,
         follow: true,
@@ -280,7 +283,7 @@ const getAppProjects = () => {
     },
     category: {
       isEnabled: true,
-      pathname: 'category',
+      pathname: 'projects-category',
       robots: {
         index: true,
         follow: true,
@@ -288,14 +291,14 @@ const getAppProjects = () => {
     },
     tag: {
       isEnabled: true,
-      pathname: 'tag',
+      pathname: 'projects-tag',
       robots: {
         index: false,
         follow: true,
       },
     },
   };
-  return merge({}, _default, config?.apps?.blog ?? {}) as AppBlogConfig;
+  return merge({}, _default, config?.apps?.projects ?? {}) as AppProjectsConfig;
 };
 const getAppStore = () => {
   const _default = {
@@ -306,7 +309,7 @@ const getAppStore = () => {
     relatedPostsCount: 4,
     post: {
       isEnabled: true,
-      permalink: '/blog/%slug%',
+      permalink: '/store/%slug%',
       robots: {
         index: true,
         follow: true,
@@ -314,7 +317,7 @@ const getAppStore = () => {
     },
     list: {
       isEnabled: true,
-      pathname: 'blog',
+      pathname: 'store',
       robots: {
         index: true,
         follow: true,
@@ -322,7 +325,7 @@ const getAppStore = () => {
     },
     category: {
       isEnabled: true,
-      pathname: 'category',
+      pathname: 'store-category',
       robots: {
         index: true,
         follow: true,
@@ -330,14 +333,14 @@ const getAppStore = () => {
     },
     tag: {
       isEnabled: true,
-      pathname: 'tag',
+      pathname: 'store-tag',
       robots: {
-        index: false,
+        index: true,
         follow: true,
       },
     },
   };
-  return merge({}, _default, config?.apps?.blog ?? {}) as AppBlogConfig;
+  return merge({}, _default, config?.apps?.store ?? {}) as AppItemShopConfig;
 };
 const getUI = () => {
   const _default = {

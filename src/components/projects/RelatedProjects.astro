@@ -1,0 +1,28 @@
+---
+import { APP_PROJECTS } from "@/utils/config";
+
+import { fetchNormalizedProjects, getRelatedNormalizedProjects } from "@/utils/projects";
+import BlogHighlightedPosts from "../projects/BlogHighlightedPosts.astro";
+import type NormalizedProject from '@/interfaces/NormalizedProject'
+import { getProjectsPermaLink } from "@/utils/permalinks";
+
+export interface Props {
+  post: NormalizedProject;
+}
+
+const { post } = Astro.props;
+const fetchedPosts = await fetchNormalizedProjects();
+const relatedPosts = post.tags ? getRelatedNormalizedProjects(fetchedPosts, post.slug, post.tags) : [];
+---
+
+{
+  APP_PROJECTS.isRelatedPostsEnabled ? (
+    <BlogHighlightedPosts
+      classes={{ container: "pt-0 lg:pt-0 md:pt-0" }}
+      title="Related Posts"
+      linkText="View All Posts"
+      linkUrl={getProjectsPermaLink()}
+      postIds={relatedPosts.map((post) => post.id)}
+    />
+  ) : null
+}

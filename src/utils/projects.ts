@@ -1,12 +1,12 @@
 import type { PaginateFunction } from 'astro';
 
-import type Post from '@/interfaces/Post';
-import { APP_BLOG } from '@/utils/config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import type NormalizedProject from '@/interfaces/NormalizedProject';
+import { APP_PROJECTS } from '@/utils/config';
+import { cleanSlug, trimSlash, PROJECTS_BASE, PROJECTS_PERMALINK_PATTERN, CATEGORY_PROJECT_BASE, TAG_PROJECT_BASE } from './permalinks';
 import { wpquery } from '@/data/wordpress';
-import PostQuery from '@/graphql/PostQuery';
-import type NormalizedPost from '@/interfaces/NormalizedPost';
-
+import ProjectQuery from '@/graphql/ProjectQuery';
+import type Project from '@/interfaces/Project';
+import parseHTMLToListObjects from '@/helpers/parseHTMLToObject';
 const generatePermalink = async ({
   id,
   slug,
@@ -25,7 +25,7 @@ const generatePermalink = async ({
   const minute = String(publishDate.getMinutes()).padStart(2, '0');
   const second = String(publishDate.getSeconds()).padStart(2, '0');
 
-  const permalink = POST_PERMALINK_PATTERN.replace('%slug%', slug)
+  const permalink = PROJECTS_PERMALINK_PATTERN.replace('%slug%', slug)
     .replace('%id%', id)
     .replace('%category%', category || '')
     .replace('%year%', year)
@@ -42,29 +42,26 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: Post): Promise<NormalizedPost> => {
-  const _tags = post.tags.edges.map(item => item.node.name)
-  const categories = post.categories.edges.map(item => item.node.name)
+const getNormalizedProject = async (project: Project): Promise<NormalizedProject> => {
+  const _tags = project.tags.map(tag => tag.toLowerCase().replace(/[\W_]+/g, '-'));
   const _data = {
-    publishDate: post.date,
-    title: post.title,
-    excerpt: post.excerpt,
-    image: post.featuredImage.node.mediaItemUrl,
+    publishDate: project.date,
+    title: project.title,
+    excerpt: project.description,
+    image: project.thumbnail.node.mediaItemUrl,
     tags: _tags,
-    category : categories[0],
-    author: post.author.node.name,
-    updateDate: post.modified,
-    draft: post.draft,
+    updateDate: project.modified,
+    draft: project.draft,
+ 
   }
-  const _post = {
+  const _project = {
     data: _data,
-    body: post.content,
-    collection: 'post',
-    id: post.id,
-    slug: post.slug,
-    author: post.author
+    body: project.content,
+    collection: 'project',
+    id: project.id,
+    slug: project.slug,
   }
-  const { id, slug: rawSlug = '', data } = _post;
+  const { id, slug: rawSlug = '', data } = _project;
 
   const {
     publishDate: rawPublishDate = new Date(),
@@ -73,43 +70,45 @@ const getNormalizedPost = async (post: Post): Promise<NormalizedPost> => {
     excerpt,
     image,
     tags: rawTags = [],
-    category: rawCategory,
-    author,
     draft = false,
     metadata = {},
   } = data;
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
-  const category = rawCategory ? cleanSlug(rawCategory) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
 
   return {
     id: id,
     slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category }),
-
+    permalink: await generatePermalink({ id, slug, publishDate, category: '' }),
     publishDate: publishDate,
     updateDate: updateDate,
-
     title: title,
     excerpt: excerpt,
     image: image,
-
-    category: category,
     tags: tags,
-    author: author,
-    content: post.content,
     draft: draft,
     metadata,
-
-    readingTime: post?.readingTime,
+    testimonial: project.testimonial.edges[0].node.testimonialItem,
+    init_year: project.initYear,
+    present: project.present,
+    end_year: project.endYear,
+    role: project.role,
+    project_url: project.url.url,
+    background: project.background,
+    solutions: project.solutions && parseHTMLToListObjects(project.solutions),
+    conclusion: project.conclusion,
+    goals: project.goals && parseHTMLToListObjects(project.goals),
+    tools: project.tools && project.tools.split('\r\n'),
+    type : project.type,
+    image_1: project.image1.node.mediaItemUrl
   };
 
 };
 
-const getRandomizedPosts = (array: NormalizedPost[], num: number) => {
-  const newArray: NormalizedPost[] = [];
+const getRandomizedNormalizedProjects = (array: NormalizedProject[], num: number) => {
+  const newArray: NormalizedProject[] = [];
 
   while (newArray.length < num && array.length > 0) {
     const randomIndex = Math.floor(Math.random() * array.length);
@@ -120,116 +119,123 @@ const getRandomizedPosts = (array: NormalizedPost[], num: number) => {
   return newArray;
 };
 
-const load = async function (): Promise<Array<NormalizedPost>> {
-  const posts = (await wpquery({query : PostQuery})).posts.nodes ;
-  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
-
-  const results = (await Promise.all(normalizedPosts))
+const load = async function (): Promise<Array<NormalizedProject>> {
+  const projects = (await wpquery({query : ProjectQuery})).projects.nodes.map(project => {
+    return {
+          ...project.projectItem,
+          slug: project.slug,
+          status: project.status,
+          title: project.title,
+          modified: project.modified,
+          date: project.date
+    };
+  });
+  const normalizedNormalizedProjects = projects.map(async (project) => await getNormalizedProject(project));
+  const results = (await Promise.all(normalizedNormalizedProjects))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((post) => !post.draft);
+    .filter((project) => !project.draft);
 
   return results;
 };
 
-let _posts: Array<NormalizedPost>;
+let _projects: Array<NormalizedProject>;
 
 /** */
-export const isWordpressEnabled = APP_BLOG.isWordpressEnabled;
-export const isBlogEnabled = APP_BLOG.isEnabled;
-export const isRelatedPostsEnabled = APP_BLOG.isRelatedPostsEnabled;
-export const isBlogListRouteEnabled = APP_BLOG.list.isEnabled;
-export const isBlogPostRouteEnabled = APP_BLOG.post.isEnabled;
-export const isBlogCategoryRouteEnabled = APP_BLOG.category.isEnabled;
-export const isBlogTagRouteEnabled = APP_BLOG.tag.isEnabled;
+export const isWordpressEnabled = APP_PROJECTS.isWordpressEnabled;
+export const isProjectEnabled = APP_PROJECTS.isEnabled;
+export const isRelatedNormalizedProjectsEnabled = APP_PROJECTS.isRelatedPostsEnabled;
+export const isProjectListRouteEnabled = APP_PROJECTS.list.isEnabled;
+export const isProjectNormalizedProjectRouteEnabled = APP_PROJECTS.post.isEnabled;
+export const isProjectCategoryRouteEnabled = APP_PROJECTS.category.isEnabled;
+export const isProjectTagRouteEnabled = APP_PROJECTS.tag.isEnabled;
 
-export const blogListRobots = APP_BLOG.list.robots;
-export const blogPostRobots = APP_BLOG.post.robots;
-export const blogCategoryRobots = APP_BLOG.category.robots;
-export const blogTagRobots = APP_BLOG.tag.robots;
+export const blogListRobots = APP_PROJECTS.list.robots;
+export const blogNormalizedProjectRobots = APP_PROJECTS.post.robots;
+export const blogCategoryRobots = APP_PROJECTS.category.robots;
+export const blogTagRobots = APP_PROJECTS.tag.robots;
 
-export const blogPostsPerPage = APP_BLOG?.postsPerPage;
+export const blogNormalizedProjectsPerPage = APP_PROJECTS?.postsPerPage;
 
 /** */
-export const fetchPosts = async (): Promise<Array<NormalizedPost>> => {
-  if (!_posts) {
-    _posts = await load();
+export const fetchNormalizedProjects = async (): Promise<Array<NormalizedProject>> => {
+  if (!_projects) {
+    _projects = await load();
   }
-
-  return _posts;
+  return _projects;
 };
 
 /** */
-export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<NormalizedPost>> => {
+export const findNormalizedProjectsBySlugs = async (slugs: Array<string>): Promise<Array<NormalizedProject>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const posts = await fetchPosts();
+  const projects = await fetchNormalizedProjects();
 
-  return slugs.reduce(function (r: Array<NormalizedPost>, slug: string) {
-    posts.some(function (post: NormalizedPost) {
-      return slug === post.slug && r.push(post);
+  return slugs.reduce(function (r: Array<NormalizedProject>, slug: string) {
+    projects.some(function (project: NormalizedProject) {
+      return slug === project.slug && r.push(project);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findPostsByIds = async (ids: Array<string>): Promise<Array<NormalizedPost>> => {
+export const findNormalizedProjectsByIds = async (ids: Array<string>): Promise<Array<NormalizedProject>> => {
   if (!Array.isArray(ids)) return [];
 
-  const posts = await fetchPosts();
+  const projects = await fetchNormalizedProjects();
 
-  return ids.reduce(function (r: Array<NormalizedPost>, id: string) {
-    posts.some(function (post: NormalizedPost) {
-      return id === post.id && r.push(post);
+  return ids.reduce(function (r: Array<NormalizedProject>, id: string) {
+    projects.some(function (project: NormalizedProject) {
+      return id === project.id && r.push(project);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findLatestPosts = async ({ count }: { count?: number }): Promise<Array<NormalizedPost>> => {
+export const findLatestNormalizedProjects = async ({ count }: { count?: number }): Promise<Array<NormalizedProject>> => {
   const _count = count || 4;
-  const posts = await fetchPosts();
+  const projects = await fetchNormalizedProjects();
 
-  return posts ? posts.slice(0, _count) : [];
+  return projects ? projects.slice(0, _count) : [];
 };
 
 /** */
-export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateFunction }) => {
-  if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchPosts(), {
-    params: { blog: BLOG_BASE || undefined },
-    pageSize: blogPostsPerPage,
+export const getStaticPathsProjectList = async ({ paginate }: { paginate: PaginateFunction }) => {
+  if (!isProjectEnabled || !isProjectListRouteEnabled) return [];
+  return paginate(await fetchNormalizedProjects(), {
+    params: { project: PROJECTS_BASE || undefined },
+    pageSize: blogNormalizedProjectsPerPage,
   });
 };
 
 /** */
-export const getStaticPathsBlogPost = async () => {
-  if (!isBlogEnabled || !isBlogPostRouteEnabled) return [];
-  return (await fetchPosts()).flatMap((post) => ({
+export const getStaticPathsNormalizedProject = async () => {
+  if (!isProjectEnabled || !isProjectNormalizedProjectRouteEnabled) return [];
+  return (await fetchNormalizedProjects()).flatMap((project) => ({
     params: {
-      blog: post.permalink,
+      project: project.permalink,
     },
-    props: { post },
+    props: { project },
   }));
 };
 
 /** */
-export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
-  if (!isBlogEnabled || !isBlogCategoryRouteEnabled) return [];
+export const getStaticPathsProjectCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
+  if (!isProjectEnabled || !isProjectCategoryRouteEnabled) return [];
 
-  const posts = await fetchPosts();
+  const projects = await fetchNormalizedProjects();
   const categories = new Set<string>();
-  posts.map((post) => {
-    typeof post.category === 'string' && categories.add(post.category.toLowerCase());
+  projects.map((project) => {
+    typeof project.category === 'string' && categories.add(project.category.toLowerCase());
   });
 
   return Array.from(categories).flatMap((category) =>
     paginate(
-      posts.filter((post) => typeof post.category === 'string' && category === post.category.toLowerCase()),
+      projects.filter((project) => typeof project.category === 'string' && category === project.category.toLowerCase()),
       {
-        params: { category: category, blog: CATEGORY_BASE || undefined },
-        pageSize: blogPostsPerPage,
+        params: { category: category, project: CATEGORY_PROJECT_BASE || undefined },
+        pageSize: blogNormalizedProjectsPerPage,
         props: { category },
       }
     )
@@ -237,21 +243,20 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
 };
 
 /** */
-export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFunction }) => {
-  if (!isBlogEnabled || !isBlogTagRouteEnabled) return [];
+export const getStaticPathsProjectTag = async ({ paginate }: { paginate: PaginateFunction }) => {
+  if (!isProjectEnabled || !isProjectTagRouteEnabled) return [];
 
-  const posts = await fetchPosts();
+  const projects = await fetchNormalizedProjects();
   const tags = new Set<string>();
-  posts.map((post) => {
-    Array.isArray(post.tags) && post.tags.map((tag) => tags.add(tag.toLowerCase()));
+  projects.map((project) => {
+    Array.isArray(project.tags) && project.tags.map((tag) => tags.add(tag.toLowerCase()));
   });
-
   return Array.from(tags).flatMap((tag) =>
     paginate(
-      posts.filter((post) => Array.isArray(post.tags) && post.tags.find((elem) => elem.toLowerCase() === tag)),
+      projects.filter((project) => Array.isArray(project.tags) && project.tags.find((elem) => elem.toLowerCase() === tag)),
       {
-        params: { tag: tag, blog: TAG_BASE || undefined },
-        pageSize: blogPostsPerPage,
+        params: { tag: tag, project: TAG_PROJECT_BASE || undefined },
+        pageSize: blogNormalizedProjectsPerPage,
         props: { tag },
       }
     )
@@ -259,21 +264,21 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 };
 
 /** */
-export function getRelatedPosts(allPosts: NormalizedPost[], currentSlug: string, currentTags: string[]) {
-  if (!isBlogEnabled || !isRelatedPostsEnabled) return [];
+export function getRelatedNormalizedProjects(allNormalizedProjects: NormalizedProject[], currentSlug: string, currentTags: string[]) {
+  if (!isProjectEnabled || !isRelatedNormalizedProjectsEnabled) return [];
 
-  const relatedPosts = getRandomizedPosts(
-    allPosts.filter((post) => post.slug !== currentSlug && post.tags?.some((tag) => currentTags.includes(tag))),
-    APP_BLOG.relatedPostsCount
+  const relatedNormalizedProjects = getRandomizedNormalizedProjects(
+    allNormalizedProjects.filter((project) => project.slug !== currentSlug && project.tags?.some((tag) => currentTags.includes(tag))),
+    APP_PROJECTS.relatedPostsCount
   );
 
-  if (relatedPosts.length < APP_BLOG.relatedPostsCount) {
-    const morePosts = getRandomizedPosts(
-      allPosts.filter((post) => post.slug !== currentSlug && !post.tags?.some((tag) => currentTags.includes(tag))),
-      APP_BLOG.relatedPostsCount - relatedPosts.length
+  if (relatedNormalizedProjects.length < APP_PROJECTS.relatedPostsCount) {
+    const moreNormalizedProjects = getRandomizedNormalizedProjects(
+      allNormalizedProjects.filter((project) => project.slug !== currentSlug && !project.tags?.some((tag) => currentTags.includes(tag))),
+      APP_PROJECTS.relatedPostsCount - relatedNormalizedProjects.length
     );
-    relatedPosts.push(...morePosts);
+    relatedNormalizedProjects.push(...moreNormalizedProjects);
   }
 
-  return relatedPosts;
+  return relatedNormalizedProjects;
 }

@@ -21,6 +21,5 @@ export async function wpquery({ query, variables = {} }: WPGraphQLParams) {
   }
 
   const { data } = await res.json();
-
   return data;
 }

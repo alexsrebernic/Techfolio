@@ -1,39 +1,40 @@
 export default `query StoreItem {
   shopItems {
     nodes {
-      title(format: RENDERED)
+      id
       slug
       status
+      title(format: RENDERED)
+      link
       modified
+      date
       itemShop {
-        type
-        price
-        overview
-        name
-        link
-        items
-        currency
-        content
         briefDescription
+        content
+        currency
+        items
+        link
+        name
+        price
+        type
         image1 {
           node {
             mediaItemUrl
           }
         }
-        tags {
-          edges {
-            node {
-              name
-              slug
-            }
+        image2 {
+          node {
+            mediaItemUrl
           }
         }
-        categories {
-          edges {
-            node {
-              name
-              slug
-            }
+        image3 {
+          node {
+            mediaItemUrl
+          }
+        }
+        image4 {
+          node {
+            mediaItemUrl
           }
         }
         thumbnail {
@@ -41,8 +42,8 @@ export default `query StoreItem {
             mediaItemUrl
           }
         }
+        description
       }
-      shopItemId
     }
   }
 }`

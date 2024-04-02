@@ -3,7 +3,7 @@ import { APP_BLOG } from "@/utils/config";
 
 import { fetchPosts, getRelatedPosts } from "@/utils/blog";
 import BlogHighlightedPosts from "../widgets/BlogHighlightedPosts.astro";
-import { getBlogPermalink } from "@/utils/permalinks";
+import { getStorePermaLink } from "@/utils/permalinks";
 import type NormalizedPost from "@/interfaces/NormalizedPost";
 
 export interface Props {
@@ -21,7 +21,7 @@ const relatedPosts = post.tags ? getRelatedPosts(fetchedPosts, post.slug, post.t
       classes={{ container: "pt-0 lg:pt-0 md:pt-0" }}
       title="Related Posts"
       linkText="View All Posts"
-      linkUrl={getBlogPermalink()}
+      linkUrl={getStorePermaLink()}
       postIds={relatedPosts.map((post) => post.id)}
     />
   ) : null

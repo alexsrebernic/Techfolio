@@ -44,6 +44,7 @@ const metadata = merge(
 ---
 
 <Layout metadata={metadata}>
+  <ToBlogLink />
   <SinglePost post={{ ...post, image: image }} url={url} />
   <ToBlogLink />
   <RelatedPosts post={post} />

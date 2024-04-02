@@ -1,6 +1,6 @@
 import type { MetaData } from "@/types";
 
-export default interface StoreItem {
+export default interface NormalizedStoreItem {
   name: string,
   type: string,
   price: number,
@@ -13,6 +13,7 @@ export default interface StoreItem {
   status: string,
   date: Date,
   id: string,
+  thumbnail: {node:{mediaItemUrl: string}},
   modified: Date,
   permalink: string;
   publishDate: Date;

@@ -1,35 +1,31 @@
 ---
 import Layout from '@/layouts/PageLayout.astro';
 import AuthorQuery from '@/graphql/AuthorQuery';
-import ProjectQuery from '@/graphql/ProjectQuery';
 import { wpquery } from '@/data/wordpress';
-import ItemsGrid from '@/components/ui/WordpressItemsGrid.astro';
+import ItemsGrid from '@/components/projects/List.astro';
 import TestimonialGrid from '@/components/ui/TestimonialGrid.astro';
 import type Author from '@/interfaces/Author';
 import Button from '@/components/ui/Button.astro';
-import type Project from '@/interfaces/Project';
+import type NormalizedProject from '@/interfaces/NormalizedProject';
 import type { Testimonial } from '@/types';
 import TestimonialQuery from '@/graphql/TestimonialQuery';
 import { fetchPosts } from '@/utils/blog';
 import List from '@/components/blog/List.astro';
 import type NormalizedPost from '@/interfaces/NormalizedPost';
+import { fetchNormalizedProjects } from '@/utils/projects';
 const metadata = {
   title: "Home | Alex's Portfolio",
   ignoreTitleTemplate: true,
 };
 const {firstName,email, briefIntroduction, ubication,slogan, availableForWork } : Author = (await wpquery({query: AuthorQuery})).owners.edges[0].node.author
-const projects : Project[] = (await wpquery({query: ProjectQuery})).projects.nodes.map(project => {
-  return {
-        ...project.projectItem,
-        slug: project.slug
-  };
-});
 const testimonials : Testimonial[] = (await wpquery({query: TestimonialQuery})).testimonials.nodes.map(testimonial => {
   return {
         ...testimonial.testimonialItem,
         slug: testimonial.slug
   };
 });
+
+const projects : NormalizedProject[] = await fetchNormalizedProjects()
 const posts : NormalizedPost[] = await fetchPosts()
 ---
 
@@ -86,8 +82,11 @@ const posts : NormalizedPost[] = await fetchPosts()
         </div>
       </div>
     </section>
-    <section>
-      <ItemsGrid path="projects" columns={2} title="Selected Work" items={projects}/>
+    <section class="space-y-10 ">
+      <div>
+        <h2 class="text-2xl font-[500]">Projects</h2>
+      </div>
+      <ItemsGrid  posts={projects}/>
     </section>
     <section>
       <TestimonialGrid  columns={2} title="What co-workers/clients say" items={testimonials}/>

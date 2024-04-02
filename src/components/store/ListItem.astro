@@ -1,0 +1,81 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Icon } from 'astro-icon/components';
+import Image from '@/components/common/Image.astro';
+import PostTags from '@/components/store/Tags.astro';
+
+import { APP_STORE } from '@/utils/config';
+
+import { getPermaStoreLink } from '@/utils/permalinks';
+import { findImage } from '@/utils/images';
+import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
+
+export interface Props {
+  post: NormalizedStoreItem;
+}
+
+const { post } = Astro.props;
+const image = (await findImage(post.image)) as ImageMetadata | undefined;
+const link = APP_STORE?.post?.isEnabled ? getPermaStoreLink(post.permalink, 'post') : '';
+---
+<article class="flex gap-4  md:space-y-0  flex-col">
+    {
+      image && (
+        <a class="relative block group flex-1" href={link ?? 'javascript:void(0)'}>
+          <div class="relative h-0 pb-[56.25%] md:pb-[75%] md:h-72 lg:pb-[56.25%] overflow-hidden bg-gray-400 dark:bg-slate-700 rounded-xl shadow-lg">
+            {image && (
+              <Image
+                src={image}
+                class="absolute inset-0 object-cover w-full h-full mb-6 rounded-xl shadow-xl bg-gray-400 dark:bg-slate-700 transition-transform  hover:scale-110"
+                widths={[400, 900]}
+                width={900}
+                sizes="(max-width: 900px) 400px, 900px"
+                alt={post.title}
+                aspectRatio="16:9"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </div>
+        </a>
+      )
+    }
+    <div class="flex-1 flex justify-between items-start">
+      <div>
+        <h2 class=" text-xl font-medium leading-tight mb-2  dark:text-slate-300">
+          {
+            link ? (
+              <a class="hover:text-primary dark:hover:text-gray-800 transition ease-in duration-200 break-all" href={link}>
+                {post.title}
+              </a>
+            ) : (
+              post.title
+            )
+          }
+        </h2>    
+        <div class="text-sm">
+         
+          {post.excerpt && 
+             <p class=" overflow-hidden line-clamp-3">
+              {post.excerpt}
+            </p>
+          }
+        </div>
+        <footer class="mt-5">
+          <PostTags tags={post.tags} />
+        </footer>
+      </div>
+      <div>
+
+        <div class="dark:bg-[#282828] px-4 py-2 rounded-xl bg-[#EFEFF0]">
+          <span class="dark:text-white">
+            ${
+              post.price ? post.price : "0"
+            }
+          </span>
+        </div>
+       
+      </div>
+    </div>
+</article>
+

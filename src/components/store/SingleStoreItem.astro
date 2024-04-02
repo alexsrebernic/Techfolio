@@ -1,30 +1,230 @@
 ---
 import { Icon } from 'astro-icon/components';
-
+import 'swiper/swiper-bundle.css'
 import Image from '@/components/common/Image.astro';
-import PostTags from '@/components/blog/Tags.astro';
+import PostTags from '@/components/store/Tags.astro';
 import SocialShare from '@/components/common/SocialShare.astro';
-
-import { getPermalink } from '@/utils/permalinks';
+import { getPermaStoreLink } from '@/utils/permalinks';
 import { getFormattedDate } from '@/utils/utils';
-
-import type Project from '@/interfaces/Project';
+import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
+import Button from '../ui/Button.astro';
 
 export interface Props {
-  project: Project;
+  storeItem: NormalizedStoreItem;
   url: string | URL;
 }
 
-const { project, url } = Astro.props;
-const { content } = project;
+const { storeItem, url } = Astro.props;
+const {tags,title} = storeItem
+console.log(storeItem)
 ---
 
 <section class="   mx-auto">
   <article>
-     
-    <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
-      <PostTags tags={project.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
-      <SocialShare url={url} text={project.title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
+    <header class={storeItem.image ? 'space-y-10' : ''}>
+    <div class="space-y-6">
+        <h1
+        class=" mx-auto text-4xl md:text-5xl font-medium leading-tighter tracking-tighter font-heading break-all"
+      >
+        {storeItem.title}
+      </h1>
+      <p
+        class=" mx-auto mt-4 mb-8  text-md   dark:text-slate-400 text-justify"
+      >
+      {storeItem.excerpt && storeItem.excerpt.replace(/<\/?p>/g, '')    }
+
+      </p>
+      <Button variant="primary" text={storeItem.price ? `Buy for ${storeItem.price}` : 'Buy for free'} href={storeItem.url}/>
+      <Button variant="secondary" text="Preview" href={storeItem.url}/>
+    </div>
+    <!-- Slider main container -->
+    <div class="swiper max-w-[900px] overflow-hidden">
+      <!-- Additional required wrapper -->
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        {
+          storeItem.image ? (
+            <Image
+              src={storeItem.image}
+              class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700 swiper-slide"
+              widths={[400, 900]}
+              sizes="(max-width: 900px) 400px, 900px"
+              alt={storeItem?.excerpt || ''}
+              width={900}
+              height={506}
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <div class="max-w-3xl mx-auto px-4 sm:px-6">
+              <div class="border-t dark:border-slate-700" />
+            </div>
+          )
+        }
+        {
+          storeItem.image_1 ? (
+            <Image
+              src={storeItem.image_1}
+              class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700 swiper-slide"
+              widths={[400, 900]}
+              sizes="(max-width: 900px) 400px, 900px"
+              alt={storeItem?.excerpt || ''}
+              width={900}
+              height={506}
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <div class="max-w-3xl mx-auto px-4 sm:px-6">
+              <div class="border-t dark:border-slate-700" />
+            </div>
+          )
+        }
+          {
+            storeItem.image_2 ? (
+              <Image
+                src={storeItem.image_2}
+                class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700 swiper-slide"
+                widths={[400, 900]}
+                sizes="(max-width: 900px) 400px, 900px"
+                alt={storeItem?.excerpt || ''}
+                width={900}
+                height={506}
+                loading="eager"
+                decoding="async"
+              />
+            ) : (
+              <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                <div class="border-t dark:border-slate-700" />
+              </div>
+            )
+          }
+            {
+              storeItem.image_3 ? (
+                <Image
+                  src={storeItem.image_3}
+                  class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700 swiper-slide"
+                  widths={[400, 900]}
+                  sizes="(max-width: 900px) 400px, 900px"
+                  alt={storeItem?.excerpt || ''}
+                  width={900}
+                  height={506}
+                  loading="eager"
+                  decoding="async"
+                />
+              ) : (
+                <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                  <div class="border-t dark:border-slate-700" />
+                </div>
+              )
+            }
+              {
+                storeItem.image_4 ? (
+                  <Image
+                    src={storeItem.image_4}
+                    class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700 swiper-slide"
+                    widths={[400, 900]}
+                    sizes="(max-width: 900px) 400px, 900px"
+                    alt={storeItem?.excerpt || ''}
+                    width={900}
+                    height={506}
+                    loading="eager"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                    <div class="border-t dark:border-slate-700" />
+                  </div>
+                )
+              }
+      </div>
+      <div class="swiper-pagination"></div>
+      <!-- If we need navigation buttons -->
+      <div class="swiper-button-prev bg-[#505051] fill-white after p-1 !w-10 !h-10 !text-white rounded-full after:!content-none" ><Icon size={20} name="chevron-left"/></div>
+      <div class="swiper-button-next  bg-[#505051] fill-white after p-1 !w-10 !h-10 !text-white rounded-full after:!content-none"><Icon size={20} name="chevron-right"/></div>
+
+      <!-- If we need scrollbar -->
+    </div>
+    
+   
+    </header>
+    <main class="py-5">
+      <div class="flex mt-16 space-y-10 lg:space-y-0 lg:space-x-10 flex-col lg:flex-row space-x-0 ">
+        <div class="flex-1 space-y-5">
+          <h2
+          class=" mx-auto text-2xl md:text-3xl font-medium leading-tighter tracking-tighter font-heading break-all"
+        >Overview
+        </h2>
+        <div class="list-styles">
+          <ul class="space-y-5 font-normal !list-disc pl-5 marker:text-gray-600	 ">
+            {storeItem.content.map(item => (
+                <li class="py-1 list-type  justify-between items-center text-sm list-item">
+                  <span>
+                    <p>
+                    <strong>{item.title}</strong>
+                    {item.paragraph}
+                  </p>
+                  </span>
+                  
+                </li>
+            ))}
+          </ul>
+
+        </div>
+        </div>
+        <div class="flex-initial lg:min-w-[300px] xl:min-w-[340px] ">
+          <div class="bg-[#EFEFF0] px-8 py-10 space-y-2 rounded-xl sticky top-10 left-0  mb-10 dark:bg-[#282828]">
+            <Button  class="w-full" variant="primary" text={storeItem.price ? `Buy for ${storeItem.price}` : 'Buy for free'} href={storeItem.url}/>
+            <Button class="w-full" variant="secondary" text="Preview" href={storeItem.url}/>
+            <div class="py-3">
+              <ul class="space-y-5 font-normal">
+                  {storeItem.items.map(item => (
+                      <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+                        <p>
+                          {item}
+                        </p>
+                        <Icon color="gray" name='check'/>
+                      </li>
+                  ))}
+                </ul>
+              </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <hr>
+    <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row ">
+      <PostTags tags={tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
+      <SocialShare url={url} text={title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
     </div>
   </article>
 </section>
+<script >
+  // Import Swiper and modules
+import Swiper from 'swiper';
+import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
+
+// Now you can use Swiper
+new Swiper('.swiper', {
+  // Install modules
+  modules: [Navigation, Pagination, Scrollbar],
+  speed: 500,
+  slidesPerView: 1,
+  spaceBetween: 20,
+
+  allowSlideNext: true,
+  allowSlidePrev: true,
+  allowTouchMove: true,
+  effect: 'fade',
+  direction: 'horizontal',
+  loop: true,
+  centeredSlides: true,
+  fadeEffect: {
+    crossFade: true
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+});
+</script>

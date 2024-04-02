@@ -2,35 +2,31 @@
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
 import Layout from '@/layouts/PageLayout.astro';
-import BlogList from '@/components/blog/List.astro';
-import Headline from '@/components/blog/Headline.astro';
-import Pagination from '@/components/blog/Pagination.astro';
-// import PostTags from "@/components/blog/Tags.astro";
-
-import { blogListRobots, getStaticPathsBlogList } from '@/utils/blog';
+import BlogList from '@/components/projects/List.astro';
+import Pagination from '@/components/projects/Pagination.astro';
+import { getStaticPathsProjectList, blogListRobots } from "@/utils/projects.ts";
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  return await getStaticPathsBlogList({ paginate });
+  return await getStaticPathsProjectList({ paginate });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
-
 // const allCategories = await findCategories();
 // const allTags = await findTags();
 
 const metadata = {
-  title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+  title: `Project${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
     index: blogListRobots?.index && currentPage === 1,
     follow: blogListRobots?.follow,
   },
   openGraph: {
-    type: 'blog',
+    type: 'Projects',
   },
 };
 ---
@@ -39,7 +35,7 @@ const metadata = {
   <section class="">
     <div class="space-y-4 font-[600] mb-10">
       <h1 class="text-3xl font-[600] ">
-        Blog
+        Projects
       </h1>
       <p class="text-md font-[400] text-subtitle">
         The place where I share resources and tools I use    
