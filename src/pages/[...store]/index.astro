@@ -12,11 +12,13 @@ import { getStaticPathsBlogNormalizedStoreItem, storeNormalizedStoreItemRobots }
 import { findImage } from '@/utils/images';
 import type { MetaData } from '@/types';
 import RelatedPosts from '@/components/store/RelatedStoreItems.astro';
+import { I18N } from '@/utils/config';
 
 export const prerender = true;
 
 export const getStaticPaths = (async () => {
-  return await getStaticPathsBlogNormalizedStoreItem();
+  const lang = I18N.language
+  return await getStaticPathsBlogNormalizedStoreItem(lang);
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -25,11 +27,10 @@ const { storeItem } = Astro.props as Props;
 
 const url = getCanonical(getPermaStoreLink(storeItem.permalink, 'storeItem'));
 const image = (await findImage(storeItem.image)) as ImageMetadata | string | undefined;
-
 const metadata = merge(
   {
     title: storeItem.title,
-    description: storeItem.excerpt,
+    description: storeItem.brief_description,
     robots: {
       index: storeNormalizedStoreItemRobots?.index,
       follow: storeNormalizedStoreItemRobots?.follow,

@@ -4,6 +4,7 @@ import {SidebarFooter} from './components/SidebarFooter.tsx'
 import { Sidebar as SidebarReact , Menu, MenuItem , type MenuItemStyles } from 'react-pro-sidebar';
 import Home from './icons/Home.tsx'
 import Projects from './icons/Projects.tsx'
+import { useTranslatedPath } from '@/i18n/utils.ts';
 import Store from './icons/Store.tsx'
 import Contact from './icons/Contact.tsx'
 import About from './icons/About.tsx'
@@ -13,7 +14,7 @@ import type AuthorSidebarInterface from '@/interfaces/AuthorSidebar.ts'
 import hexToRGBA from '@/helpers/HexToRGBA.ts';
 import { NavbarPhone } from "../NavbarPhone.tsx";
 import {socialMediaDataHeader} from './icons/SocialMedia.tsx'
-import '@/assets/styles/sidebar.css'
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor.ts';
 const themes = {
   light: {
     sidebar: {
@@ -66,11 +67,11 @@ const themes = {
   },
 };
 interface Props {
-  author : AuthorSidebarInterface
+  author : NormalizedAuthor
   children: ReactNode
+  lang: string
 }
-export const Sidebar = ({author, children} : Props) => {
- 
+export const Sidebar = ({author, children,lang} : Props) => {
   type Theme = 'light' | 'dark';
   const [collapsed, setCollapsed] = React.useState(false);
   const [toggled, setToggled] = React.useState(false);
@@ -78,6 +79,7 @@ export const Sidebar = ({author, children} : Props) => {
   const [rtl, setRtl] = React.useState(false);
   const [hasImage, setHasImage] = React.useState(false);
   const [theme, setTheme] = React.useState<Theme>('light');
+  const translatePath = useTranslatedPath(lang)
   useEffect(() => {
     window.addEventListener('resize', (e) => {
       checkSize()
@@ -98,8 +100,8 @@ export const Sidebar = ({author, children} : Props) => {
     : setCollapsed(true)
     : setCollapsed(false)
   }
-  function extractSocialMediaUrls(object : AuthorSidebarInterface){
-    const socialMedias = []
+  function extractSocialMediaUrls(object : NormalizedAuthor){
+    const socialMedias : {icon:string , url: string}[] = []
     for(const key in object) {
       if(object.hasOwnProperty(key) && object[key] && key.toLocaleLowerCase().endsWith('url')){
         socialMedias.push(
@@ -141,7 +143,6 @@ export const Sidebar = ({author, children} : Props) => {
         color: themes[theme].menu.focus.color,
       },
     },
-   
   };
   return (
     <>
@@ -166,7 +167,7 @@ export const Sidebar = ({author, children} : Props) => {
           border: 'none',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '700px' }}>
           <SidebarHeader 
           socialMedias={extractSocialMediaUrls(author)}
           author={author}
@@ -175,7 +176,7 @@ export const Sidebar = ({author, children} : Props) => {
           style={{ marginBottom: '24px', marginTop: '32px' }} />
           <div style={{ flex: 1, marginBottom: '32px' }}>
             <Menu className='w-[90%] mx-auto space-y-5' menuItemStyles={menuItemStyles}>
-              <MenuItem  href='/' icon={<Home size={20} />} >
+              <MenuItem  href="/" icon={<Home size={20} />} >
                 Homepage
               </MenuItem>
               <MenuItem href='/projects' icon={<Projects size={20} />}>

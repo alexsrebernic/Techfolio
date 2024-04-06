@@ -23,6 +23,10 @@ export interface I18NConfig {
   textDirection: string;
   dateFormatter?: Intl.DateTimeFormat;
 }
+export interface Wordpress {
+  domain: string;
+  enabled: boolean;
+}
 export interface AppBlogConfig {
   isWordpressEnabled: boolean;
   isEnabled: boolean;
@@ -153,6 +157,7 @@ const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   site?: SiteConfig;
   metadata?: MetaDataConfig;
   i18n?: I18NConfig;
+  wordpress?: Wordpress;
   apps?: {
     blog?: AppBlogConfig;
     projects?: AppProjectsConfig;
@@ -364,7 +369,14 @@ const getAnalytics = () => {
 
   return merge({}, _default, config?.analytics ?? {}) as AnalyticsConfig;
 };
-
+const getWordpress = () => {
+  const _default = {
+      domain: 'techfolio.local',
+      enabled: true,
+  }
+  return merge({}, _default, config?.wordpress ?? {} as Wordpress) ;
+}
+export const WORDPRESS = getWordpress()
 export const SITE = getSite();
 export const I18N = getI18N();
 export const METADATA = getMetadata();

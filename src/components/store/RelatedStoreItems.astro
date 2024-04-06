@@ -1,5 +1,5 @@
 ---
-import { APP_STORE } from "@/utils/config";
+import { APP_STORE, I18N } from "@/utils/config";
 
 import { fetchStoreItems, getRelatedStoreItems } from "@/utils/store";
 import BlogHighlightedPosts from "../widgets/BlogHighlightedPosts.astro";
@@ -11,7 +11,8 @@ export interface Props {
 }
 
 const { storeItem } = Astro.props;
-const fetchedPosts = await fetchStoreItems();
+const lang = I18N.language
+const fetchedPosts = await fetchStoreItems(lang);
 const relatedPosts = storeItem.tags ? getRelatedStoreItems(fetchedPosts, storeItem.slug, storeItem.tags) : [];
 ---
 

@@ -1,29 +1,42 @@
 export default `query Project {
   projects {
     nodes {
+      date
+      id
+      modified
+      slug
+      title(format: RENDERED)
       projectItem {
-        background
-        conclusion
-        description
+        background_en
+        background_es
+        conclusion_en
+        conclusion_es
+        description_en
+        description_es
         endYear
-        goals
+        goals_en
+        goals_es
         initYear
-        name
-        role
-        solutions
-        tags
+        name_es
+        name_en
         present
-        tools
-        type
+        role_en
+        role_es
+        solutions_es
+        solutions_en
+        tags_en
+        tags_es
+        tools_en
+        tools_es
+        type_en
+        type_es
         image1 {
           node {
             mediaItemUrl
           }
         }
-        thumbnail {
-          node {
-            mediaItemUrl
-          }
+        preview_url {
+          url
         }
         testimonial {
           edges {
@@ -31,33 +44,30 @@ export default `query Project {
               ... on Testimonial {
                 id
                 testimonialItem {
-                  fieldGroupName
                   linkedinUrl
                   name
-                  position
-                  project
-                  testimonial
                   photo {
                     node {
                       mediaItemUrl
                     }
                   }
+                  position_en
+                  position_es
+                  project
+                  testimonial_en
+                  testimonial_es
                 }
+                title(format: RENDERED)
               }
             }
           }
         }
-        url {
-          title
-          url
+        thumbnail {
+          node {
+            mediaItemUrl
+          }
         }
       }
-      slug
-      status
-      title(format: RENDERED)
-      modified
-      date
-      id
     }
   }
 }`

@@ -4,19 +4,17 @@ export default `query Testimonial {
       testimonialItem {
         linkedinUrl
         name
-        position
+        position_en
+        position_es
         project
-        testimonial
+        testimonial_en
+        testimonial_es
         photo {
           node {
-            sourceUrl(size: LARGE)
-            srcSet(size: LARGE)
             mediaItemUrl
-            link
           }
         }
       }
-      slug
     }
   }
 }`

@@ -28,9 +28,14 @@ metadata:
     cardType: summary_large_image
 
 i18n:
-  language: en
+  language: es
+  languages: 
+  - en
+  - es
   textDirection: ltr
-
+wordpress:
+  domain: techfolio.local
+  enabled: true
 apps:
   store:
     isEnabled: true

@@ -14,7 +14,7 @@ export const NavbarPhone = ({author, toggleSidebar,theme} : Props) => {
       <div className='flex items-center justify-center space-x-2' >
         <img 
           className="mx-auto w-[50px]  rounded-lg  shadow-lg"
-          src={photo.node.mediaItemUrl} 
+          src={photo} 
           alt='Image of Author'
           />
           <div>

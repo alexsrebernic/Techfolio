@@ -2,10 +2,11 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { Typography } from './Typography';
 import type AuthorSidebarInterface from '@/interfaces/AuthorSidebar.ts'
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
 interface SidebarHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   rtl: boolean;
-  author?: AuthorSidebarInterface,
+  author: NormalizedAuthor,
   collapsed: boolean,
   socialMedias: {url: string, icon: React.ReactNode}[]
 }
@@ -33,7 +34,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed, socialM
       <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'start', alignItems: 'center' }}>
         <img 
         className="mx-auto w-[100px]  rounded-lg  shadow-lg"
-        src={photo.node.mediaItemUrl} 
+        src={photo} 
         alt='Image of Author'
         />
         {!collapsed &&

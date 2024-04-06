@@ -1,24 +1,24 @@
-export default  `query JobExperiences {
+export default  `query NewQuery {
   educations {
-    nodes {
-      educationItem {
-        companyName
-        content
-        details
-        endYear
-        fieldGroupName
-        initYear
-        position
-        present
-        icon {
-          node {
-            sourceUrl(size: LARGE)
-            srcSet(size: LARGE)
-            mediaItemUrl
+    edges {
+      node {
+        educationItem {
+          degree_en
+          degree_es
+          details_en
+          details_es
+          endYear
+          establishment
+          present
+          initYear
+          fieldGroupName
+          certificationdegree {
+            node {
+              mediaItemUrl
+            }
           }
         }
       }
-      slug
     }
   }
 }`

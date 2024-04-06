@@ -1,11 +1,12 @@
-export default interface Author  {
-  photo: {node:{mediaItemUrl: string}} ,
+export default interface NormalizedAuthor  {
+  photo: string ,
   firstName: string ,
   lastName: string ,
+  slogan : string,
   email: string ,
+  ubication: string ,
   phone_number: string,
   role: string ,
-  ubication: string,
   instagram_url?: string | null,
   facebook_url?: string | null,
   twitter_url?: string | null,
@@ -15,5 +16,10 @@ export default interface Author  {
   github_url?: string | null,
   pinterest_url?: string | null,
   twitch_url?: string | null,
-  youtbe_url?: string | null,
+  youtube_url?: string | null,
+  availableForWork?: boolean | null,
+  brief_introduction?: string | null,
+  achievements?: string | null,
+  services?: string[] | null,
+  tools?: string[] | null
 }

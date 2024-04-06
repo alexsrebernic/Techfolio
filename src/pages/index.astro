@@ -13,29 +13,31 @@ import { fetchPosts } from '@/utils/blog';
 import List from '@/components/blog/List.astro';
 import type NormalizedPost from '@/interfaces/NormalizedPost';
 import { fetchNormalizedProjects } from '@/utils/projects';
+import { fetchTestimonials } from '@/utils/testimonial';
+import type NormalizedTestimonial from '@/interfaces/NormalizedTestimonial';
+import { getLangFromUrl } from '@/i18n/utils';
+import { defaultLang } from '@/i18n/ui';
+import { fetchAuthor } from '@/utils/author';
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
+import { I18N } from '@/utils/config';
 const metadata = {
   title: "Home | Alex's Portfolio",
   ignoreTitleTemplate: true,
 };
-const {firstName,email, briefIntroduction, ubication,slogan, availableForWork } : Author = (await wpquery({query: AuthorQuery})).owners.edges[0].node.author
-const testimonials : Testimonial[] = (await wpquery({query: TestimonialQuery})).testimonials.nodes.map(testimonial => {
-  return {
-        ...testimonial.testimonialItem,
-        slug: testimonial.slug
-  };
-});
-
-const projects : NormalizedProject[] = await fetchNormalizedProjects()
-const posts : NormalizedPost[] = await fetchPosts()
+const lang = I18N.language
+const author : NormalizedAuthor = await fetchAuthor(lang)
+const testimonials : NormalizedTestimonial[] = await fetchTestimonials(lang)
+const projects : NormalizedProject[] = await fetchNormalizedProjects(lang)
+const posts : NormalizedPost[] = await fetchPosts(lang)
 ---
 
 <Layout metadata={metadata}>
   <div class="space-y-20">
-    <section>
+    <section data-aos="fade-up">
       <div class="space-y-8">
         <div>
           {
-          availableForWork?
+          author.availableForWork?
             <div class="bg-[#b6ffde] dark:bg-opacity-20 dark:text-[#12C971] bg-opacity-50 flex w-fit rounded-xl text-xs items-center justify-center space-x-2 px-3 font-[400] text-green-700 py-0.5">
               <div class="w-1.5 h-1.5 rounded-full bg-green-700 dark:text-[#12C971]">
               </div>
@@ -55,10 +57,10 @@ const posts : NormalizedPost[] = await fetchPosts()
         </div>
         <div class="space-y-2 font-[600]">
           <h1 class="text-3xl font-[600] ">
-            Hello! I'm {firstName} 👏 <br>
+            Hello! I'm {author.firstName} 👏 <br>
           </h1>
           <h2 class="text-3xl font-[600] text-subtitle">
-            {slogan}
+            {author.slogan}
           </h2>
         </div>
         <div class="color-brand flex items-center justify-start space-x-2 opacity-80">
@@ -68,12 +70,12 @@ const posts : NormalizedPost[] = await fetchPosts()
             <path fill="currentColor" d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.813 18.395s.233.308.286.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395" />
           </svg>
           <h4 class="text-sm font-[400] ">
-            {ubication}
+            {author.ubication}
           </h4>
         </div>
         <div>
           <p>
-            {briefIntroduction}
+            {author.brief_introduction}
           </p>
         </div>
         <div>
@@ -82,16 +84,16 @@ const posts : NormalizedPost[] = await fetchPosts()
         </div>
       </div>
     </section>
-    <section class="space-y-10 ">
+    <section data-aos="fade-up" class="space-y-10 ">
       <div>
         <h2 class="text-2xl font-[500]">Projects</h2>
       </div>
       <ItemsGrid  posts={projects}/>
     </section>
-    <section>
+    <section data-aos="fade-up">
       <TestimonialGrid  columns={2} title="What co-workers/clients say" items={testimonials}/>
     </section>
-    <section class="space-y-10 ">
+    <section data-aos="fade-up" class="space-y-10 ">
       <div>
         <h2 class="text-2xl font-[500]">Blog</h2>
       </div>
@@ -103,7 +105,7 @@ const posts : NormalizedPost[] = await fetchPosts()
   </div>
   
 </Layout>
-<script define:vars={{email}} >
+<script define:vars={{email : author.email}} >
   const button = document.getElementById('copyEmailButton')
   function copyEmailToClipboard() {
     navigator.clipboard.writeText(email);

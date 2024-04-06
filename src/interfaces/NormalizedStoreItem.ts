@@ -6,14 +6,20 @@ export default interface NormalizedStoreItem {
   price: number,
   currency: string,
   content: string,
-  link: string,
   slug: string,
-  excerpt: string,
   title: string,
   status: string,
   date: Date,
   id: string,
-  thumbnail: {node:{mediaItemUrl: string}},
+  image_1: string | null,
+  image_2: string | null,
+  image_3: string | null,
+  image_4: string | null,
+  items: string[]
+  brief_description: string,
+  description: string,
+  preview_url: string,
+  buy_url: string,
   modified: Date,
   permalink: string;
   publishDate: Date;
@@ -22,7 +28,7 @@ export default interface NormalizedStoreItem {
   category?: string;
   tags?: Array<string>;
   author?: string;
-  metadata?: MetaData;
+  metadata?: MetaData | null | {};
   draft?: boolean;
-  readingTime?: string;
+
 }

@@ -1,8 +1,9 @@
 ---
+import type NormalizedTestimonial from "@/interfaces/NormalizedTestimonial"
 import type Testimonial from "@/interfaces/Testimonial"
 import Image from "astro/components/Image.astro"
 interface Props {
-  item: Testimonial
+  item: NormalizedTestimonial
 }
 const {item} : Props = Astro.props
 const {photo, name, project, position,linkedin_url, testimonial} = item
@@ -12,7 +13,7 @@ const {photo, name, project, position,linkedin_url, testimonial} = item
     {testimonial}
   </p>
   <div class="flex space-x-4">
-    <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={photo.node.mediaItemUrl} width={75} height={75} alt={`Image of ${name}`}/>
+    <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={photo} width={75} height={75} alt={`Image of ${name}`}/>
     <a href={linkedin_url} class="flex-1 space-y-1">
       <p class="text-[#111111] text-sm dark:text-white">{name}</p>
       <p class="text-xs">{position} of {project}</p>

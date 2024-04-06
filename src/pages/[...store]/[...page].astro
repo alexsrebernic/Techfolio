@@ -7,11 +7,13 @@ import Pagination from '@/components/store/Pagination.astro';
 // import PostTags from "@/components/blog/Tags.astro";
 
 import { getStaticPathsBlogList,storeListRobots } from '@/utils/store';
+import { I18N } from '@/utils/config';
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  return await getStaticPathsBlogList({ paginate });
+  const lang = I18N.language
+  return await getStaticPathsBlogList({ paginate }, lang);
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -44,8 +46,10 @@ const metadata = {
         Check my exclusive resources
       </p>
     </div>
-    <BlogList posts={page.data} />
-    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    <section data-aos="fade-up">
+      <BlogList posts={page.data} />
+      <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    </section>
     <!--
       <PostTags tags={allCategories} class="mb-2" title="Search by Categories:" isCategory />
       <PostTags tags={allTags}  title="Search by Tags:" />

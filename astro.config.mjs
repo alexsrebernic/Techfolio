@@ -24,7 +24,7 @@ export default defineConfig({
     defaultLocale: I18N.language,
     locales: I18N.languages,
     routing: {
-      prefixDefaultLocale: true,
+      prefixDefaultLocale: false,
     }
   },
   integrations: [tailwind({

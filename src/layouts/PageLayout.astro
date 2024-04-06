@@ -5,19 +5,26 @@ import SidebarAuthorQuery from '@/graphql/SidebarAuthorQuery';
 import { wpquery } from '@/data/wordpress';
 import type { MetaData } from '@/types';
 import ToggleTheme from '@/components/common/ToggleTheme.astro'
+import { fetchAuthor } from '@/utils/author';
+import { I18N } from '@/utils/config';
 export interface Props {
   metadata?: MetaData;
 }
 
 const { metadata } = Astro.props;
-const authorSidebarData = (await wpquery({query: SidebarAuthorQuery})).owners.edges[0].node.author
+const lang = I18N.language
+const authorSidebarData = await fetchAuthor(lang)
 ---
 
 <Layout metadata={metadata}>
   <slot name="announcement">
   </slot>
   <div class="flex flex-col md:flex-row min-h-[80vh]">
-    <Sidebar author={authorSidebarData} client:only="react" transition:persist  >
+    <Sidebar 
+    lang={lang} 
+    author={authorSidebarData} 
+    client:only="react"
+    >
       <ToggleTheme />
     </Sidebar>
     <div class="md:pl-[80px] sidebar:pl-[300px] flex-1 px-2">

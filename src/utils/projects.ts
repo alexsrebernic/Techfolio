@@ -1,12 +1,14 @@
 import type { PaginateFunction } from 'astro';
 
 import type NormalizedProject from '@/interfaces/NormalizedProject';
-import { APP_PROJECTS } from '@/utils/config';
+import { APP_PROJECTS, I18N } from '@/utils/config';
 import { cleanSlug, trimSlash, PROJECTS_BASE, PROJECTS_PERMALINK_PATTERN, CATEGORY_PROJECT_BASE, TAG_PROJECT_BASE } from './permalinks';
 import { wpquery } from '@/data/wordpress';
 import ProjectQuery from '@/graphql/ProjectQuery';
 import type Project from '@/interfaces/Project';
 import parseHTMLToListObjects from '@/helpers/parseHTMLToObject';
+import searchPropsEndingWithLang from '@/helpers/searchPropsEndingWith';
+import type Testimonial from '@/interfaces/Testimonial';
 const generatePermalink = async ({
   id,
   slug,
@@ -42,24 +44,25 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedProject = async (project: Project): Promise<NormalizedProject> => {
-  const _tags = project.tags.map(tag => tag.toLowerCase().replace(/[\W_]+/g, '-'));
+const getNormalizedProject = async (project: Project,lang : string = I18N.language): Promise<NormalizedProject> => {
+  const normalizedProjectTranslated = searchPropsEndingWithLang<Project>(project,lang,I18N.languages)
+  const _tags = normalizedProjectTranslated.tags ? normalizedProjectTranslated.tags.map(tag => tag.toLowerCase().replace(/[\W_]+/g, '-')) : []
   const _data = {
-    publishDate: project.date,
-    title: project.title,
-    excerpt: project.description,
-    image: project.thumbnail.node.mediaItemUrl,
+    publishDate: normalizedProjectTranslated.date,
+    title: normalizedProjectTranslated.title,
+    excerpt: normalizedProjectTranslated.description,
+    image: normalizedProjectTranslated.thumbnail.node.mediaItemUrl,
     tags: _tags,
-    updateDate: project.modified,
-    draft: project.draft,
+    updateDate: normalizedProjectTranslated.modified,
+    draft: normalizedProjectTranslated.draft,
  
   }
   const _project = {
     data: _data,
-    body: project.content,
+    body: normalizedProjectTranslated.content,
     collection: 'project',
-    id: project.id,
-    slug: project.slug,
+    id: normalizedProjectTranslated.id,
+    slug: normalizedProjectTranslated.slug,
   }
   const { id, slug: rawSlug = '', data } = _project;
 
@@ -77,7 +80,8 @@ const getNormalizedProject = async (project: Project): Promise<NormalizedProject
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
-
+  const _testimonial = searchPropsEndingWithLang<Testimonial>(project.testimonial.edges[0].node.testimonialItem,lang,I18N.languages)
+  _testimonial.photo = _testimonial.photo.node.mediaItemUrl
   return {
     id: id,
     slug: slug,
@@ -90,19 +94,25 @@ const getNormalizedProject = async (project: Project): Promise<NormalizedProject
     tags: tags,
     draft: draft,
     metadata,
-    testimonial: project.testimonial.edges[0].node.testimonialItem,
-    init_year: project.initYear,
-    present: project.present,
-    end_year: project.endYear,
-    role: project.role,
-    project_url: project.url.url,
-    background: project.background,
-    solutions: project.solutions && parseHTMLToListObjects(project.solutions),
-    conclusion: project.conclusion,
-    goals: project.goals && parseHTMLToListObjects(project.goals),
-    tools: project.tools && project.tools.split('\r\n'),
-    type : project.type,
-    image_1: project.image1.node.mediaItemUrl
+    name: normalizedProjectTranslated.name,
+    content: normalizedProjectTranslated.content,
+    date: normalizedProjectTranslated.date,
+    status: normalizedProjectTranslated.status,
+    modified: normalizedProjectTranslated.modified,
+    description: normalizedProjectTranslated.description,
+    testimonial: _testimonial,
+    init_year: normalizedProjectTranslated.initYear,
+    present: normalizedProjectTranslated.present,
+    end_year: normalizedProjectTranslated.endYear,
+    role: normalizedProjectTranslated.role,
+    preview_url: normalizedProjectTranslated.preview_url.url,
+    background: normalizedProjectTranslated.background,
+    solutions: normalizedProjectTranslated.solutions && parseHTMLToListObjects(normalizedProjectTranslated.solutions),
+    conclusion: normalizedProjectTranslated.conclusion,
+    goals: normalizedProjectTranslated.goals && parseHTMLToListObjects(normalizedProjectTranslated.goals),
+    tools: normalizedProjectTranslated.tools ? normalizedProjectTranslated.tools.split('\r\n') : [],
+    type : normalizedProjectTranslated.type,
+    image_1: normalizedProjectTranslated.image1.node.mediaItemUrl
   };
 
 };
@@ -119,7 +129,7 @@ const getRandomizedNormalizedProjects = (array: NormalizedProject[], num: number
   return newArray;
 };
 
-const load = async function (): Promise<Array<NormalizedProject>> {
+const load = async function (lang: string): Promise<Array<NormalizedProject>> {
   const projects = (await wpquery({query : ProjectQuery})).projects.nodes.map(project => {
     return {
           ...project.projectItem,
@@ -130,7 +140,7 @@ const load = async function (): Promise<Array<NormalizedProject>> {
           date: project.date
     };
   });
-  const normalizedNormalizedProjects = projects.map(async (project) => await getNormalizedProject(project));
+  const normalizedNormalizedProjects = projects.map(async (project) => await getNormalizedProject(project, lang));
   const results = (await Promise.all(normalizedNormalizedProjects))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
     .filter((project) => !project.draft);
@@ -157,18 +167,18 @@ export const blogTagRobots = APP_PROJECTS.tag.robots;
 export const blogNormalizedProjectsPerPage = APP_PROJECTS?.postsPerPage;
 
 /** */
-export const fetchNormalizedProjects = async (): Promise<Array<NormalizedProject>> => {
+export const fetchNormalizedProjects = async (lang: string): Promise<Array<NormalizedProject>> => {
   if (!_projects) {
-    _projects = await load();
+    _projects = await load(lang);
   }
   return _projects;
 };
 
 /** */
-export const findNormalizedProjectsBySlugs = async (slugs: Array<string>): Promise<Array<NormalizedProject>> => {
+export const findNormalizedProjectsBySlugs = async (slugs: Array<string>, lang : string): Promise<Array<NormalizedProject>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const projects = await fetchNormalizedProjects();
+  const projects = await fetchNormalizedProjects(lang);
 
   return slugs.reduce(function (r: Array<NormalizedProject>, slug: string) {
     projects.some(function (project: NormalizedProject) {
@@ -179,10 +189,10 @@ export const findNormalizedProjectsBySlugs = async (slugs: Array<string>): Promi
 };
 
 /** */
-export const findNormalizedProjectsByIds = async (ids: Array<string>): Promise<Array<NormalizedProject>> => {
+export const findNormalizedProjectsByIds = async (ids: Array<string>, lang : string): Promise<Array<NormalizedProject>> => {
   if (!Array.isArray(ids)) return [];
 
-  const projects = await fetchNormalizedProjects();
+  const projects = await fetchNormalizedProjects(lang);
 
   return ids.reduce(function (r: Array<NormalizedProject>, id: string) {
     projects.some(function (project: NormalizedProject) {
@@ -193,26 +203,26 @@ export const findNormalizedProjectsByIds = async (ids: Array<string>): Promise<A
 };
 
 /** */
-export const findLatestNormalizedProjects = async ({ count }: { count?: number }): Promise<Array<NormalizedProject>> => {
+export const findLatestNormalizedProjects = async ({ count }: { count?: number  } , lang : string): Promise<Array<NormalizedProject>> => {
   const _count = count || 4;
-  const projects = await fetchNormalizedProjects();
+  const projects = await fetchNormalizedProjects(lang);
 
   return projects ? projects.slice(0, _count) : [];
 };
 
 /** */
-export const getStaticPathsProjectList = async ({ paginate }: { paginate: PaginateFunction }) => {
+export const getStaticPathsProjectList = async ({ paginate }: { paginate: PaginateFunction } , lang : string) => {
   if (!isProjectEnabled || !isProjectListRouteEnabled) return [];
-  return paginate(await fetchNormalizedProjects(), {
+  return paginate(await fetchNormalizedProjects(lang), {
     params: { project: PROJECTS_BASE || undefined },
     pageSize: blogNormalizedProjectsPerPage,
   });
 };
 
 /** */
-export const getStaticPathsNormalizedProject = async () => {
+export const getStaticPathsNormalizedProject = async (lang : string) => {
   if (!isProjectEnabled || !isProjectNormalizedProjectRouteEnabled) return [];
-  return (await fetchNormalizedProjects()).flatMap((project) => ({
+  return (await fetchNormalizedProjects(lang)).flatMap((project) => ({
     params: {
       project: project.permalink,
     },
@@ -221,10 +231,10 @@ export const getStaticPathsNormalizedProject = async () => {
 };
 
 /** */
-export const getStaticPathsProjectCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
+export const getStaticPathsProjectCategory = async ({ paginate }: { paginate: PaginateFunction } , lang : string) => {
   if (!isProjectEnabled || !isProjectCategoryRouteEnabled) return [];
 
-  const projects = await fetchNormalizedProjects();
+  const projects = await fetchNormalizedProjects(lang);
   const categories = new Set<string>();
   projects.map((project) => {
     typeof project.category === 'string' && categories.add(project.category.toLowerCase());
@@ -243,10 +253,10 @@ export const getStaticPathsProjectCategory = async ({ paginate }: { paginate: Pa
 };
 
 /** */
-export const getStaticPathsProjectTag = async ({ paginate }: { paginate: PaginateFunction }) => {
+export const getStaticPathsProjectTag = async ({ paginate }: { paginate: PaginateFunction } , lang : string) => {
   if (!isProjectEnabled || !isProjectTagRouteEnabled) return [];
 
-  const projects = await fetchNormalizedProjects();
+  const projects = await fetchNormalizedProjects(lang);
   const tags = new Set<string>();
   projects.map((project) => {
     Array.isArray(project.tags) && project.tags.map((tag) => tags.add(tag.toLowerCase()));

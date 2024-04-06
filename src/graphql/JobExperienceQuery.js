@@ -1,23 +1,15 @@
-export default  `query JobExperiences {
+export default  `query NewQuery {
   jobExperiences {
     edges {
       node {
         experienceItem {
+          details_es
+          details_en
           companyName
-          content
-          details
           endYear
-          fieldGroupName
-          icon {
-            node {
-              mediaItemUrl
-              slug
-              sourceUrl
-            }
-          }
           initYear
-          link
-          position
+          position_en
+          position_es
           present
         }
       }

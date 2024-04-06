@@ -7,18 +7,23 @@ import EducationQuery from '@/graphql/EducationQuery';
 import JobExperienceQuery from '@/graphql/JobExperienceQuery';
 import { wpquery } from '@/data/wordpress';
 
-import type Author from '@/interfaces/Author';
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
 import Image from 'astro/components/Image.astro';
 import Button from '@/components/ui/Button.astro';
 import { Icon } from 'astro-icon/components';
-
+import {fetchAuthor} from '@/utils/author'
+import { I18N } from '@/utils/config';
+import { fetchExperiences } from '@/utils/experience';
+import type NormalizedExperience from '@/interfaces/NormalizedExperience';
+import {fetchEducations} from '@/utils/education'
 const metadata = {
   title: "Home | Alex's Portfolio",
   ignoreTitleTemplate: true,
 };
-const {firstName,tools,services,photo,lastName, currentSituation, briefIntroduction, role } : Author = (await wpquery({query: AuthorQuery})).owners.edges[0].node.author
-const jobExperiences : Experience[] = (await wpquery({query: JobExperienceQuery})).jobExperiences.edges.map(item => ({...item.node})).map(item => ({...item.experienceItem}))
-const educations : Education[] = (await wpquery({query: EducationQuery})).educations.nodes.map(item => ({...item.educationItem}))
+const lang = I18N.language
+const author : NormalizedAuthor = await fetchAuthor(lang)
+const jobExperiences : NormalizedExperience[] = await fetchExperiences(lang)
+const educations : Education[] = await fetchEducations(lang)
 ---
 
 <Layout metadata={metadata}>
@@ -28,30 +33,30 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
         <div class="space-y-8 flex-1">
           <div class="space-y-2 font-[600]">
             <h1 class="text-3xl font-[600] ">
-              {firstName} {lastName}
+              {author.firstName} {author.lastName}
             </h1>
             <h2 class="text-3xl font-[600] text-subtitle">
-              {role}
+              {author.role}
             </h2>
           </div>
           <div class="space-y-4 2xl:text-sm">
             <p>
-              {briefIntroduction}
+              {author.brief_introduction}
             </p>
             <p>
-              {currentSituation}
+              {author.achievements}
             </p>
           </div>
         </div>
         <div class="flex-initial rounded-xl hidden md:block">
-          <Image alt='A photo of me smiling :)' class='rounded-xl shadow-xl' width={200} height={200} src={photo.node.mediaItemUrl}/>
+          <Image alt='A photo of me smiling :)' class='rounded-xl shadow-xl' width={200} height={200} src={author.photo}/>
         </div>
       </div>
     </section>
     <section>
 
     </section>
-    <section>
+    <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
           <h2 class="text-xl font-[500]">Services</h2>
@@ -62,7 +67,7 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
         >
           <div id="element-gradient" class="absolute top-0 left-0 w-full h-full bg-gradient-to-white dark:bg-gradient-to-black z-10 ">
           </div>
-          {services.map((item) => (
+          {author.services && author.services.map((item) => (
             <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm dark:bg-[#282828]">
               {item}
             </div>
@@ -73,7 +78,7 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
         <Button id="button-see-more-services" variant="secondary" class="mx-auto" text="See more"/>
       </div>
     </section>
-    <section>
+    <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
           <h2 class="text-xl font-[500]">Tools and languages I work with</h2>
@@ -85,7 +90,7 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
           <div id="tools-gradient" class="absolute top-0 left-0 w-full h-full bg-gradient-to-white dark:bg-gradient-to-black z-10 ">
           </div>
           
-          {tools.map((item) => (
+          {author.tools && author.tools.map((item) => (
             <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
               <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/${item.toLowerCase().replaceAll(' ', '')}`}/>
               <span class="flex-1">
@@ -99,7 +104,7 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
         <Button id="button-see-more-tools" variant="secondary" class="mx-auto" text="See more"/>
       </div>
     </section>
-    <section>
+    <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
           <h2 class="text-xl font-[500]">Experience</h2>
@@ -126,7 +131,7 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
         </div>
       </div>
     </section>
-    <section>
+    <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
           <h2 class="text-xl font-[500]">Education</h2>
@@ -140,8 +145,8 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
                 </div>
                 <div class="space-y-6 flex-1">
                   <div class="flex flex-col ">
-                    <span>{education.companyName}</span>
-                    <p class="text-sm">{education.position}</p>
+                    <span>{education.establishment}</span>
+                    <p class="text-sm">{education.degree}</p>
                   </div>
                   <p class="text-sm">
                     {education.details}
@@ -169,19 +174,19 @@ const educations : Education[] = (await wpquery({query: EducationQuery})).educat
   buttonServices?.addEventListener('click', () => {
     const element = document.getElementById('services-grid')
     const elementGradient = document.getElementById('element-gradient')
-    element.classList.remove('max-h-[300px]')
-    element.classList.add(`max-h-[3000px]`)
-    elementGradient?.remove('bg-gradient-to-black')
-    elementGradient?.remove('bg-gradient-to-white')
+    element?.classList.remove('max-h-[300px]')
+    element?.classList.add(`max-h-[3000px]`)
+    elementGradient?.classList.remove('bg-gradient-to-black')
+    elementGradient?.classList.remove('bg-gradient-to-white')
     buttonServices.classList.add('hidden')
   })
   buttonTools?.addEventListener('click', () => {
     const element = document.getElementById('tools-grid')
     const elementGradient = document.getElementById('tools-gradient')
-    element.classList.remove('max-h-[300px]')
-    element.classList.add(`max-h-[3000px]`)
-    elementGradient?.remove('bg-gradient-to-black')
-    elementGradient?.remove('bg-gradient-to-white')
+    element?.classList.remove('max-h-[300px]')
+    element?.classList.add(`max-h-[3000px]`)
+    elementGradient?.classList.remove('bg-gradient-to-black')
+    elementGradient?.classList.remove('bg-gradient-to-white')
     buttonTools.classList.add('hidden')
   })
 </script>

@@ -1,31 +1,35 @@
-# 🚀 AstroWind
+Sure, here's a related markdown for a portfolio called TechFolio:
 
-<img src="https://raw.githubusercontent.com/onwidget/.github/main/resources/astrowind/lighthouse-score.png" align="right"
-     alt="AstroWind Lighthouse Score" width="100" height="358">
+```markdown
+# 🚀 TechFolio
 
-🌟 _Most *starred* & *forked* Astro theme in 2022 & 2023_. 🌟
+<img src="https://example.com/path/to/techfolio/screenshot.png" align="right"
+     alt="TechFolio Screenshot" width="200" height="200">
 
-**AstroWind** is a free and open-source template to make your website using **[Astro 4.0](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/)**. Ready to start a new project and designed taking into account web best practices.
+🌟 _Crafted for the tech-savvy professionals, TechFolio is your go-to portfolio template for showcasing your skills and projects._ 🌟
 
-- ✅ **Production-ready** scores in **PageSpeed Insights** reports.
-- ✅ Integration with **Tailwind CSS** supporting **Dark mode** and **_RTL_**.
-- ✅ **Fast and SEO friendly blog** with automatic **RSS feed**, **MDX** support, **Categories & Tags**, **Social Share**, ...
-- ✅ **Image Optimization** (using new **Astro Assets** and **Unpic** for Universal image CDN).
-- ✅ Generation of **project sitemap** based on your routes.
-- ✅ **Open Graph tags** for social media sharing.
-- ✅ **Analytics** built-in Google Analytics, and Splitbee integration.
+**TechFolio** is a responsive, minimalistic, and lightning-fast portfolio template designed specifically for individuals in the tech industry. Whether you're a developer, designer, or any other tech enthusiast, TechFolio has got you covered.
+
+- ✅ **Responsive Design**: Looks great on all devices, ensuring your portfolio shines no matter where it's viewed.
+- ✅ **Minimalistic Style**: Clean and clutter-free design focuses attention on your work and accomplishments.
+- ✅ **Lightning Fast**: Optimized for speed to ensure swift loading times and smooth browsing experience.
+- ✅ **Built-in Blog**: Share your thoughts, insights, and experiences with the world through the integrated blog feature.
+- ✅ **Store Integration**: Showcase your products or services effortlessly with the built-in store functionality.
+- ✅ **Contact Section**: Allow potential clients or collaborators to get in touch easily through the dedicated contact section.
+- ✅ **About Me Section**: Introduce yourself and let visitors know who you are, what you do, and what sets you apart.
+- ✅ **Projects Section**: Highlight your projects, past works, or contributions to demonstrate your expertise and creativity.
 
 <br>
 
-<img src="https://raw.githubusercontent.com/onwidget/.github/main/resources/astrowind/screenshot-astrowind-1.png" alt="AstroWind Theme Screenshot">
+<img src="https://example.com/path/to/techfolio/screenshot-2.png" alt="TechFolio Theme Screenshot">
 
-[![onWidget](https://custom-icon-badges.demolab.com/badge/made%20by%20-onWidget-556bf2?style=flat-square&logo=onwidget&logoColor=white&labelColor=101827)](https://onwidget.com)
-[![License](https://img.shields.io/github/license/onwidget/astrowind?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/onwidget/astrowind/blob/main/LICENSE.md)
-[![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/onwidget)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/onwidget/astrowind#contributing)
-[![Known Vulnerabilities](https://snyk.io/test/github/onwidget/astrowind/badge.svg?style=flat-square)](https://snyk.io/test/github/onwidget/astrowind)
-[![Stars](https://img.shields.io/github/stars/onwidget/astrowind.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/onwidget/astrowind)
-[![Forks](https://img.shields.io/github/forks/onwidget/astrowind.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/onwidget/astrowind)
+[![Your Name](https://custom-icon-badges.demolab.com/badge/made%20by%20-YourName-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://yourwebsite.com)
+[![License](https://img.shields.io/github/license/yourusername/techfolio?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/yourusername/techfolio/blob/main/LICENSE.md)
+[![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/yourusername)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/yourusername/techfolio#contributing)
+[![Known Vulnerabilities](https://snyk.io/test/github/yourusername/techfolio/badge.svg?style=flat-square)](https://snyk.io/test/github/yourusername/techfolio)
+[![Stars](https://img.shields.io/github/stars/yourusername/techfolio.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/yourusername/techfolio)
+[![Forks](https://img.shields.io/github/forks/yourusername/techfolio.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/yourusername/techfolio)
 
 <br>
 
@@ -33,12 +37,12 @@
 <summary>Table of Contents</summary>
 
 - [Demo](#demo)
-- [Getting started](#getting-started)
-  - [Project structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Project Structure](#project-structure)
   - [Commands](#commands)
   - [Configuration](#configuration)
   - [Deploy](#deploy)
-- [Frequently Asked Questions](#frequently-asked-questions)
+- [FAQ](#frequently-asked-questions)
 - [Related Projects](#related-projects)
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
@@ -50,220 +54,155 @@
 
 ## Demo
 
-📌 [https://astrowind.vercel.app/](https://astrowind.vercel.app/)
+📌 [View Demo](https://yourtechfoliodemo.com/)
 
 <br>
 
-## Getting started
+## Getting Started
 
-**AstroWind** tries to give you quick access to creating a website using [Astro 4.0](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/). It's a free theme which focuses on simplicity, good practices and high performance.
+**TechFolio** empowers tech professionals like you to create an impressive online presence with ease. Whether you're a seasoned veteran or just starting out, TechFolio provides the perfect platform to showcase your talents.
 
-Very little vanilla javascript is used only to provide basic functionality so that each developer decides which framework (React, Vue, Svelte, Solid JS...) to use and how to approach their goals.
+### Project Structure
 
-In this version the template only supports the `static` and `hybrid` options in the `output` configuration (not SSR). We are working on the next version that, among other features, will be compatible with SSR.
-
-### Project structure
-
-Inside **AstroWind** template, you'll see the following folders and files:
+Here's a glimpse into the structure of TechFolio:
 
 ```
-/
-├── public/
+.
+├── public
 │   ├── _headers
 │   └── robots.txt
-├── src/
-│   ├── assets/
-│   │   ├── favicons/
-│   │   ├── images/
-│   │   └── styles/
-│   │       └── tailwind.css
-│   ├── components/
-│   │   ├── blog/
-│   │   ├── common/
-│   │   ├── ui/
-│   │   ├── widgets/
-│   │   │   ├── Header.astro
-│   │   │   └── ...
-│   │   ├── CustomStyles.astro
+├── src
+│   ├── components
+... │   ├── CustomStyles.astro
 │   │   ├── Favicons.astro
 │   │   └── Logo.astro
-│   ├── content/
-│   │   ├── post/
-│   │   │   ├── post-slug-1.md
-│   │   │   ├── post-slug-2.mdx
-│   │   │   └── ...
-│   │   └-- config.ts
-│   ├── layouts/
+│   ├── data
+│   │   └── wordpress.ts
+│   ├── graphql
+│   │   ├── AuthorQuery.js
+│   │   ├── EducationQuery.js
+│   │   ├── JobExperienceQuery.js
+│   │   ├── PostQuery.js
+│   │   ├── ProjectQuery.js
+│   │   ├── SidebarAuthorQuery.js
+│   │   ├── StoreItemQuery.js
+│   │   └── TestimonialQuery.js
+│   ├── helpers
+│   │   ├── HexToRGBA.ts
+│   │   ├── parseHTMLToObject.js
+│   │   └── searchPropsEndingWith.ts
+│   ├── i18n
+│   │   ├── menus.ts
+│   │   ├── ui.ts
+│   │   └── utils.ts
+│   ├── interfaces
+│   │   ├── Author.ts
+│   │   ├── Education.ts
+│   │   ├── Experience.ts
+│   │   ├── NormalizedAuthor.ts
+│   │   ├── NormalizedEducation.ts
+│   │   ├── NormalizedExperience.ts
+│   │   ├── NormalizedPost.ts
+│   │   ├── NormalizedProject.ts
+│   │   ├── NormalizedStoreItem.ts
+│   │   ├── NormalizedTestimonial.ts
+│   │   ├── Post.ts
+│   │   ├── Project.ts
+│   │   ├── StoreItem.ts
+│   │   └── Testimonial.ts
+│   ├── layouts
 │   │   ├── Layout.astro
 │   │   ├── MarkdownLayout.astro
 │   │   └── PageLayout.astro
-│   ├── pages/
-│   │   ├── [...blog]/
-│   │   │   ├── [category]/
-│   │   │   ├── [tag]/
-│   │   │   ├── [...page].astro
-│   │   │   └── index.astro
+│   ├── pages
+│   │   ├── about.astro
+│   │   ├── contact.astro
 │   │   ├── index.astro
-│   │   ├── 404.astro
-│   │   ├-- rss.xml.ts
-│   │   └── ...
-│   ├── utils/
+│   │   └── rss.xml.ts
+│   ├── utils
+│   │   ├── author.ts
+│   │   ├── blog.ts
+│   │   ├── config.ts
+│   │   ├── directories.ts
+│   │   ├── education.ts
+│   │   ├── experience.ts
+│   │   ├── frontmatter.mjs
+│   │   ├── images-optimization.ts
+│   │   ├── images.ts
+│   │   ├── permalinks.ts
+│   │   ├── projects.ts
+│   │   ├── store.ts
+│   │   ├── tasks.mjs
+│   │   ├── testimonial.ts
+│   │   └── utils.ts
 │   ├── config.yaml
-│   └── navigation.js
-├── package.json
+│   ├── env.d.ts
+│   └── types.d.ts
 ├── astro.config.mjs
-└── ...
+├── LICENSE.md
+├── package.json
+├── package-lock.json
+├── README.md
+├── sandbox.config.json
+├── tailwind.config.cjs
+├── tsconfig.json
+└── vscode.tailwind.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory if they do not require any transformation or in the `assets/` directory if they are imported directly.
-
-[![Edit AstroWind on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/onwidget/astrowind/tree/main) [![Open in Gitpod](https://svgshare.com/i/xdi.svg)](https://gitpod.io/?on=gitpod#https://github.com/onwidget/astrowind) [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/onwidget/astrowind)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file `README.md`. Update `src/config.yaml` and contents. Have fun!
-
-<br>
 
 ### Commands
 
-All commands are run from the root of the project, from a terminal:
+Execute these commands from the project root:
 
 | Command               | Action                                             |
 | :-------------------- | :------------------------------------------------- |
-| `npm install`         | Installs dependencies                              |
-| `npm run dev`         | Starts local dev server at `localhost:3000`        |
-| `npm run build`       | Build your production site to `./dist/`            |
-| `npm run preview`     | Preview your build locally, before deploying       |
-| `npm run format`      | Format codes with Prettier                         |
-| `npm run lint:eslint` | Run Eslint                                         |
-| `npm run astro ...`   | Run CLI commands like `astro add`, `astro preview` |
-
-<br>
+| `npm install`         | Install dependencies                              |
+| `npm run dev`         | Start local development server at `localhost:3000` |
+| `npm run build`       | Generate optimized production build to `./dist/`  |
+| `npm run preview`     | Preview production build locally before deployment|
+| `npm run format`      | Format code using Prettier                         |
+| `npm run lint:eslint` | Run ESLint to lint code                            |
+| `npm run ...`         | Other Astro CLI commands such as `astro add`, `astro preview`, etc. |
 
 ### Configuration
 
 Basic configuration file: `./src/config.yaml`
 
 ```yaml
-site:
-  name: 'Example'
-  site: 'https://example.com'
-  base: '/' # Change this if you need to deploy to Github Pages, for example
-  trailingSlash: false # Generate permalinks with or without "/" at the end
-
-  googleSiteVerificationId: false # Or some value,
-
-# Default SEO metadata
-metadata:
-  title:
-    default: 'Example'
-    template: '%s — Example'
-  description: 'This is the default meta description of Example website'
-  robots:
-    index: true
-    follow: true
-  openGraph:
-    site_name: 'Example'
-    images:
-      - url: '@/assets/images/default.jpg'
-        width: 1200
-        height: 628
-    type: website
-  twitter:
-    handle: '@twitter_user'
-    site: '@twitter_user'
-    cardType: summary_large_image
-
-i18n:
-  language: en
-  textDirection: ltr
-
-apps:
-  blog:
-    isEnabled: true # If the blog will be enabled
-    postsPerPage: 6 # Number of posts per page
-
-    post:
-      isEnabled: true
-      permalink: '/blog/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
-      robots:
-        index: true
-
-    list:
-      isEnabled: true
-      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
-      robots:
-        index: true
-
-    category:
-      isEnabled: true
-      pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
-      robots:
-        index: true
-
-    tag:
-      isEnabled: true
-      pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
-      robots:
-        index: false
-
-    isRelatedPostsEnabled: true # If a widget with related posts is to be displayed below each post
-    relatedPostsCount: 4 # Number of related posts to display
-
-analytics:
-  vendors:
-    googleAnalytics:
-      id: null # or "G-XXXXXXXXXX"
-
-ui:
-  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
+# Your configuration settings here
 ```
-
-<br>
 
 ### Deploy
 
-#### Deploy to production (manual)
+#### Manual Production Deployment
 
-You can create an optimized production build with:
+Create an optimized production build with:
 
 ```shell
 npm run build
 ```
 
-Now, your website is ready to be deployed. All generated files are located at
-`dist` folder, which you can deploy the folder to any hosting service you
-prefer.
+The generated files will be in the `dist` folder, ready to be deployed to your chosen hosting service.
 
-#### Deploy to Netlify
+#### Cloudflare Deployment
 
-Clone this repository on own GitHub account and deploy to Netlify:
+Deploy TechFolio to Cloudflare (recommended):
 
-[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/onwidget/astrowind)
+[![Cloudflare Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/techfolio)
 
-#### Deploy to Vercel
 
-Clone this repository on own GitHub account and deploy to Vercel:
+#### Netlify Deployment
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonwidget%2Fastrowind)
+Deploy TechFolio to Netlify:
 
-<br>
+[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/techfolio)
 
-## Frequently Asked Questions
+#### Vercel Deployment
 
-- Why?
--
--
+Deploy TechFolio to Vercel:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Ftechfolio)
 
 <br>
-
-## Related projects
-
-- [TailNext](https://tailnext.vercel.app/) - Free template using Next.js 14 and Tailwind CSS with the new App Router.
-- [Qwind](https://qwind.pages.dev/) - Free template to make your website using Qwik + Tailwind CSS.
 
 ## Contributing
 
@@ -272,8 +211,8 @@ That would be very useful for all of us and we would be happy to listen and take
 
 ## Acknowledgements
 
-Initially created by [onWidget](https://onwidget.com) and maintained by a community of [contributors](https://github.com/onwidget/astrowind/graphs/contributors).
+Initially created by [Alex Srebernic](https://alexsrebernic.com) with the template Astrowind made by[onWidget](https://onwidget.com) 
 
 ## License
 
-**AstroWind** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.
+**Techfolio** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.

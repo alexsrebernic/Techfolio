@@ -6,11 +6,13 @@ import BlogList from '@/components/projects/List.astro';
 import Headline from '@/components/blog/Headline.astro';
 import Pagination from '@/components/projects/Pagination.astro';
 import { getStaticPathsProjectTag, blogTagRobots } from '@/utils/projects';
+import { I18N } from '@/utils/config';
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  return await getStaticPathsProjectTag({ paginate });
+  const lang = I18N.language
+  return await getStaticPathsProjectTag({ paginate }, lang);
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -31,7 +33,9 @@ const metadata = {
 <Layout metadata={metadata}>
   <section class="px-4 md:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
     <Headline>Tag: {tag}</Headline>
-    <BlogList posts={page.data} />
-    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    <section data-aos="fade-up">
+      <BlogList posts={page.data} />
+      <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    </section>
   </section>
 </Layout>

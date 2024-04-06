@@ -3,7 +3,9 @@ export type Ui = {
     [key: string]: string;
   };
 };
-
+interface RouteObject {
+  slug: string;
+}
 export type Routes = {
   [key: string]: {
     [key: string]: string;
@@ -84,13 +86,28 @@ export const routes : Routes = {
       projects: "proyectos",
       store: "tienda",
       blog: "blog",
-      about: 'acerca',
+      about: "acerca",
     },
     en: {
-      contacto: "contact",
-      proyectos: "projects",
+      contact: "contact",
+      projects: "projects",
       blog: "blog",
-      tienda: 'store',
-      acerca: 'about'
+      store: "store",
+      about: "about"
     },
 } as const
+
+export function generateSlugRoutes(): RouteObject[] {
+  const slugRoutes: RouteObject[] = [];
+
+  Object.keys(routes).forEach((language) => {
+    const languageRoutes = routes[language];
+
+    Object.keys(languageRoutes).forEach((routeKey) => {
+      const slug = `${language}/${languageRoutes[routeKey]}`;
+      slugRoutes.push({ slug });
+    });
+  });
+
+  return slugRoutes;
+}

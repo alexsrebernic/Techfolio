@@ -4,10 +4,9 @@ import type { Metadata } from "sharp";
 export default interface NormalizedProject {
   name: string,
   type: string,
-  thumbnail: {node:{mediaItemUrl: string}},
   content: string,
   slug:string,
-  project_url: string,
+  preview_url: string,
   excerpt: string,
   id: string,
   title: string,
@@ -24,7 +23,7 @@ export default interface NormalizedProject {
   metadata?: Metadata;
   draft?: boolean;
   readingTime?: string;
-  image_1: {node:{mediaItemUrl: string,srcSet: string, sizes: string, altText:string}},
+  image_1: string,
   tools: string[],
   goals: string[],
   solutions: string[],

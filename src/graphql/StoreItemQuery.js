@@ -1,49 +1,54 @@
 export default `query StoreItem {
-  shopItems {
+  storeItems {
     nodes {
-      id
-      slug
-      status
-      title(format: RENDERED)
-      link
-      modified
-      date
-      itemShop {
-        briefDescription
-        content
+      storeItem {
+        brief_description_en
+        brief_description_es
+        buy_link
+        content_en
+        content_es
         currency
-        items
-        link
-        name
+        description_en
+        description_es
+        image_1 {
+          node {
+            mediaItemUrl
+          }
+        }
+        image_2 {
+          node {
+            mediaItemUrl
+          }
+        }
+        image_3 {
+          node {
+            mediaItemUrl
+          }
+        }
+        image_4 {
+          node {
+            mediaItemUrl
+          }
+        }
+        items_en
+        items_es
+        name_en
+        name_es
+        preview_link
         price
-        type
-        image1 {
-          node {
-            mediaItemUrl
-          }
-        }
-        image2 {
-          node {
-            mediaItemUrl
-          }
-        }
-        image3 {
-          node {
-            mediaItemUrl
-          }
-        }
-        image4 {
-          node {
-            mediaItemUrl
-          }
-        }
         thumbnail {
           node {
             mediaItemUrl
           }
         }
-        description
+        type_en
+        type_es
       }
+      date
+      id
+      modified
+      slug
+      title(format: RENDERED)
     }
   }
 }`

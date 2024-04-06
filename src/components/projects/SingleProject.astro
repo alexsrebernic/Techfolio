@@ -20,8 +20,8 @@ const {title,tags} = project
 ---
 
 <section class="   mx-auto">
-  <article class="">
-    <header class={project.image ? 'space-y-10' : ''}>
+  <article   class="">
+    <header data-aos="fade-up"  class={project.image ? 'space-y-10' : ''}>
       <PostTags tags={tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
 
     <div class="space-y-6">
@@ -36,7 +36,7 @@ const {title,tags} = project
       {project.excerpt && project.excerpt.replace(/<\/?p>/g, '')    }
 
       </p>
-      <Button variant="primary" text="Live preview" href={project.url}/>
+      <Button variant="primary" text="Live preview" href={project.preview_url}/>
     </div>
     
 
@@ -61,7 +61,7 @@ const {title,tags} = project
       }
     </header>
     <main>
-      <div class="grid md:grid-cols-2  rounded-xl gap-1 pt-10">
+      <div data-aos="fade-up" class="grid md:grid-cols-2  rounded-xl gap-1 pt-10">
         <div class="bg-[#EFEFF0] dark:bg-[#282828] rounded-xl md:rounded-none md:rounded-tl-xl  md:rounded-bl-xl py-7 px-8 flex items-center justify-center flex-col space-y-2">
           <Icon class='color-brand-light'  size={20} name='calendar'/>
           <time datetime={String(project.init_year)} class="inline-block">{new Date(project.init_year).toLocaleString('en-US', {month: 'long',year: 'numeric'})} -  {project.present? 'Present' : new Date(project.end_year).toLocaleString('en-US', {month: 'long',year: 'numeric'}) }</time>
@@ -73,7 +73,7 @@ const {title,tags} = project
           <p class="text-sm">Role</p>
         </div>
       </div>
-      <div class="flex items-start justify-center py-10  flex-col space-y-3 md:space-y-0 md:flex-row">
+      <div data-aos="fade-up" class="flex items-start justify-center py-10  flex-col space-y-3 md:space-y-0 md:flex-row">
         <div class="flex-initial min-w-[250px]">
           <h3 class="text-xl font-medium">Background</h3>
         </div>
@@ -84,7 +84,7 @@ const {title,tags} = project
         </div>
       </div>
       <hr>
-      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
+      <div data-aos="fade-up" class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
         <div class="flex-initial min-w-[250px]">
           <h3 class="text-xl font-medium">Goals</h3>
         </div>
@@ -127,7 +127,7 @@ const {title,tags} = project
           </div>
         )
       }
-      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
+      <div data-aos="fade-up" class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
         <div class="flex-initial min-w-[250px]">
           <h3 class="text-xl font-medium">Solutions</h3>
         </div>
@@ -152,7 +152,7 @@ const {title,tags} = project
         </div>
       </div>
       <hr>
-      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row ">
+      <div data-aos="fade-up" class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row ">
         <div class="flex-initial min-w-[250px]">
           <h3 class="text-xl font-medium">Tools</h3>
         </div>
@@ -167,10 +167,10 @@ const {title,tags} = project
           ))}
         </div>
       </div>
-      <div>
+      <div data-aos="fade-up">
         <TestimonialItem item={project.testimonial}/>
       </div>
-      <div class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
+      <div data-aos="fade-up" class="flex items-start justify-center py-10  flex-col space-y-5 md:space-y-0 md:flex-row">
         <div class="flex-initial min-w-[250px]">
           <h3 class="text-xl font-medium">Conclusion</h3>
         </div>
@@ -182,7 +182,7 @@ const {title,tags} = project
       </div>
       <hr>
     </main>
-    <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
+    <div data-aos="fade-up" class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
       <PostTags tags={tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
       <SocialShare url={url} text={title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
     </div>

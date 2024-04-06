@@ -1,5 +1,5 @@
 import type { PaginateFunction } from 'astro';
-
+import { I18N } from '@/utils/config';
 import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
 import type StoreItem from '@/interfaces/StoreItem';
 import { APP_STORE } from '@/utils/config';
@@ -7,6 +7,7 @@ import { cleanSlug, trimSlash, STORE_BASE, STORE_ITEM_PERMALINK_PATTERN, CATEGOR
 import { wpquery } from '@/data/wordpress';
 import StoreItemQuery from '@/graphql/StoreItemQuery';
 import parseHTMLToListObjects from '@/helpers/parseHTMLToObject';
+import searchPropsEndingWithLang from '@/helpers/searchPropsEndingWith';
 
 const generatePermalink = async ({
   id,
@@ -43,22 +44,21 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedStoreItem = async (storeItem: StoreItem): Promise<NormalizedStoreItem> => {
-  console.log(storeItem)
-  const _tags = [storeItem.type]
+const getNormalizedStoreItem = async (storeItem: StoreItem, lang : string = I18N.language): Promise<NormalizedStoreItem>  => {
+  const storeItemTranslated : StoreItem = searchPropsEndingWithLang<StoreItem>(storeItem,lang,I18N.languages)
   const _data = {
-    publishDate: storeItem.date,
-    title: storeItem.title,
-    excerpt: storeItem.briefDescription,
-    image: storeItem.thumbnail.node.mediaItemUrl,
-    tags: _tags,
-    updateDate: storeItem.modified,
-    draft: storeItem.draft,
-    price: storeItem.price 
+    publishDate: storeItemTranslated.date,
+    updateDate: storeItemTranslated.modified,
+    title: storeItemTranslated.name,
+    image: storeItemTranslated.thumbnail.node.mediaItemUrl,
+    tags: [storeItemTranslated.type],
+    draft: storeItemTranslated.draft,
+    price: storeItemTranslated.price,
+    metadata: null,
   }
   const _storeItem = {
     data: _data,
-    body: storeItem.content,
+    body: storeItemTranslated.content,
     collection: 'storeItem',
     id: storeItem.id,
     slug: storeItem.slug,
@@ -69,19 +69,24 @@ const getNormalizedStoreItem = async (storeItem: StoreItem): Promise<NormalizedS
     publishDate: rawPublishDate = new Date(),
     updateDate: rawUpdateDate,
     title,
-    excerpt,
     image,
     tags: rawTags = [],
     draft = false,
     metadata = {},
     price = 0,
   } = data;
+
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
-
   return {
+    type: storeItemTranslated.type,
+    status: storeItemTranslated.status,
+    brief_description: storeItemTranslated.brief_description,
+    date: storeItemTranslated.date,
+    modified: storeItemTranslated.modified,
+    name: storeItemTranslated.name,
     id: id,
     slug: slug,
     permalink: await generatePermalink({ id, slug, publishDate, category: '' }),
@@ -89,20 +94,19 @@ const getNormalizedStoreItem = async (storeItem: StoreItem): Promise<NormalizedS
     publishDate: publishDate,
     updateDate: updateDate,
     title: title,
-    excerpt: excerpt,
     image: image,
     currency: storeItem.currency,
-    items: storeItem.items.split('\r\n'),
-    image_1: storeItem.image1 && storeItem.image1.node.mediaItemUrl,
-    image_2: storeItem.image2 &&storeItem.image2.node.mediaItemUrl,
-    image_3: storeItem.image3 && storeItem.image3.node.mediaItemUrl,
-    image_4: storeItem.image4 && storeItem.image4.node.mediaItemUrl,
-    preview_url: storeItem.preview_link,
+    items: storeItemTranslated.items ? storeItemTranslated.items.split('\r\n') : [],
+    image_1: storeItemTranslated.image_1 ? storeItemTranslated.image_1.node.mediaItemUrl : null,
+    image_2: storeItemTranslated.image_2 ? storeItemTranslated.image_2.node.mediaItemUrl : null,
+    image_3: storeItemTranslated.image_3 ? storeItemTranslated.image_3.node.mediaItemUrl : null,
+    image_4: storeItemTranslated.image_4 ? storeItemTranslated.image_4.node.mediaItemUrl : null,
+    preview_url: storeItemTranslated.preview_link,
     buy_url: storeItem.buy_link, 
     tags: tags,
-    content: storeItem.content && parseHTMLToListObjects(storeItem.content) ,
+    content: storeItemTranslated.content && parseHTMLToListObjects(storeItemTranslated.content) ,
     draft: draft,
-    description: storeItem.description,
+    description: storeItemTranslated.description,
     metadata,
   };
 
@@ -120,10 +124,10 @@ const getRandomizedStoreItems = (array: NormalizedStoreItem[], num: number) => {
   return newArray;
 };
 
-const load = async function (): Promise<Array<NormalizedStoreItem>> {
-  const storeItems = (await wpquery({query : StoreItemQuery})).shopItems.nodes.map(item => {
+const load = async function (lang : string): Promise<Array<NormalizedStoreItem>> {
+  const storeItems = (await wpquery({query : StoreItemQuery})).storeItems.nodes.map(item => {
     return {
-          ...item.itemShop,
+          ...item.storeItem,
           slug: item.slug,
           status: item.status,
           title: item.title,
@@ -131,7 +135,7 @@ const load = async function (): Promise<Array<NormalizedStoreItem>> {
           date: item.date
     };
   }); 
-  const normalizedStoreItems = storeItems.map(async (storeItem) => await getNormalizedStoreItem(storeItem));
+  const normalizedStoreItems = storeItems.map(async (storeItem) => await getNormalizedStoreItem(storeItem,lang));
 
   const results = (await Promise.all(normalizedStoreItems))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
@@ -159,19 +163,19 @@ export const storeTagRobots = APP_STORE.tag.robots;
 export const storeStoreItemsPerPage = APP_STORE?.postsPerPage;
 
 /** */
-export const fetchStoreItems = async (): Promise<Array<NormalizedStoreItem>> => {
+export const fetchStoreItems = async (lang : string): Promise<Array<NormalizedStoreItem>> => {
   if (!_storeItems) {
-    _storeItems = await load();
+    _storeItems = await load(lang);
   }
 
   return _storeItems;
 };
 
 /** */
-export const findStoreItemsBySlugs = async (slugs: Array<string>): Promise<Array<NormalizedStoreItem>> => {
+export const findStoreItemsBySlugs = async (slugs: Array<string>, lang: string): Promise<Array<NormalizedStoreItem>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const storeItems = await fetchStoreItems();
+  const storeItems = await fetchStoreItems(lang);
 
   return slugs.reduce(function (r: Array<NormalizedStoreItem>, slug: string) {
     storeItems.some(function (storeItem: NormalizedStoreItem) {
@@ -182,10 +186,10 @@ export const findStoreItemsBySlugs = async (slugs: Array<string>): Promise<Array
 };
 
 /** */
-export const findStoreItemsByIds = async (ids: Array<string>): Promise<Array<NormalizedStoreItem>> => {
+export const findStoreItemsByIds = async (ids: Array<string>, lang: string): Promise<Array<NormalizedStoreItem>> => {
   if (!Array.isArray(ids)) return [];
 
-  const storeItems = await fetchStoreItems();
+  const storeItems = await fetchStoreItems(lang);
 
   return ids.reduce(function (r: Array<NormalizedStoreItem>, id: string) {
     storeItems.some(function (storeItem: NormalizedStoreItem) {
@@ -196,26 +200,26 @@ export const findStoreItemsByIds = async (ids: Array<string>): Promise<Array<Nor
 };
 
 /** */
-export const findLatestStoreItems = async ({ count }: { count?: number }): Promise<Array<NormalizedStoreItem>> => {
+export const findLatestStoreItems = async ({ count }: { count?: number } , lang : string): Promise<Array<NormalizedStoreItem>> => {
   const _count = count || 4;
-  const storeItems = await fetchStoreItems();
+  const storeItems = await fetchStoreItems(lang);
 
   return storeItems ? storeItems.slice(0, _count) : [];
 };
 
 /** */
-export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateFunction }) => {
+export const getStaticPathsBlogList = async ({ paginate } : { paginate: PaginateFunction }, lang : string ) => {
   if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchStoreItems(), {
+  return paginate(await fetchStoreItems(lang), {
     params: { store: STORE_BASE || undefined },
     pageSize: storeStoreItemsPerPage,
   });
 };
 
 /** */
-export const getStaticPathsBlogNormalizedStoreItem = async () => {
+export const getStaticPathsBlogNormalizedStoreItem = async (lang: string) => {
   if (!isBlogEnabled || !isBlogNormalizedStoreItemRouteEnabled) return [];
-  return (await fetchStoreItems()).flatMap((storeItem) => ({
+  return (await fetchStoreItems(lang)).flatMap((storeItem) => ({
     params: {
       store: storeItem.permalink,
     },
@@ -224,10 +228,10 @@ export const getStaticPathsBlogNormalizedStoreItem = async () => {
 };
 
 /** */
-export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
+export const getStaticPathsBlogCategory = async ({ paginate } : { paginate: PaginateFunction }, lang : string) => {
   if (!isBlogEnabled || !isBlogCategoryRouteEnabled) return [];
 
-  const storeItems = await fetchStoreItems();
+  const storeItems = await fetchStoreItems(lang);
   const categories = new Set<string>();
   storeItems.map((storeItem) => {
     typeof storeItem.category === 'string' && categories.add(storeItem.category.toLowerCase());
@@ -246,15 +250,14 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
 };
 
 /** */
-export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFunction }) => {
+export const getStaticPathsBlogTag = async ({ paginate } : { paginate: PaginateFunction }, lang : string) => {
   if (!isBlogEnabled || !isBlogTagRouteEnabled) return [];
 
-  const storeItems = await fetchStoreItems();
+  const storeItems = await fetchStoreItems(lang);
   const tags = new Set<string>();
   storeItems.map((storeItem) => {
     Array.isArray(storeItem.tags) && storeItem.tags.map((tag) => tags.add(tag.toLowerCase()));
   });
-
   return Array.from(tags).flatMap((tag) =>
     paginate(
       storeItems.filter((storeItem) => Array.isArray(storeItem.tags) && storeItem.tags.find((elem) => elem.toLowerCase() === tag)),

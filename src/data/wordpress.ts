@@ -2,9 +2,12 @@ interface WPGraphQLParams {
   query: string;
   variables?: object;
 }
+import { WORDPRESS } from "@/utils/config";
 
 export async function wpquery({ query, variables = {} }: WPGraphQLParams) {
-  const res = await fetch('http://portfolio.local/graphql', {
+  if(!WORDPRESS.enabled) throw Error('Headless wordpress is not enabled')
+  console.log(WORDPRESS.domain)
+  const res = await fetch(`http://${WORDPRESS.domain}/graphql`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
