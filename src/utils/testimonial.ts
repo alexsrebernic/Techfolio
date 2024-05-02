@@ -1,29 +1,74 @@
-import { wpquery } from "@/data/wordpress";
-import type Testimonial from "@/interfaces/Testimonial";
-import type NormalizedTestimonial from "@/interfaces/NormalizedTestimonial";
-import TestimonialQuery from "@/graphql/TestimonialQuery";
-import searchPropsEndingWithLang from "@/helpers/searchPropsEndingWith";
-import type { ui } from "@/i18n/ui";
-import { I18N } from "./config";
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { Testimonial, LocalizedTestimonial } from '~/types';
+import { I18N } from '~/utils/config';
+import { cleanSlug } from './permalinks';
 
-let _testimonials  : NormalizedTestimonial[];
 
-export async function fetchTestimonials(lang : string){
-  if(!_testimonials) return await load(lang);
-  return _testimonials;
-}
-export async function load (lang : string){
-  const data = (await wpquery({query: TestimonialQuery})).testimonials.nodes.map(testimonial => {
-    return {
-          ...testimonial.testimonialItem,
-          slug: testimonial.slug
+const getNormalizedPost = async (post: CollectionEntry<'testimonials'>): Promise<Testimonial> => {
+  const { id, slug: rawSlug = '', data } = post;
+
+  const {
+    name,
+    position,
+    project,
+    testimonial,
+    photo
+  } = data;
+
+  const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
+
+  return {
+    slug: slug,
+    name,
+    position,
+    project,
+    testimonial,
+    photo
+  };
+};
+
+const load = async function (): Promise<Testimonial[]> {
+  const posts = await getCollection('testimonials');
+  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
+
+  const results = (await Promise.all(normalizedPosts))
+
+
+  return results;
+};
+
+let _testimonials: Testimonial[];
+let _localizedTestimonials : Array<LocalizedTestimonial>;
+
+/** */
+export const fetchLocalizedTestimonials = async (): Promise<Array<LocalizedTestimonial>> => {
+  if (!_testimonials) {
+    _testimonials = await load();
+
+    const common_slugs = [...new Set(_testimonials.map((post) => post.slug.split('/')[1]))];
+    _localizedTestimonials = common_slugs.map((id) => {
+      const postsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
+        const post = _testimonials.find((post) => post.slug === `${locale}/${id}`);
+        map[locale] = post;
+        return map;
+    }, {});
+      return {
+        common_slug: id,
+        locales: postsLocalizedMap
+      }
+    });
   }
-  })
-  const normalizedTestimonials = data.map(testimonial =>  getNormalizedTestimonial(testimonial,lang));
-  return normalizedTestimonials
-}
-export  function getNormalizedTestimonial (testimonial : Testimonial, lang : string = I18N.language) : NormalizedTestimonial | {} {
-  const translatedTestimonial = searchPropsEndingWithLang(testimonial,lang, I18N.languages)
-  translatedTestimonial.photo = translatedTestimonial.photo.node.mediaItemUrl
-  return translatedTestimonial;
-}
+
+  return _localizedTestimonials;
+};
+
+/** */
+export const fetchTestimonials = async (locale: string): Promise<Testimonial[]> => {
+  const _localizedTestimonials = await fetchLocalizedTestimonials();
+  return _localizedTestimonials
+    .map((post) => post.locales[locale])
+    .filter((post): post is Testimonial => post !== undefined);
+};
+
+

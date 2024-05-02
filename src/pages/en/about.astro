@@ -1,0 +1,192 @@
+---
+import Layout from '@/layouts/PageLayout.astro';
+import AuthorQuery from '@/graphql/AuthorQuery';
+import type Experience from '@/interfaces/Experience';
+import type Education from '@/interfaces/Education';
+import EducationQuery from '@/graphql/EducationQuery';
+import JobExperienceQuery from '@/graphql/JobExperienceQuery';
+import { wpquery } from '@/data/wordpress';
+
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
+import Image from 'astro/components/Image.astro';
+import Button from '@/components/ui/Button.astro';
+import { Icon } from 'astro-icon/components';
+import {fetchAuthor} from '@/utils/author'
+import { I18N } from '@/utils/config';
+import { fetchExperiences } from '@/utils/experience';
+import type NormalizedExperience from '@/interfaces/NormalizedExperience';
+import {fetchEducations} from '@/utils/education'
+const metadata = {
+  title: "Home | Alex's Portfolio",
+  ignoreTitleTemplate: true,
+};
+const lang = Astro?.currentLocale!
+const author : NormalizedAuthor = await fetchAuthor(lang)
+const jobExperiences : NormalizedExperience[] = await fetchExperiences(lang)
+const educations : Education[] = await fetchEducations(lang)
+---
+
+<Layout metadata={metadata}>
+  <div class="space-y-20">
+    <section>
+      <div class="flex space-x-10">
+        <div class="space-y-8 flex-1">
+          <div class="space-y-2 font-[600]">
+            <h1 class="text-3xl font-[600] ">
+              {author.firstName} {author.lastName}
+            </h1>
+            <h2 class="text-3xl font-[600] text-subtitle">
+              {author.role}
+            </h2>
+          </div>
+          <div class="space-y-4 2xl:text-sm">
+            <p>
+              {author.brief_introduction}
+            </p>
+            <p>
+              {author.achievements}
+            </p>
+          </div>
+        </div>
+        <div class="flex-initial rounded-xl hidden md:block">
+          <Image alt='A photo of me smiling :)' class='rounded-xl shadow-xl' width={200} height={200} src={author.photo}/>
+        </div>
+      </div>
+    </section>
+    <section>
+
+    </section>
+    <section data-aos="fade-up">
+      <div class="space-y-10">
+        <div>
+          <h2 class="text-xl font-[500]">Services</h2>
+        </div>
+        <div
+         id="services-grid"
+          class="grid mx-auto gap-1 grid-cols-2 rounded-xl  relative overflow-hidden max-h-[300px]   grid-element-testimonial"
+        >
+          <div id="element-gradient" class="absolute top-0 left-0 w-full h-full bg-gradient-to-white dark:bg-gradient-to-black z-10 ">
+          </div>
+          {author.services && author.services.map((item) => (
+            <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm dark:bg-[#282828]">
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="flex items-center justify-center mt-4">
+        <Button id="button-see-more-services" variant="secondary" class="mx-auto" text="See more"/>
+      </div>
+    </section>
+    <section data-aos="fade-up">
+      <div class="space-y-10">
+        <div>
+          <h2 class="text-xl font-[500]">Tools and locales I work with</h2>
+        </div>
+        <div
+         id="tools-grid"
+          class="grid mx-auto gap-1 grid-cols-2 rounded-xl  relative overflow-hidden max-h-[300px]   grid-element-testimonial"
+        >
+          <div id="tools-gradient" class="absolute top-0 left-0 w-full h-full bg-gradient-to-white dark:bg-gradient-to-black z-10 ">
+          </div>
+          
+          {author.tools && author.tools.map((item) => (
+            <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+              <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/${item.toLowerCase().replaceAll(' ', '')}`}/>
+              <span class="flex-1">
+                {item}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="flex items-center justify-center mt-4">
+        <Button id="button-see-more-tools" variant="secondary" class="mx-auto" text="See more"/>
+      </div>
+    </section>
+    <section data-aos="fade-up">
+      <div class="space-y-10">
+        <div>
+          <h2 class="text-xl font-[500]">Experience</h2>
+        </div>
+        <div class="space-y-8">
+          {
+            jobExperiences.map(experience => (
+              <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-6 border-b py-5 dark:border-b-[#424242]">
+                <div class="flex-initial text-sm md:w-[230px] dark:text-[#929292]">
+                  <span>{new Date(experience.initYear).toLocaleString('en-US', {month: 'long',year: 'numeric'})}</span> - {experience.present? 'Present' : new Date(experience.endYear).toLocaleString('en-US', {month: 'long',year: 'numeric'}) }
+                </div>
+                <div class="space-y-6 flex-1">
+                  <div class="flex flex-col ">
+                    <span>{experience.companyName}</span>
+                    <p class="text-sm">{experience.position}</p>
+                  </div>
+                  <p class="text-sm">
+                    {experience.details}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section data-aos="fade-up">
+      <div class="space-y-10">
+        <div>
+          <h2 class="text-xl font-[500]">Education</h2>
+        </div>
+        <div class="space-y-8">
+          {
+            educations.map(education => (
+              <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-6 border-b py-5 dark:border-b-[#424242]">
+                <div class="flex-initial text-sm md:w-[230px] dark:text-[#929292]">
+                  <span>{new Date(education.initYear).toLocaleString('en-US', {month: 'long',year: 'numeric'})}</span> - {education.present? 'Present' : new Date(education.endYear).toLocaleString('en-US', {month: 'long',year: 'numeric'}) }
+                </div>
+                <div class="space-y-6 flex-1">
+                  <div class="flex flex-col ">
+                    <span>{education.establishment}</span>
+                    <p class="text-sm">{education.degree}</p>
+                  </div>
+                  <p class="text-sm">
+                    {education.details}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+
+<style>
+  .grid-element-testimonial {
+    transition: max-height 0.5s ease-in-out;
+
+  }
+</style>
+<script>
+  const buttonServices = document.getElementById('button-see-more-services')
+  const buttonTools = document.getElementById('button-see-more-tools')
+  buttonServices?.addEventListener('click', () => {
+    const element = document.getElementById('services-grid')
+    const elementGradient = document.getElementById('element-gradient')
+    element?.classList.remove('max-h-[300px]')
+    element?.classList.add(`max-h-[3000px]`)
+    elementGradient?.classList.remove('bg-gradient-to-black')
+    elementGradient?.classList.remove('bg-gradient-to-white')
+    buttonServices.classList.add('hidden')
+  })
+  buttonTools?.addEventListener('click', () => {
+    const element = document.getElementById('tools-grid')
+    const elementGradient = document.getElementById('tools-gradient')
+    element?.classList.remove('max-h-[300px]')
+    element?.classList.add(`max-h-[3000px]`)
+    elementGradient?.classList.remove('bg-gradient-to-black')
+    elementGradient?.classList.remove('bg-gradient-to-white')
+    buttonTools.classList.add('hidden')
+  })
+</script>

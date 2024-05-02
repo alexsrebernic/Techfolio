@@ -1,6 +1,3 @@
-Sure, here's a related markdown for a portfolio called TechFolio:
-
-```markdown
 # 🚀 TechFolio
 
 <img src="https://example.com/path/to/techfolio/screenshot.png" align="right"
@@ -23,13 +20,12 @@ Sure, here's a related markdown for a portfolio called TechFolio:
 
 <img src="https://example.com/path/to/techfolio/screenshot-2.png" alt="TechFolio Theme Screenshot">
 
-[![Your Name](https://custom-icon-badges.demolab.com/badge/made%20by%20-YourName-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://yourwebsite.com)
-[![License](https://img.shields.io/github/license/yourusername/techfolio?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/yourusername/techfolio/blob/main/LICENSE.md)
-[![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/yourusername)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/yourusername/techfolio#contributing)
-[![Known Vulnerabilities](https://snyk.io/test/github/yourusername/techfolio/badge.svg?style=flat-square)](https://snyk.io/test/github/yourusername/techfolio)
-[![Stars](https://img.shields.io/github/stars/yourusername/techfolio.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/yourusername/techfolio)
-[![Forks](https://img.shields.io/github/forks/yourusername/techfolio.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/yourusername/techfolio)
+[![Alex Srebernic](https://custom-icon-badges.demolab.com/badge/made%20by%20-YourName-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://yourwebsite.com)
+[![License](https://img.shields.io/github/license/yourusername/techfolio?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/alexsrebernic/techfolio/blob/main/LICENSE.md)
+[![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/alexsrebernic)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/alexsrebernic/techfolio#contributing)
+[![Stars](https://img.shields.io/github/stars/yourusername/techfolio.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/alexsrebernic/techfolio)
+[![Forks](https://img.shields.io/github/forks/yourusername/techfolio.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/alexsrebernic/techfolio)
 
 <br>
 
@@ -42,8 +38,6 @@ Sure, here's a related markdown for a portfolio called TechFolio:
   - [Commands](#commands)
   - [Configuration](#configuration)
   - [Deploy](#deploy)
-- [FAQ](#frequently-asked-questions)
-- [Related Projects](#related-projects)
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
@@ -167,9 +161,190 @@ Execute these commands from the project root:
 
 Basic configuration file: `./src/config.yaml`
 
+### Configuration
+
+Basic configuration file: `./src/config.yaml`
+
 ```yaml
-# Your configuration settings here
+site:
+  name: Alex Srebernic | Portfolio
+  site: 'https://alexsrebernic.com'
+  base: '/'
+  trailingSlash: false
+
+  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
+
+# Default SEO metadata
+metadata:
+  title:
+    default: Alex Srebernic | Portfolio
+    template: Alex Srebernic's portfolio
+  description: "Alex Srebernic's portfolio."
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: Alex Srebernic's portfolio
+    images:
+      - url: '@/assets/images/default.png'
+        width: 1200
+        height: 628
+    type: website
+  twitter:
+    handle: '@alexsrebernic'
+    site: '@alexsrebernic'
+    cardType: summary_large_image
+
+i18n:
+  language: es
+  locales: 
+  - en
+  - es
+  textDirection: ltr
+wordpress:
+  domain: techfolio.local
+  enabled: true
+apps:
+  store:
+    isEnabled: true
+    postsPerPage: 6
+
+    post:
+      isEnabled: true
+      permalink: 'store/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'store' # Blog main path, you can change this to "articles" (/articles)
+      robots:
+        index: true
+
+    category:
+      isEnabled: false
+      pathname: 'store-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'store-tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
+      robots:
+        index: true
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+    
+  projects:
+    isEnabled: true
+    postsPerPage: 6
+
+    post:
+      isEnabled: true
+      permalink: 'project/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'projects' # Blog main path, you can change this to "articles" (/articles)
+      robots:
+        index: true
+
+    category:
+      isEnabled: false
+      pathname: 'projects-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'projects-tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
+      robots:
+        index: true
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+    
+  blog:
+    isEnabled: true
+    postsPerPage: 6
+
+    post:
+      isEnabled: true
+      permalink: 'blog/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
+      robots:
+        index: true
+
+    category:
+      isEnabled: true
+      pathname: 'blog-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'blog-tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
+      robots:
+        index: false
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null # or "G-XXXXXXXXXX"
+
+ui:
+  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
+
+  tokens:
+    default:
+      fonts:
+        sans: Inter
+        serif: var(--ph-font-sans)
+        heading: var(--ph-font-sans)
+      colors:
+        default: rgb(16 16 16)
+        heading: rgb(0 0 0)
+        muted: rgb(40 40 40)
+        bgPage: rgb(255 255 255)
+        primary: rgb(0 124 220)
+        secondary: rgb(30 58 138)
+        accent: rgb(109 40 217)
+        info: rgb(119 182 234)
+        success: rgb(54 211 153)
+        warning: rgb(251 189 35)
+        error: rgb(248 114 114)
+        link: var(--ph-color-primary)
+        linkActive: var(--ph-color-link)
+    dark:
+      fonts: {}
+      colors:
+        default: rgb(247, 248, 248)
+        heading: rgb(247, 248, 248)
+        muted: rgb(200, 188, 208)
+        bgPage: rgb(3 6 32)
+        primary: rgb(29 78 216)
+        secondary: rgb(30 58 138)
+        accent: rgb(135 77 2267)
+        info: rgb(58 191 248)
+        success: rgb(54 211 153)
+        warning: rgb(251 189 35)
+        error: rgb(248 114 114)
+        link: var(--ph-color-primary)
+        linkActive: var(--ph-color-link)
+
 ```
+
 
 ### Deploy
 
@@ -211,7 +386,7 @@ That would be very useful for all of us and we would be happy to listen and take
 
 ## Acknowledgements
 
-Initially created by [Alex Srebernic](https://alexsrebernic.com) with the template Astrowind made by[onWidget](https://onwidget.com) 
+Initially created by [Alex Srebernic](https://alexsrebernic.com) with the template Astrowind made by [onWidget](https://onwidget.com) 
 
 ## License
 

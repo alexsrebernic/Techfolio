@@ -19,6 +19,7 @@ export const sidebarUi : Ui = {
       "sidebar.about": "Acerca",
       "sidebar.store": "Tienda",
       "sidebar.contact": "Contacto",
+      "sidebar.blog": "Blog",
     },
     en: {
       "sidebar.homepage": "Homepage",
@@ -26,5 +27,6 @@ export const sidebarUi : Ui = {
       "sidebar.about": "About",
       "sidebar.store": "Store",
       "sidebar.contact": "Contact",
+      "sidebar.blog": "Blog",
     },
 } as const

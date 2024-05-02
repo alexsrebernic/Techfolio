@@ -1,13 +1,8 @@
-import type { PaginateFunction } from 'astro';
-import { I18N } from '@/utils/config';
-import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
-import type StoreItem from '@/interfaces/StoreItem';
-import { APP_STORE } from '@/utils/config';
-import { cleanSlug, trimSlash, STORE_BASE, STORE_ITEM_PERMALINK_PATTERN, CATEGORY_STORE_BASE, TAG_STORE_BASE } from './permalinks';
-import { wpquery } from '@/data/wordpress';
-import StoreItemQuery from '@/graphql/StoreItemQuery';
-import parseHTMLToListObjects from '@/helpers/parseHTMLToObject';
-import searchPropsEndingWithLang from '@/helpers/searchPropsEndingWith';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { StoreItem, LocalizedStoreItem } from '~/types';
+import { APP_PROJECTS, I18N } from '~/utils/config';
+import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 
 const generatePermalink = async ({
   id,
@@ -27,7 +22,7 @@ const generatePermalink = async ({
   const minute = String(publishDate.getMinutes()).padStart(2, '0');
   const second = String(publishDate.getSeconds()).padStart(2, '0');
 
-  const permalink = STORE_ITEM_PERMALINK_PATTERN.replace('%slug%', slug)
+  const permalink = POST_PERMALINK_PATTERN.replace('%slug%', slug)
     .replace('%id%', id)
     .replace('%category%', category || '')
     .replace('%year%', year)
@@ -44,205 +39,202 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedStoreItem = async (storeItem: StoreItem, lang : string = I18N.language): Promise<NormalizedStoreItem>  => {
-  const storeItemTranslated : StoreItem = searchPropsEndingWithLang<StoreItem>(storeItem,lang,I18N.languages)
-  const _data = {
-    publishDate: storeItemTranslated.date,
-    updateDate: storeItemTranslated.modified,
-    title: storeItemTranslated.name,
-    image: storeItemTranslated.thumbnail.node.mediaItemUrl,
-    tags: [storeItemTranslated.type],
-    draft: storeItemTranslated.draft,
-    price: storeItemTranslated.price,
-    metadata: null,
-  }
-  const _storeItem = {
-    data: _data,
-    body: storeItemTranslated.content,
-    collection: 'storeItem',
-    id: storeItem.id,
-    slug: storeItem.slug,
-  }
-  const { id, slug: rawSlug = '', data } = _storeItem;
+const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreItem> => {
+  const { id, slug: rawSlug = '', data } = post;
+  const { Content, remarkPluginFrontmatter } = await post.render();
 
   const {
     publishDate: rawPublishDate = new Date(),
     updateDate: rawUpdateDate,
     title,
+    excerpt,
     image,
     tags: rawTags = [],
+    category: rawCategory,
+    author,
     draft = false,
     metadata = {},
-    price = 0,
   } = data;
 
+  const locale = id.split('/')[0];
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
+  const category = rawCategory ? cleanSlug(rawCategory) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
+  const permalink = await generatePermalink({ id, slug, publishDate, category });
+
   return {
-    type: storeItemTranslated.type,
-    status: storeItemTranslated.status,
-    brief_description: storeItemTranslated.brief_description,
-    date: storeItemTranslated.date,
-    modified: storeItemTranslated.modified,
-    name: storeItemTranslated.name,
     id: id,
     slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category: '' }),
-    price,
+    permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
+
     publishDate: publishDate,
     updateDate: updateDate,
+
     title: title,
+    excerpt: excerpt,
     image: image,
-    currency: storeItem.currency,
-    items: storeItemTranslated.items ? storeItemTranslated.items.split('\r\n') : [],
-    image_1: storeItemTranslated.image_1 ? storeItemTranslated.image_1.node.mediaItemUrl : null,
-    image_2: storeItemTranslated.image_2 ? storeItemTranslated.image_2.node.mediaItemUrl : null,
-    image_3: storeItemTranslated.image_3 ? storeItemTranslated.image_3.node.mediaItemUrl : null,
-    image_4: storeItemTranslated.image_4 ? storeItemTranslated.image_4.node.mediaItemUrl : null,
-    preview_url: storeItemTranslated.preview_link,
-    buy_url: storeItem.buy_link, 
+
+    category: category,
     tags: tags,
-    content: storeItemTranslated.content && parseHTMLToListObjects(storeItemTranslated.content) ,
+    author: author,
+
     draft: draft,
-    description: storeItemTranslated.description,
+
     metadata,
+
+    Content: Content,
+    // or 'content' in case you consume from API
+
+    readingTime: remarkPluginFrontmatter?.readingTime,
   };
-
 };
 
-const getRandomizedStoreItems = (array: NormalizedStoreItem[], num: number) => {
-  const newArray: NormalizedStoreItem[] = [];
-
-  while (newArray.length < num && array.length > 0) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    newArray.push(array[randomIndex]);
-    array.splice(randomIndex, 1);
-  }
-
-  return newArray;
-};
-
-const load = async function (lang : string): Promise<Array<NormalizedStoreItem>> {
-  const storeItems = (await wpquery({query : StoreItemQuery})).storeItems.nodes.map(item => {
-    return {
-          ...item.storeItem,
-          slug: item.slug,
-          status: item.status,
-          title: item.title,
-          modified: item.modified,
-          date: item.date
-    };
-  }); 
-  const normalizedStoreItems = storeItems.map(async (storeItem) => await getNormalizedStoreItem(storeItem,lang));
+const load = async function (): Promise<Array<StoreItem>> {
+  const projects = await getCollection('post');
+  const normalizedStoreItems = projects.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedStoreItems))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((storeItem) => !storeItem.draft);
+    .filter((post) => !post.draft);
 
   return results;
 };
 
-let _storeItems: Array<NormalizedStoreItem>;
+let _projects: Array<StoreItem>;
+let _projectsLocalized : Array<LocalizedStoreItem>;
+export const paginatedStoreItemsByLang = new Map<string, Array<StoreItem>>();
 
 /** */
-export const isWordpressEnabled = APP_STORE.isWordpressEnabled;
-export const isBlogEnabled = APP_STORE.isEnabled;
-export const isRelatedStoreItemsEnabled = APP_STORE.isRelatedPostsEnabled;
-export const isBlogListRouteEnabled = APP_STORE.list.isEnabled;
-export const isBlogNormalizedStoreItemRouteEnabled = APP_STORE.post.isEnabled;
-export const isBlogCategoryRouteEnabled = APP_STORE.category.isEnabled;
-export const isBlogTagRouteEnabled = APP_STORE.tag.isEnabled;
+export const isStoreItemEnabled = APP_PROJECTS.isEnabled;
+export const isStoreItemListRouteEnabled = APP_PROJECTS.list.isEnabled;
+export const isStoreItemPostRouteEnabled = APP_PROJECTS.post.isEnabled;
+export const isStoreItemCategoryRouteEnabled = APP_PROJECTS.category.isEnabled;
+export const isStoreItemTagRouteEnabled = APP_PROJECTS.tag.isEnabled;
 
-export const storeListRobots = APP_STORE.list.robots;
-export const storeNormalizedStoreItemRobots = APP_STORE.post.robots;
-export const storeCategoryRobots = APP_STORE.category.robots;
-export const storeTagRobots = APP_STORE.tag.robots;
+export const blogListRobots = APP_PROJECTS.list.robots;
+export const blogPostRobots = APP_PROJECTS.post.robots;
+export const blogCategoryRobots = APP_PROJECTS.category.robots;
+export const blogTagRobots = APP_PROJECTS.tag.robots;
 
-export const storeStoreItemsPerPage = APP_STORE?.postsPerPage;
+export const blogStoreItemsPerPage = APP_PROJECTS?.postsPerPage;
 
 /** */
-export const fetchStoreItems = async (lang : string): Promise<Array<NormalizedStoreItem>> => {
-  if (!_storeItems) {
-    _storeItems = await load(lang);
+export const fetchLocalizedStoreItems = async (): Promise<Array<LocalizedStoreItem>> => {
+  if (!_projects) {
+    _projects = await load();
+
+    const common_slugs = [...new Set(_projects.map((post) => post.slug.split('/')[1]))];
+    _projectsLocalized = common_slugs.map((id) => {
+      const projectsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
+        const post = _projects.find((post) => post.slug === `${locale}/${id}`);
+        map[locale] = post;
+        return map;
+    }, {});
+      return {
+        common_slug: id,
+        locales: projectsLocalizedMap
+      }
+    });
   }
 
-  return _storeItems;
+  return _projectsLocalized;
 };
 
 /** */
-export const findStoreItemsBySlugs = async (slugs: Array<string>, lang: string): Promise<Array<NormalizedStoreItem>> => {
+export const fetchStoreItems = async (locale: string): Promise<Array<StoreItem>> => {
+  const _projectsLocalized = await fetchLocalizedStoreItems();
+  return _projectsLocalized
+    .map((post) => post.locales[locale])
+    .filter((post): post is StoreItem => post !== undefined);
+};
+
+/** */
+export const findStoreItemsBySlugs = async (slugs: Array<string>, locale: string): Promise<Array<StoreItem>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const storeItems = await fetchStoreItems(lang);
+  const projects = await fetchStoreItems(locale);
 
-  return slugs.reduce(function (r: Array<NormalizedStoreItem>, slug: string) {
-    storeItems.some(function (storeItem: NormalizedStoreItem) {
-      return slug === storeItem.slug && r.push(storeItem);
+  return slugs.reduce(function (r: Array<StoreItem>, slug: string) {
+    projects.some(function (post: StoreItem) {
+      return slug === post.slug && r.push(post);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findStoreItemsByIds = async (ids: Array<string>, lang: string): Promise<Array<NormalizedStoreItem>> => {
+export const findStoreItemsByIds = async (ids: Array<string>, locale: string): Promise<Array<StoreItem>> => {
   if (!Array.isArray(ids)) return [];
 
-  const storeItems = await fetchStoreItems(lang);
+  const projects = await fetchStoreItems(locale);
 
-  return ids.reduce(function (r: Array<NormalizedStoreItem>, id: string) {
-    storeItems.some(function (storeItem: NormalizedStoreItem) {
-      return id === storeItem.id && r.push(storeItem);
+  return ids.reduce(function (r: Array<StoreItem>, id: string) {
+    projects.some(function (post: StoreItem) {
+      return id === post.id && r.push(post);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findLatestStoreItems = async ({ count }: { count?: number } , lang : string): Promise<Array<NormalizedStoreItem>> => {
+export const findLatestStoreItems = async ({ count }: { count?: number }, locale: string): Promise<Array<StoreItem>> => {
   const _count = count || 4;
-  const storeItems = await fetchStoreItems(lang);
+  const projects = await fetchStoreItems(locale);
 
-  return storeItems ? storeItems.slice(0, _count) : [];
+  return projects ? projects.slice(0, _count) : [];
 };
 
 /** */
-export const getStaticPathsBlogList = async ({ paginate } : { paginate: PaginateFunction }, lang : string ) => {
-  if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchStoreItems(lang), {
-    params: { store: STORE_BASE || undefined },
-    pageSize: storeStoreItemsPerPage,
-  });
+export const getStaticPathsStoreItemList = async ({ paginate }) => {
+  if (!isStoreItemEnabled || !isStoreItemListRouteEnabled) return [];
+  const _projectsLocalized = await fetchLocalizedStoreItems();
+
+  return paginate(_projectsLocalized, {
+    params: { blog: BLOG_BASE || undefined },
+    pageSize: blogStoreItemsPerPage,
+    });
 };
 
 /** */
-export const getStaticPathsBlogNormalizedStoreItem = async (lang: string) => {
-  if (!isBlogEnabled || !isBlogNormalizedStoreItemRouteEnabled) return [];
-  return (await fetchStoreItems(lang)).flatMap((storeItem) => ({
+export const getStaticPathsStoreItemPost = async () => {
+  if (!isStoreItemEnabled || !isStoreItemPostRouteEnabled) return [];
+  const _projectsLocalized = await fetchLocalizedStoreItems();
+
+  return _projectsLocalized.map((post) => ({
     params: {
-      store: storeItem.permalink,
+      blog: post.common_slug,
     },
-    props: { storeItem },
+    props: { post },
   }));
 };
 
 /** */
-export const getStaticPathsBlogCategory = async ({ paginate } : { paginate: PaginateFunction }, lang : string) => {
-  if (!isBlogEnabled || !isBlogCategoryRouteEnabled) return [];
+export const getStaticPathsStoreItemCategory = async ({ paginate }) => {
+  if (!isStoreItemEnabled || !isStoreItemCategoryRouteEnabled) return [];
 
-  const storeItems = await fetchStoreItems(lang);
-  const categories = new Set<string>();
-  storeItems.map((storeItem) => {
-    typeof storeItem.category === 'string' && categories.add(storeItem.category.toLowerCase());
-  });
+  const _projectsLocalized = await fetchLocalizedStoreItems();
 
-  return Array.from(categories).flatMap((category) =>
+  const categoriesSet = new Set(
+    _projectsLocalized.flatMap(post =>
+      Object.values(post.locales)
+        .map(locale => locale?.category?.toLowerCase())  // Use optional chaining
+        .filter(category => typeof category === 'string')
+    )
+  );
+
+  return Array.from(categoriesSet).flatMap(category =>
     paginate(
-      storeItems.filter((storeItem) => typeof storeItem.category === 'string' && category === storeItem.category.toLowerCase()),
+      _projectsLocalized.filter(post =>
+        Object.values(post.locales).some(
+          locale =>
+            locale?.category?.toLowerCase() === category  // Use optional chaining
+        )
+      ),
       {
-        params: { category: category, store: CATEGORY_STORE_BASE || undefined },
-        pageSize: storeStoreItemsPerPage,
+        params: { category, blog: CATEGORY_BASE || undefined },
+        pageSize: blogStoreItemsPerPage,
         props: { category },
       }
     )
@@ -250,42 +242,36 @@ export const getStaticPathsBlogCategory = async ({ paginate } : { paginate: Pagi
 };
 
 /** */
-export const getStaticPathsBlogTag = async ({ paginate } : { paginate: PaginateFunction }, lang : string) => {
-  if (!isBlogEnabled || !isBlogTagRouteEnabled) return [];
+export const getStaticPathsStoreItemTag = async ({ paginate }) => {
+  if (!isStoreItemEnabled || !isStoreItemTagRouteEnabled) return [];
 
-  const storeItems = await fetchStoreItems(lang);
-  const tags = new Set<string>();
-  storeItems.map((storeItem) => {
-    Array.isArray(storeItem.tags) && storeItem.tags.map((tag) => tags.add(tag.toLowerCase()));
-  });
-  return Array.from(tags).flatMap((tag) =>
+  const _projectsLocalized = await fetchLocalizedStoreItems();
+
+  const tagsSet = new Set(
+    _projectsLocalized.flatMap(post =>
+      Object.values(post.locales)
+        .filter(locale => locale) // Filter out undefined locales
+        .flatMap(locale => locale?.tags || []) // Use optional chaining and provide an empty array for undefined tags
+        .map(tag => tag?.toLowerCase())
+        .filter(tag => typeof tag === 'string')
+    )
+  );
+
+  return Array.from(tagsSet).flatMap(tag =>
     paginate(
-      storeItems.filter((storeItem) => Array.isArray(storeItem.tags) && storeItem.tags.find((elem) => elem.toLowerCase() === tag)),
+      _projectsLocalized.filter(post =>
+        Object.values(post.locales).some(
+          locale =>
+            locale &&
+            Array.isArray(locale.tags) &&
+            locale.tags.includes(tag)
+        )
+      ),
       {
-        params: { tag: tag, store: TAG_STORE_BASE || undefined },
-        pageSize: storeStoreItemsPerPage,
+        params: { tag, blog: TAG_BASE || undefined },
+        pageSize: blogStoreItemsPerPage,
         props: { tag },
       }
     )
   );
 };
-
-/** */
-export function getRelatedStoreItems(allStoreItems: NormalizedStoreItem[], currentSlug: string, currentTags: string[]) {
-  if (!isBlogEnabled || !isRelatedStoreItemsEnabled) return [];
-
-  const relatedStoreItems = getRandomizedStoreItems(
-    allStoreItems.filter((storeItem) => storeItem.slug !== currentSlug && storeItem.tags?.some((tag) => currentTags.includes(tag))),
-    APP_STORE.relatedPostsCount
-  );
-
-  if (relatedStoreItems.length < APP_STORE.relatedPostsCount) {
-    const moreStoreItems = getRandomizedStoreItems(
-      allStoreItems.filter((storeItem) => storeItem.slug !== currentSlug && !storeItem.tags?.some((tag) => currentTags.includes(tag))),
-      APP_STORE.relatedPostsCount - relatedStoreItems.length
-    );
-    relatedStoreItems.push(...moreStoreItems);
-  }
-
-  return relatedStoreItems;
-}

@@ -1,16 +1,18 @@
+import type Author from "./Author";
+
 export default interface Post {
   title: string,
-  featuredImage: {node:{mediaItemUrl: string,srcSet: string, sizes: string, altText:string}},
+  featuredImage: string,
   slug : string,
   status: string,
   excerpt: string,
   content: string,
   date: Date,
-  tags: {edges: {node: {name: string}}[]},
-  categories: {edges: {node: {name: string}}[]},
+  tags: string[],
+  categories: string[],
   readingTime : string,
   id: string,
-  author: {node: {name :string}},
+  author: Author,
   draft: boolean,
   modified: Date,
 

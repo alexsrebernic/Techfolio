@@ -21,15 +21,20 @@ export default defineConfig({
   trailingSlash: SITE.trailingSlash ? 'always' : 'never',
   output: 'static',
   i18n: {
-    defaultLocale: I18N.language,
-    locales: I18N.languages,
+    defaultLocale: I18N.defaultLocale,
+    locales: I18N.locales,
     routing: {
-      prefixDefaultLocale: false,
+      prefixDefaultLocale: I18N.prefixDefaultLocale,
     }
   },
   integrations: [tailwind({
     applyBaseStyles: false
-  }), sitemap(), mdx(), icon({
+  }), sitemap({
+    i18n: {
+      locales: I18N.locales,
+      defaultLocale: I18N.defaultLocale,
+    },
+  }), mdx(), icon({
     include: {
       tabler: ['*'],
       'flat-color-icons': ['template', 'gallery', 'approval', 'document', 'advertising', 'currency-exchange', 'voice-presentation', 'business-contact', 'database']

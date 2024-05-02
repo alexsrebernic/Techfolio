@@ -12,7 +12,7 @@ export interface Props {
 }
 
 const { metadata } = Astro.props;
-const lang = I18N.language
+const lang = Astro.currentLocale!
 const authorSidebarData = await fetchAuthor(lang)
 ---
 
@@ -27,7 +27,9 @@ const authorSidebarData = await fetchAuthor(lang)
     >
       <ToggleTheme />
     </Sidebar>
+    
     <div class="md:pl-[80px] sidebar:pl-[300px] flex-1 px-2">
+
       <main class="w-full   h-full bg-white dark:bg-[#1A1A1A]  rounded-xl shadow-md md:m-2">
         <div class="md:w-[80%] pt-4 md:pt-12 px-4 pb-4 md:pb-20 md:px-0  lg:pt-24 lg:w-[60%] mx-auto">
           <slot />

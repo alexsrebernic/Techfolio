@@ -1,9 +1,7 @@
 export default interface Author  {
-  photo: {node:{mediaItemUrl: string}} ,
+  photo: string ,
   firstName: string ,
   lastName: string ,
-  slogan_en : string,
-  slogan_es : string,
   slogan : string,
   email: string ,
   ubication: string ,
@@ -21,13 +19,7 @@ export default interface Author  {
   youtube_url?: string | null,
   availableForWork?: boolean | null,
   brief_introduction?: string | null,
-  brief_introduction_en?: string | null,
-  brief_introduction_es?: string | null,
   achievements?: string | null,
-  achievements_en?: string | null,
-  achievements_es?: string | null,
   services?: string[] | null,
-  services_en?: string[] | null,
-  services_es?: string[] | null,
   tools?: string[] | null
 }

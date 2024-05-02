@@ -4,31 +4,28 @@ import AuthorQuery from '@/graphql/AuthorQuery';
 import { wpquery } from '@/data/wordpress';
 import ItemsGrid from '@/components/projects/List.astro';
 import TestimonialGrid from '@/components/ui/TestimonialGrid.astro';
-import type Author from '@/interfaces/Author';
 import Button from '@/components/ui/Button.astro';
 import type NormalizedProject from '@/interfaces/NormalizedProject';
-import type { Testimonial } from '@/types';
-import TestimonialQuery from '@/graphql/TestimonialQuery';
 import { fetchPosts } from '@/utils/blog';
 import List from '@/components/blog/List.astro';
 import type NormalizedPost from '@/interfaces/NormalizedPost';
-import { fetchNormalizedProjects } from '@/utils/projects';
+import { fetchNormalizedProjects, fetchProjects } from '@/utils/projects';
 import { fetchTestimonials } from '@/utils/testimonial';
 import type NormalizedTestimonial from '@/interfaces/NormalizedTestimonial';
-import { getLangFromUrl } from '@/i18n/utils';
-import { defaultLang } from '@/i18n/ui';
 import { fetchAuthor } from '@/utils/author';
 import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
-import { I18N } from '@/utils/config';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import type { Author, LocalizedAuthor } from '@/types';
 const metadata = {
-  title: "Home | Alex's Portfolio",
+  title: "Inicio | Alex Srebernic",
   ignoreTitleTemplate: true,
 };
-const lang = I18N.language
-const author : NormalizedAuthor = await fetchAuthor(lang)
-const testimonials : NormalizedTestimonial[] = await fetchTestimonials(lang)
-const projects : NormalizedProject[] = await fetchNormalizedProjects(lang)
-const posts : NormalizedPost[] = await fetchPosts(lang)
+const lang = Astro.currentLocale
+const author : Author = (await fetchAuthor(lang as string))
+console.log(author)
+const testimonials : NormalizedTestimonial[] = await fetchTestimonials(lang as string)
+const projects : NormalizedProject[] = await fetchProjects(lang as string)
+const posts : NormalizedPost[] = await fetchPosts(lang as string)
 ---
 
 <Layout metadata={metadata}>
@@ -42,7 +39,7 @@ const posts : NormalizedPost[] = await fetchPosts(lang)
               <div class="w-1.5 h-1.5 rounded-full bg-green-700 dark:text-[#12C971]">
               </div>
               <span>
-                Available for work
+                Disponible para trabajar
               </span>
             </div>
             :
@@ -50,14 +47,15 @@ const posts : NormalizedPost[] = await fetchPosts(lang)
               <div class="w-1.5 h-1.5 rounded-full bg-red-700">
               </div>
               <span>
-                Not available for work
+                No disponible para trabajar
               </span>
             </div>
         }
         </div>
         <div class="space-y-2 font-[600]">
           <h1 class="text-3xl font-[600] ">
-            Hello! I'm {author.firstName} 👏 <br>
+            Hola! Yo soy
+            {author.firstName} 👏 <br>
           </h1>
           <h2 class="text-3xl font-[600] text-subtitle">
             {author.slogan}
@@ -79,19 +77,23 @@ const posts : NormalizedPost[] = await fetchPosts(lang)
           </p>
         </div>
         <div>
-          <Button href="/about"  variant="primary" text="About" />
-          <Button id="copyEmailButton" type="button" icon="copy" variant="secondary" text="Copy email"/>
+          <Button href="/es/about"  variant="primary" text="Acerca" />
+          <Button id="copyEmailButton" type="button" icon="copy" variant="secondary" text="Copiar email"/>
         </div>
       </div>
     </section>
     <section data-aos="fade-up" class="space-y-10 ">
       <div>
-        <h2 class="text-2xl font-[500]">Projects</h2>
+        <h2 class="text-2xl font-[500]">
+          Proyectos
+        </h2>
       </div>
       <ItemsGrid  posts={projects}/>
     </section>
     <section data-aos="fade-up">
-      <TestimonialGrid  columns={2} title="What co-workers/clients say" items={testimonials}/>
+      <TestimonialGrid  columns={2} title="Testimonios" items={testimonials}>
+        <Button id="button-see-more" variant="secondary" class="mx-auto" text="Ver mas"/>
+      </TestimonialGrid>
     </section>
     <section data-aos="fade-up" class="space-y-10 ">
       <div>
@@ -99,18 +101,18 @@ const posts : NormalizedPost[] = await fetchPosts(lang)
       </div>
       <List posts={posts.slice(0,3)}/>
       <div class="flex items-center justify-center">
-        <Button   href="/blog" variant="secondary" text="See more"/>
+        <Button   href="/es/blog" variant="secondary" text="Ver más"/>
       </div>
     </section>
   </div>
   
 </Layout>
-<script define:vars={{email : author.email}} >
+<script define:vars={{email : author.email, lang}} >
   const button = document.getElementById('copyEmailButton')
   function copyEmailToClipboard() {
     navigator.clipboard.writeText(email);
     const oldText = button.innerHTML
-    button.innerHTML =  `Copied! <svg class="w-4 h-4 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24">
+    button.innerHTML =  `Copiado! <svg class="w-4 h-4 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24">
 	<rect width="24" height="24" fill="none" />
 	<path fill="currentColor" d="M21 7L9 19l-5.5-5.5l1.41-1.41L9 16.17L19.59 5.59z" />
 </svg>`

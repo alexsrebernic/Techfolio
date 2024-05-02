@@ -11,7 +11,7 @@ export interface Props {
 }
 
 const { storeItem } = Astro.props;
-const lang = I18N.language
+const lang = Astro.currentLocale!
 const fetchedPosts = await fetchStoreItems(lang);
 const relatedPosts = storeItem.tags ? getRelatedStoreItems(fetchedPosts, storeItem.slug, storeItem.tags) : [];
 ---

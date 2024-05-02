@@ -1,14 +1,9 @@
-import type { PaginateFunction } from 'astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { Project, LocalizedProject } from '~/types';
+import { APP_PROJECTS, I18N } from '~/utils/config';
+import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 
-import type NormalizedProject from '@/interfaces/NormalizedProject';
-import { APP_PROJECTS, I18N } from '@/utils/config';
-import { cleanSlug, trimSlash, PROJECTS_BASE, PROJECTS_PERMALINK_PATTERN, CATEGORY_PROJECT_BASE, TAG_PROJECT_BASE } from './permalinks';
-import { wpquery } from '@/data/wordpress';
-import ProjectQuery from '@/graphql/ProjectQuery';
-import type Project from '@/interfaces/Project';
-import parseHTMLToListObjects from '@/helpers/parseHTMLToObject';
-import searchPropsEndingWithLang from '@/helpers/searchPropsEndingWith';
-import type Testimonial from '@/interfaces/Testimonial';
 const generatePermalink = async ({
   id,
   slug,
@@ -27,7 +22,7 @@ const generatePermalink = async ({
   const minute = String(publishDate.getMinutes()).padStart(2, '0');
   const second = String(publishDate.getSeconds()).padStart(2, '0');
 
-  const permalink = PROJECTS_PERMALINK_PATTERN.replace('%slug%', slug)
+  const permalink = POST_PERMALINK_PATTERN.replace('%slug%', slug)
     .replace('%id%', id)
     .replace('%category%', category || '')
     .replace('%year%', year)
@@ -44,27 +39,9 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedProject = async (project: Project,lang : string = I18N.language): Promise<NormalizedProject> => {
-  const normalizedProjectTranslated = searchPropsEndingWithLang<Project>(project,lang,I18N.languages)
-  const _tags = normalizedProjectTranslated.tags ? normalizedProjectTranslated.tags.map(tag => tag.toLowerCase().replace(/[\W_]+/g, '-')) : []
-  const _data = {
-    publishDate: normalizedProjectTranslated.date,
-    title: normalizedProjectTranslated.title,
-    excerpt: normalizedProjectTranslated.description,
-    image: normalizedProjectTranslated.thumbnail.node.mediaItemUrl,
-    tags: _tags,
-    updateDate: normalizedProjectTranslated.modified,
-    draft: normalizedProjectTranslated.draft,
- 
-  }
-  const _project = {
-    data: _data,
-    body: normalizedProjectTranslated.content,
-    collection: 'project',
-    id: normalizedProjectTranslated.id,
-    slug: normalizedProjectTranslated.slug,
-  }
-  const { id, slug: rawSlug = '', data } = _project;
+const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Project> => {
+  const { id, slug: rawSlug = '', data } = post;
+  const { Content, remarkPluginFrontmatter } = await post.render();
 
   const {
     publishDate: rawPublishDate = new Date(),
@@ -73,179 +50,191 @@ const getNormalizedProject = async (project: Project,lang : string = I18N.langua
     excerpt,
     image,
     tags: rawTags = [],
+    category: rawCategory,
+    author,
     draft = false,
     metadata = {},
   } = data;
+
+  const locale = id.split('/')[0];
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
+  const category = rawCategory ? cleanSlug(rawCategory) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
-  const _testimonial = searchPropsEndingWithLang<Testimonial>(project.testimonial.edges[0].node.testimonialItem,lang,I18N.languages)
-  _testimonial.photo = _testimonial.photo.node.mediaItemUrl
+  const permalink = await generatePermalink({ id, slug, publishDate, category });
+
   return {
     id: id,
     slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category: '' }),
+    permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
+
     publishDate: publishDate,
     updateDate: updateDate,
+
     title: title,
     excerpt: excerpt,
     image: image,
+
+    category: category,
     tags: tags,
+    author: author,
+
     draft: draft,
+
     metadata,
-    name: normalizedProjectTranslated.name,
-    content: normalizedProjectTranslated.content,
-    date: normalizedProjectTranslated.date,
-    status: normalizedProjectTranslated.status,
-    modified: normalizedProjectTranslated.modified,
-    description: normalizedProjectTranslated.description,
-    testimonial: _testimonial,
-    init_year: normalizedProjectTranslated.initYear,
-    present: normalizedProjectTranslated.present,
-    end_year: normalizedProjectTranslated.endYear,
-    role: normalizedProjectTranslated.role,
-    preview_url: normalizedProjectTranslated.preview_url.url,
-    background: normalizedProjectTranslated.background,
-    solutions: normalizedProjectTranslated.solutions && parseHTMLToListObjects(normalizedProjectTranslated.solutions),
-    conclusion: normalizedProjectTranslated.conclusion,
-    goals: normalizedProjectTranslated.goals && parseHTMLToListObjects(normalizedProjectTranslated.goals),
-    tools: normalizedProjectTranslated.tools ? normalizedProjectTranslated.tools.split('\r\n') : [],
-    type : normalizedProjectTranslated.type,
-    image_1: normalizedProjectTranslated.image1.node.mediaItemUrl
+
+    Content: Content,
+    // or 'content' in case you consume from API
+
+    readingTime: remarkPluginFrontmatter?.readingTime,
   };
-
 };
 
-const getRandomizedNormalizedProjects = (array: NormalizedProject[], num: number) => {
-  const newArray: NormalizedProject[] = [];
+const load = async function (): Promise<Array<Project>> {
+  const projects = await getCollection('post');
+  const normalizedProjects = projects.map(async (post) => await getNormalizedPost(post));
 
-  while (newArray.length < num && array.length > 0) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    newArray.push(array[randomIndex]);
-    array.splice(randomIndex, 1);
-  }
-
-  return newArray;
-};
-
-const load = async function (lang: string): Promise<Array<NormalizedProject>> {
-  const projects = (await wpquery({query : ProjectQuery})).projects.nodes.map(project => {
-    return {
-          ...project.projectItem,
-          slug: project.slug,
-          status: project.status,
-          title: project.title,
-          modified: project.modified,
-          date: project.date
-    };
-  });
-  const normalizedNormalizedProjects = projects.map(async (project) => await getNormalizedProject(project, lang));
-  const results = (await Promise.all(normalizedNormalizedProjects))
+  const results = (await Promise.all(normalizedProjects))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((project) => !project.draft);
+    .filter((post) => !post.draft);
 
   return results;
 };
 
-let _projects: Array<NormalizedProject>;
+let _projects: Array<Project>;
+let _projectsLocalized : Array<LocalizedProject>;
+export const paginatedProjectsByLang = new Map<string, Array<Project>>();
 
 /** */
-export const isWordpressEnabled = APP_PROJECTS.isWordpressEnabled;
 export const isProjectEnabled = APP_PROJECTS.isEnabled;
-export const isRelatedNormalizedProjectsEnabled = APP_PROJECTS.isRelatedPostsEnabled;
 export const isProjectListRouteEnabled = APP_PROJECTS.list.isEnabled;
-export const isProjectNormalizedProjectRouteEnabled = APP_PROJECTS.post.isEnabled;
+export const isProjectPostRouteEnabled = APP_PROJECTS.post.isEnabled;
 export const isProjectCategoryRouteEnabled = APP_PROJECTS.category.isEnabled;
 export const isProjectTagRouteEnabled = APP_PROJECTS.tag.isEnabled;
 
 export const blogListRobots = APP_PROJECTS.list.robots;
-export const blogNormalizedProjectRobots = APP_PROJECTS.post.robots;
+export const blogPostRobots = APP_PROJECTS.post.robots;
 export const blogCategoryRobots = APP_PROJECTS.category.robots;
 export const blogTagRobots = APP_PROJECTS.tag.robots;
 
-export const blogNormalizedProjectsPerPage = APP_PROJECTS?.postsPerPage;
+export const blogProjectsPerPage = APP_PROJECTS?.postsPerPage;
 
 /** */
-export const fetchNormalizedProjects = async (lang: string): Promise<Array<NormalizedProject>> => {
+export const fetchLocalizedProjects = async (): Promise<Array<LocalizedProject>> => {
   if (!_projects) {
-    _projects = await load(lang);
+    _projects = await load();
+
+    const common_slugs = [...new Set(_projects.map((post) => post.slug.split('/')[1]))];
+    _projectsLocalized = common_slugs.map((id) => {
+      const projectsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
+        const post = _projects.find((post) => post.slug === `${locale}/${id}`);
+        map[locale] = post;
+        return map;
+    }, {});
+      return {
+        common_slug: id,
+        locales: projectsLocalizedMap
+      }
+    });
   }
-  return _projects;
+
+  return _projectsLocalized;
 };
 
 /** */
-export const findNormalizedProjectsBySlugs = async (slugs: Array<string>, lang : string): Promise<Array<NormalizedProject>> => {
+export const fetchProjects = async (locale: string): Promise<Array<Project>> => {
+  const _projectsLocalized = await fetchLocalizedProjects();
+  return _projectsLocalized
+    .map((post) => post.locales[locale])
+    .filter((post): post is Project => post !== undefined);
+};
+
+/** */
+export const findProjectsBySlugs = async (slugs: Array<string>, locale: string): Promise<Array<Project>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const projects = await fetchNormalizedProjects(lang);
+  const projects = await fetchProjects(locale);
 
-  return slugs.reduce(function (r: Array<NormalizedProject>, slug: string) {
-    projects.some(function (project: NormalizedProject) {
-      return slug === project.slug && r.push(project);
+  return slugs.reduce(function (r: Array<Project>, slug: string) {
+    projects.some(function (post: Project) {
+      return slug === post.slug && r.push(post);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findNormalizedProjectsByIds = async (ids: Array<string>, lang : string): Promise<Array<NormalizedProject>> => {
+export const findProjectsByIds = async (ids: Array<string>, locale: string): Promise<Array<Project>> => {
   if (!Array.isArray(ids)) return [];
 
-  const projects = await fetchNormalizedProjects(lang);
+  const projects = await fetchProjects(locale);
 
-  return ids.reduce(function (r: Array<NormalizedProject>, id: string) {
-    projects.some(function (project: NormalizedProject) {
-      return id === project.id && r.push(project);
+  return ids.reduce(function (r: Array<Project>, id: string) {
+    projects.some(function (post: Project) {
+      return id === post.id && r.push(post);
     });
     return r;
   }, []);
 };
 
 /** */
-export const findLatestNormalizedProjects = async ({ count }: { count?: number  } , lang : string): Promise<Array<NormalizedProject>> => {
+export const findLatestProjects = async ({ count }: { count?: number }, locale: string): Promise<Array<Project>> => {
   const _count = count || 4;
-  const projects = await fetchNormalizedProjects(lang);
+  const projects = await fetchProjects(locale);
 
   return projects ? projects.slice(0, _count) : [];
 };
 
 /** */
-export const getStaticPathsProjectList = async ({ paginate }: { paginate: PaginateFunction } , lang : string) => {
+export const getStaticPathsProjectList = async ({ paginate }) => {
   if (!isProjectEnabled || !isProjectListRouteEnabled) return [];
-  return paginate(await fetchNormalizedProjects(lang), {
-    params: { project: PROJECTS_BASE || undefined },
-    pageSize: blogNormalizedProjectsPerPage,
-  });
+  const _projectsLocalized = await fetchLocalizedProjects();
+
+  return paginate(_projectsLocalized, {
+    params: { blog: BLOG_BASE || undefined },
+    pageSize: blogProjectsPerPage,
+    });
 };
 
 /** */
-export const getStaticPathsNormalizedProject = async (lang : string) => {
-  if (!isProjectEnabled || !isProjectNormalizedProjectRouteEnabled) return [];
-  return (await fetchNormalizedProjects(lang)).flatMap((project) => ({
+export const getStaticPathsProjectPost = async () => {
+  if (!isProjectEnabled || !isProjectPostRouteEnabled) return [];
+  const _projectsLocalized = await fetchLocalizedProjects();
+
+  return _projectsLocalized.map((post) => ({
     params: {
-      project: project.permalink,
+      blog: post.common_slug,
     },
-    props: { project },
+    props: { post },
   }));
 };
 
 /** */
-export const getStaticPathsProjectCategory = async ({ paginate }: { paginate: PaginateFunction } , lang : string) => {
+export const getStaticPathsProjectCategory = async ({ paginate }) => {
   if (!isProjectEnabled || !isProjectCategoryRouteEnabled) return [];
 
-  const projects = await fetchNormalizedProjects(lang);
-  const categories = new Set<string>();
-  projects.map((project) => {
-    typeof project.category === 'string' && categories.add(project.category.toLowerCase());
-  });
+  const _projectsLocalized = await fetchLocalizedProjects();
 
-  return Array.from(categories).flatMap((category) =>
+  const categoriesSet = new Set(
+    _projectsLocalized.flatMap(post =>
+      Object.values(post.locales)
+        .map(locale => locale?.category?.toLowerCase())  // Use optional chaining
+        .filter(category => typeof category === 'string')
+    )
+  );
+
+  return Array.from(categoriesSet).flatMap(category =>
     paginate(
-      projects.filter((project) => typeof project.category === 'string' && category === project.category.toLowerCase()),
+      _projectsLocalized.filter(post =>
+        Object.values(post.locales).some(
+          locale =>
+            locale?.category?.toLowerCase() === category  // Use optional chaining
+        )
+      ),
       {
-        params: { category: category, project: CATEGORY_PROJECT_BASE || undefined },
-        pageSize: blogNormalizedProjectsPerPage,
+        params: { category, blog: CATEGORY_BASE || undefined },
+        pageSize: blogProjectsPerPage,
         props: { category },
       }
     )
@@ -253,42 +242,36 @@ export const getStaticPathsProjectCategory = async ({ paginate }: { paginate: Pa
 };
 
 /** */
-export const getStaticPathsProjectTag = async ({ paginate }: { paginate: PaginateFunction } , lang : string) => {
+export const getStaticPathsProjectTag = async ({ paginate }) => {
   if (!isProjectEnabled || !isProjectTagRouteEnabled) return [];
 
-  const projects = await fetchNormalizedProjects(lang);
-  const tags = new Set<string>();
-  projects.map((project) => {
-    Array.isArray(project.tags) && project.tags.map((tag) => tags.add(tag.toLowerCase()));
-  });
-  return Array.from(tags).flatMap((tag) =>
+  const _projectsLocalized = await fetchLocalizedProjects();
+
+  const tagsSet = new Set(
+    _projectsLocalized.flatMap(post =>
+      Object.values(post.locales)
+        .filter(locale => locale) // Filter out undefined locales
+        .flatMap(locale => locale?.tags || []) // Use optional chaining and provide an empty array for undefined tags
+        .map(tag => tag?.toLowerCase())
+        .filter(tag => typeof tag === 'string')
+    )
+  );
+
+  return Array.from(tagsSet).flatMap(tag =>
     paginate(
-      projects.filter((project) => Array.isArray(project.tags) && project.tags.find((elem) => elem.toLowerCase() === tag)),
+      _projectsLocalized.filter(post =>
+        Object.values(post.locales).some(
+          locale =>
+            locale &&
+            Array.isArray(locale.tags) &&
+            locale.tags.includes(tag)
+        )
+      ),
       {
-        params: { tag: tag, project: TAG_PROJECT_BASE || undefined },
-        pageSize: blogNormalizedProjectsPerPage,
+        params: { tag, blog: TAG_BASE || undefined },
+        pageSize: blogProjectsPerPage,
         props: { tag },
       }
     )
   );
 };
-
-/** */
-export function getRelatedNormalizedProjects(allNormalizedProjects: NormalizedProject[], currentSlug: string, currentTags: string[]) {
-  if (!isProjectEnabled || !isRelatedNormalizedProjectsEnabled) return [];
-
-  const relatedNormalizedProjects = getRandomizedNormalizedProjects(
-    allNormalizedProjects.filter((project) => project.slug !== currentSlug && project.tags?.some((tag) => currentTags.includes(tag))),
-    APP_PROJECTS.relatedPostsCount
-  );
-
-  if (relatedNormalizedProjects.length < APP_PROJECTS.relatedPostsCount) {
-    const moreNormalizedProjects = getRandomizedNormalizedProjects(
-      allNormalizedProjects.filter((project) => project.slug !== currentSlug && !project.tags?.some((tag) => currentTags.includes(tag))),
-      APP_PROJECTS.relatedPostsCount - relatedNormalizedProjects.length
-    );
-    relatedNormalizedProjects.push(...moreNormalizedProjects);
-  }
-
-  return relatedNormalizedProjects;
-}

@@ -1,4 +1,4 @@
-import { ui, defaultLang, routes, showDefaultLang, type Ui } from "./ui"
+import { ui, type RouteObject, defaultLang, routes, showDefaultLang, type Ui } from "./ui"
 
 export function getLangFromUrl(url: string): keyof typeof ui {
   let lang;
@@ -29,13 +29,13 @@ export function useTranslatedPath(lang: keyof typeof ui) {
     const pathName = path.replaceAll("/", "")
     const hasTranslation =
       defaultLang !== l && routes[l] !== undefined && routes[l][pathName] !== undefined
-    const translatedPath = hasTranslation   ? "/" + routes[l][pathName] : path 
+    const translatedPath = hasTranslation ? "/" + routes[l][pathName] : path
 
-    return !showDefaultLang && l === defaultLang 
-    ? translatedPath 
-    : translatedPath != '/' 
-    ? `/${l}${translatedPath}` 
-    : `/${l}`
+    return !showDefaultLang && l === defaultLang
+      ? translatedPath
+      : translatedPath != "/"
+        ? `/${l}${translatedPath}`
+        : `/${l}`
   }
 }
 export function useToggleLanguage(lang: keyof typeof ui) {
@@ -43,7 +43,7 @@ export function useToggleLanguage(lang: keyof typeof ui) {
         const paths = path.split('/').filter(p => p !== '')
         if (lang === 'en') {
             if (paths.length > 1) {
-                const translatedPath = routes.pl[paths[1]]; // Translate to Polish
+                const translatedPath = routes.es[paths[1]]; // Translate to Polish
                 return translatedPath ?  `/${translatedPath}` : '/'
             } else {
                 return '/';
@@ -53,4 +53,19 @@ export function useToggleLanguage(lang: keyof typeof ui) {
             return translatedPath ? `/en/${translatedPath}` : '/en'
         }
     }
+}
+
+export function generateSlugRoutes(): RouteObject[] {
+  const slugRoutes: RouteObject[] = [];
+
+  Object.keys(routes).forEach((language) => {
+    const languageRoutes = routes[language];
+
+    Object.keys(languageRoutes).forEach((routeKey) => {
+      const slug = `${language}/${languageRoutes[routeKey]}`;
+      slugRoutes.push({ slug });
+    });
+  });
+
+  return slugRoutes;
 }

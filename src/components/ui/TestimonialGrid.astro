@@ -39,7 +39,7 @@ const { path, title, items = [], columns} = Astro.props as ItemGrid;
   )
 }
 <div class="flex items-center justify-center mt-4">
-  <Button id="button-see-more" variant="secondary" class="mx-auto" text="See more"/>
+  <slot/>
 </div>
 
 <style>

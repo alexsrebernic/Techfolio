@@ -1,0 +1,122 @@
+---
+import Layout from '@/layouts/PageLayout.astro';
+import AuthorQuery from '@/graphql/AuthorQuery';
+import { wpquery } from '@/data/wordpress';
+import ItemsGrid from '@/components/projects/List.astro';
+import TestimonialGrid from '@/components/ui/TestimonialGrid.astro';
+import Button from '@/components/ui/Button.astro';
+import type NormalizedProject from '@/interfaces/NormalizedProject';
+import { fetchPosts } from '@/utils/blog';
+import List from '@/components/blog/List.astro';
+import type NormalizedPost from '@/interfaces/NormalizedPost';
+import { fetchNormalizedProjects } from '@/utils/projects';
+import { fetchTestimonials } from '@/utils/testimonial';
+import type NormalizedTestimonial from '@/interfaces/NormalizedTestimonial';
+import { fetchAuthor } from '@/utils/author';
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+const metadata = {
+  title: "Inicio | Alex Srebernic",
+  ignoreTitleTemplate: true,
+};
+const lang = Astro.currentLocale
+const author : NormalizedAuthor = await fetchAuthor(lang as string)
+const testimonials : NormalizedTestimonial[] = await fetchTestimonials(lang as string)
+const projects : NormalizedProject[] = await fetchNormalizedProjects(lang as string)
+const posts : NormalizedPost[] = await fetchPosts(lang as string)
+---
+
+<Layout metadata={metadata}>
+  <div class="space-y-20">
+    <section data-aos="fade-up">
+      <div class="space-y-8">
+        <div>
+          {
+          author.availableForWork?
+            <div class="bg-[#b6ffde] dark:bg-opacity-20 dark:text-[#12C971] bg-opacity-50 flex w-fit rounded-xl text-xs items-center justify-center space-x-2 px-3 font-[400] text-green-700 py-0.5">
+              <div class="w-1.5 h-1.5 rounded-full bg-green-700 dark:text-[#12C971]">
+              </div>
+              <span>
+                Disponible para trabajar
+              </span>
+            </div>
+            :
+            <div class="bg-red-100 dark:bg-opacity-20 bg-opacity-50 flex w-fit rounded-xl text-xs items-center justify-center space-x-2 px-3 font-[400] text-red-700 py-0.5">
+              <div class="w-1.5 h-1.5 rounded-full bg-red-700">
+              </div>
+              <span>
+                No disponible para trabajar
+              </span>
+            </div>
+        }
+        </div>
+        <div class="space-y-2 font-[600]">
+          <h1 class="text-3xl font-[600] ">
+            Hola! Yo soy
+            {author.firstName} 👏 <br>
+          </h1>
+          <h2 class="text-3xl font-[600] text-subtitle">
+            {author.slogan}
+          </h2>
+        </div>
+        <div class="color-brand flex items-center justify-start space-x-2 opacity-80">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32">
+            <rect width="32" height="32" fill="none" />
+            <path fill="currentColor" d="M16 18a5 5 0 1 1 5-5a5.006 5.006 0 0 1-5 5m0-8a3 3 0 1 0 3 3a3.003 3.003 0 0 0-3-3" />
+            <path fill="currentColor" d="m16 30l-8.436-9.949a35.076 35.076 0 0 1-.348-.451A10.889 10.889 0 0 1 5 13a11 11 0 0 1 22 0a10.884 10.884 0 0 1-2.215 6.597l-.001.003s-.3.394-.345.447ZM8.813 18.395s.233.308.286.374L16 26.908l6.91-8.15c.044-.055.278-.365.279-.366A8.901 8.901 0 0 0 25 13a9 9 0 1 0-18 0a8.905 8.905 0 0 0 1.813 5.395" />
+          </svg>
+          <h4 class="text-sm font-[400] ">
+            {author.ubication}
+          </h4>
+        </div>
+        <div>
+          <p>
+            {author.brief_introduction}
+          </p>
+        </div>
+        <div>
+          <Button href="/es/about"  variant="primary" text="Acerca" />
+          <Button id="copyEmailButton" type="button" icon="copy" variant="secondary" text="Copiar email"/>
+        </div>
+      </div>
+    </section>
+    <section data-aos="fade-up" class="space-y-10 ">
+      <div>
+        <h2 class="text-2xl font-[500]">
+          Proyectos
+        </h2>
+      </div>
+      <ItemsGrid  posts={projects}/>
+    </section>
+    <section data-aos="fade-up">
+      <TestimonialGrid  columns={2} title="Testimonios" items={testimonials}>
+        <Button id="button-see-more" variant="secondary" class="mx-auto" text="Ver mas"/>
+      </TestimonialGrid>
+    </section>
+    <section data-aos="fade-up" class="space-y-10 ">
+      <div>
+        <h2 class="text-2xl font-[500]">Blog</h2>
+      </div>
+      <List posts={posts.slice(0,3)}/>
+      <div class="flex items-center justify-center">
+        <Button   href="/es/blog" variant="secondary" text="Ver más"/>
+      </div>
+    </section>
+  </div>
+  
+</Layout>
+<script define:vars={{email : author.email, lang}} >
+  const button = document.getElementById('copyEmailButton')
+  function copyEmailToClipboard() {
+    navigator.clipboard.writeText(email);
+    const oldText = button.innerHTML
+    button.innerHTML =  `Copiado! <svg class="w-4 h-4 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24">
+	<rect width="24" height="24" fill="none" />
+	<path fill="currentColor" d="M21 7L9 19l-5.5-5.5l1.41-1.41L9 16.17L19.59 5.59z" />
+</svg>`
+    setTimeout(() => {
+      button.innerHTML = oldText
+    }, 1500);
+  }
+  button.addEventListener('click', copyEmailToClipboard)
+</script>

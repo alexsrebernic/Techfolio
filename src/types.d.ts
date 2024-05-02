@@ -3,9 +3,200 @@ import type { HTMLAttributes, ImageMetadata } from 'astro/types';
 
 export interface Post {
   /** A unique ID number that identifies a post. */
+  id: string;
 
+  /** A post’s unique slug – part of the post’s URL based on its name, i.e. a post called “My Sample Page” has a slug “my-sample-page”. */
+  slug: string;
+
+  /**  */
+  permalink: string;
+
+  /**  */
+  publishDate: Date;
+  /**  */
+  updateDate?: Date;
+
+  /**  */
+  title: string;
+  /** Optional summary of post content. */
+  excerpt?: string;
+  /**  */
+  image?: string;
+
+  /**  */
+  category?: string;
+  /**  */
+  tags?: Array<string>;
+  /**  */
+  author?: string;
+
+  /**  */
+  metadata?: MetaData;
+
+  /**  */
+  draft?: boolean;
+
+  /**  */
+  Content?: unknown;
+  content?: string;
+
+  /**  */
+  readingTime?: number;
 }
 
+
+export interface LocalizedPost {
+  common_slug: string;
+  locales: {
+    [locale: string]: Post;
+  };
+}
+export  interface Author  {
+  slug: string,
+  photo: string ,
+  firstName: string ,
+  lastName: string ,
+  slogan : string,
+  email: string ,
+  ubication: string ,
+  phonenumber: string,
+  role: string ,
+  instagram_url?: string | null,
+  facebook_url?: string | null,
+  twitter_url?: string | null,
+  linkedin_url?: string | null,
+  stackoverflow_url?: string | null,
+  dribbble_url?: string | null,
+  github_url?: string | null,
+  pinterest_url?: string | null,
+  twitch_url?: string | null,
+  youtube_url?: string | null,
+  availableForWork?: boolean | null,
+  brief_introduction?: string | null,
+  achievements?: string | null,
+  services?: string[] | null,
+  tools?: string[] | null
+}
+export  interface LocalizedAuthor  {
+  common_slug: string;
+  locales: {
+    [locale: string]: Author;
+  };
+}
+export  interface Testimonial {
+  slug:string,
+  name: string,
+  position: string,
+  project: string,
+  testimonial: string,
+  photo: string
+}
+export  interface LocalizedTestimonial {
+  common_slug: string;
+  locales: {
+    [locale: string]: Testimonial;
+  };
+}
+export  interface Experience {
+  slug:string,
+  initYear: Date,
+  endYear: Date,
+  position: string,
+  companyName: string,
+  details: string,
+  link: string,
+  present: boolean,
+  content: string,
+}
+export  interface LocalizedExperience {
+  common_slug: string;
+  locales: {
+    [locale: string]: LocalizedExperience;
+  };
+}
+export  interface Education {
+  degree: string,
+  establishment: string,
+  initYear: Date,
+  endYear: Date,
+  position: string,
+  details: string,
+  link: string,
+  present: boolean,
+  content: string,
+}
+export  interface LocalizedEducation {
+  common_slug: string;
+  locales: {
+    [locale: string]: Education;
+  };
+}
+export  interface Project {
+  name: string,
+  type: string,
+  thumbnail: string,
+  image1 : string,
+  content: string,
+  slug:string,
+  preview_url: string,
+  excerpt: string,
+  id: string,
+  title: string,
+  status: string,
+  date: Date,
+  draft: boolean,
+  modified: Date,
+  tags: string[],
+  goals: string,
+  tools: string,
+  solutions: string,
+  background: string ,
+  conclusion: string ,
+  testimonial : Testimonial,
+  role : string ,
+  initYear: Date,
+  endYear: Date | null, 
+  description: string,
+  present: boolean | null,
+}
+
+export  interface LocalizedProject {
+  common_slug: string;
+  locales: {
+    [locale: string]: Project;
+  };
+}
+export  interface StoreItem {
+  name: string,
+  type: string,
+  thumbnail: string,
+  price: number,
+  currency: string,
+  content: string,
+  draft: boolean,
+  link: string,
+  slug: string,
+  brief_description: string,
+  items:string ,
+  description: string,
+  status: string,
+  date: Date,
+  modified: Date,
+  id: string,
+  buy_link: string,
+  preview_link: string,
+  image_1? :  string,
+  image_2? : string,
+  image_3? : string,
+  image_4? : string,
+
+}
+export  interface LocalizedStoreItem {
+  common_slug: string;
+  locales: {
+    [locale: string]: StoreItem;
+  };
+}
 export interface MetaData {
   title?: string;
   ignoreTitleTemplate?: boolean;

@@ -4,17 +4,17 @@ import {SidebarFooter} from './components/SidebarFooter.tsx'
 import { Sidebar as SidebarReact , Menu, MenuItem , type MenuItemStyles } from 'react-pro-sidebar';
 import Home from './icons/Home.tsx'
 import Projects from './icons/Projects.tsx'
-import { useTranslatedPath } from '@/i18n/utils.ts';
+import { useTranslatedPath, useTranslations } from '@/i18n/utils.ts';
 import Store from './icons/Store.tsx'
 import Contact from './icons/Contact.tsx'
 import About from './icons/About.tsx'
 import Blog from './icons/Blog.tsx'
 import {  menuClasses  } from '../Sidebar';
-import type AuthorSidebarInterface from '@/interfaces/AuthorSidebar.ts'
 import hexToRGBA from '@/helpers/HexToRGBA.ts';
 import { NavbarPhone } from "../NavbarPhone.tsx";
 import {socialMediaDataHeader} from './icons/SocialMedia.tsx'
 import type NormalizedAuthor from '@/interfaces/NormalizedAuthor.ts';
+import { sidebarUi } from '@/i18n/menus.ts';
 const themes = {
   light: {
     sidebar: {
@@ -80,6 +80,7 @@ export const Sidebar = ({author, children,lang} : Props) => {
   const [hasImage, setHasImage] = React.useState(false);
   const [theme, setTheme] = React.useState<Theme>('light');
   const translatePath = useTranslatedPath(lang)
+  const translate = useTranslations(lang,sidebarUi)
   useEffect(() => {
     window.addEventListener('resize', (e) => {
       checkSize()
@@ -176,23 +177,27 @@ export const Sidebar = ({author, children,lang} : Props) => {
           style={{ marginBottom: '24px', marginTop: '32px' }} />
           <div style={{ flex: 1, marginBottom: '32px' }}>
             <Menu className='w-[90%] mx-auto space-y-5' menuItemStyles={menuItemStyles}>
-              <MenuItem  href="/" icon={<Home size={20} />} >
-                Homepage
+              <MenuItem  href={translatePath('/', lang)} icon={<Home size={20} />} >
+                {translate('sidebar.homepage')}
               </MenuItem>
-              <MenuItem href='/projects' icon={<Projects size={20} />}>
-                Projects
+              <MenuItem href={translatePath('/projects', lang)}icon={<Projects size={20} />}>
+                {translate('sidebar.projects')}
+
               </MenuItem>
-              <MenuItem href='/about'  icon={<About size={20} />}>
-                About
+              <MenuItem href={translatePath('/about', lang)}  icon={<About size={20} />}>
+                {translate('sidebar.about')}
+
               </MenuItem>
-              <MenuItem href='/store'  icon={<Store size={20} />}>
-                Store
+              <MenuItem href={translatePath('/store', lang)}  icon={<Store size={20} />}>
+                {translate('sidebar.store')}
+
               </MenuItem>
-              <MenuItem href='/blog'  icon={<Blog size={20} />}>
-                Blog
+              <MenuItem href={translatePath('/blog', lang)}  icon={<Blog size={20} />}>
+                {translate('sidebar.blog')}
               </MenuItem>
-              <MenuItem href='/contact'  icon={<Contact size={20} />}>
-                Contact
+              <MenuItem href={translatePath('/contact', lang)} icon={<Contact size={20} />}>
+                {translate('sidebar.contact')}
+
               </MenuItem>
             </Menu>
             {

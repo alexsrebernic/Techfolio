@@ -18,9 +18,10 @@ export interface MetaDataConfig extends Omit<MetaData, 'title'> {
   };
 }
 export interface I18NConfig {
-  language: string;
-  languages: string[];
+  defaultLocale: string;
+  locales: string[];
   textDirection: string;
+  prefixDefaultLocale: boolean;
   dateFormatter?: Intl.DateTimeFormat;
 }
 export interface Wordpress {
@@ -204,8 +205,9 @@ const getMetadata = () => {
 
 const getI18N = () => {
   const _default = {
-    language: 'en',
-    languages: ['en','es'],
+    defaultLocale: 'en',
+    prefixDefaultLocale: true,
+    locales: ['en','es'],
     textDirection: 'ltr',
   };
 
