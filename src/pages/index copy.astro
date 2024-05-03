@@ -1,22 +1,29 @@
 ---
 import Layout from '@/layouts/PageLayout.astro';
+import AuthorQuery from '@/graphql/AuthorQuery';
+import { wpquery } from '@/data/wordpress';
 import ItemsGrid from '@/components/projects/List.astro';
 import TestimonialGrid from '@/components/ui/TestimonialGrid.astro';
 import Button from '@/components/ui/Button.astro';
+import type NormalizedProject from '@/interfaces/NormalizedProject';
 import { fetchPosts } from '@/utils/blog';
 import List from '@/components/blog/List.astro';
-import { fetchLocalizedProjects } from '@/utils/projects';
+import type NormalizedPost from '@/interfaces/NormalizedPost';
+import { fetchNormalizedProjects } from '@/utils/projects';
 import { fetchTestimonials } from '@/utils/testimonial';
+import type NormalizedTestimonial from '@/interfaces/NormalizedTestimonial';
 import { fetchAuthor } from '@/utils/author';
+import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 const metadata = {
   title: "Inicio | Alex Srebernic",
   ignoreTitleTemplate: true,
 };
 const lang = Astro.currentLocale
-const author  = await fetchAuthor(lang as string)
-const testimonials  = await fetchTestimonials(lang as string)
-const projects = await fetchLocalizedProjects(lang as string)
-const posts  = await fetchPosts(lang as string)
+const author : NormalizedAuthor = await fetchAuthor(lang as string)
+const testimonials : NormalizedTestimonial[] = await fetchTestimonials(lang as string)
+const projects : NormalizedProject[] = await fetchNormalizedProjects(lang as string)
+const posts : NormalizedPost[] = await fetchPosts(lang as string)
 ---
 
 <Layout metadata={metadata}>

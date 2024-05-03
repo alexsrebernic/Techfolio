@@ -66,10 +66,10 @@ const getNormalizedPost = async (post: CollectionEntry<'author'>): Promise<Autho
 
 const load = async function (): Promise<Author[]> {
   const posts = await getCollection('author');
-  console.log(posts)
   const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))
+  console.log(results)
 
 
   return results;
@@ -82,7 +82,6 @@ let _localizedAuthors : Array<LocalizedAuthor>;
 export const fetchLocalizedAuthors = async (): Promise<Array<LocalizedAuthor>> => {
   if (!_authors) {
     _authors = await load();
-    console.log(_authors)
     const common_slugs = [...new Set(_authors.map((post) => post.slug.split('/')[1]))];
     _localizedAuthors = common_slugs.map((id) => {
       const postsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {

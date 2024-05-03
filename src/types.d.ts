@@ -133,7 +133,11 @@ export  interface LocalizedEducation {
 }
 export  interface Project {
   name: string,
-  type: string,
+  permalink: string;
+  publishDate: Date;
+  updateDate?: Date;
+  category: string,
+  tags: string[],
   thumbnail: string,
   image1 : string,
   content: string,
@@ -146,7 +150,6 @@ export  interface Project {
   date: Date,
   draft: boolean,
   modified: Date,
-  tags: string[],
   goals: string,
   tools: string,
   solutions: string,
@@ -168,7 +171,11 @@ export  interface LocalizedProject {
 }
 export  interface StoreItem {
   name: string,
-  type: string,
+  category: string,
+  tags: string[],
+  permalink: string;
+  publishDate: Date;
+  updateDate?: Date;
   thumbnail: string,
   price: number,
   currency: string,

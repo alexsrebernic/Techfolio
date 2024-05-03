@@ -44,16 +44,26 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreIt
   const { Content, remarkPluginFrontmatter } = await post.render();
 
   const {
-    publishDate: rawPublishDate = new Date(),
-    updateDate: rawUpdateDate,
-    title,
-    excerpt,
-    image,
-    tags: rawTags = [],
-    category: rawCategory,
-    author,
-    draft = false,
-    metadata = {},
+    name,
+    type,
+    thumbnail,
+    price,
+    currency,
+    content,
+    draft,
+    link,
+    brief_description,
+    items ,
+    description,
+    status,
+    date,
+    modified,
+    buy_link,
+    preview_link,
+    image_1,
+    image_2,
+    image_3,
+    image_4,
   } = data;
 
   const locale = id.split('/')[0];
@@ -68,26 +78,30 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreIt
     id: id,
     slug: slug,
     permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
-
     publishDate: publishDate,
     updateDate: updateDate,
-
-    title: title,
-    excerpt: excerpt,
-    image: image,
-
     category: category,
     tags: tags,
-    author: author,
-
-    draft: draft,
-
-    metadata,
-
-    Content: Content,
-    // or 'content' in case you consume from API
-
-    readingTime: remarkPluginFrontmatter?.readingTime,
+    name,
+    type,
+    thumbnail,
+    price,
+    currency,
+    content,
+    draft,
+    link,
+    brief_description,
+    items ,
+    description,
+    status,
+    date,
+    modified,
+    buy_link,
+    preview_link,
+    image_1,
+    image_2,
+    image_3,
+    image_4,
   };
 };
 

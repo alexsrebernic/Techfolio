@@ -44,50 +44,68 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Project
   const { Content, remarkPluginFrontmatter } = await post.render();
 
   const {
-    publishDate: rawPublishDate = new Date(),
-    updateDate: rawUpdateDate,
-    title,
-    excerpt,
-    image,
-    tags: rawTags = [],
-    category: rawCategory,
-    author,
-    draft = false,
-    metadata = {},
+  name,
+  publishDate,
+  category,
+  type,
+  thumbnail,
+  image1 ,
+  content,
+  preview_url,
+  excerpt,
+  title,
+  status,
+  date,
+  draft,
+  modified,
+  goals,
+  tools,
+  tags,
+  solutions,
+  background,
+  conclusion,
+  testimonial,
+  role ,
+  initYear,
+  endYear, 
+  description,
+  present,
   } = data;
 
   const locale = id.split('/')[0];
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
-  const publishDate = new Date(rawPublishDate);
-  const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
-  const category = rawCategory ? cleanSlug(rawCategory) : undefined;
-  const tags = rawTags.map((tag: string) => cleanSlug(tag));
+  const _tags = tags.map((tag: string) => cleanSlug(tag));
   const permalink = await generatePermalink({ id, slug, publishDate, category });
 
   return {
     id: id,
     slug: slug,
+    publishDate,
     permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
-
-    publishDate: publishDate,
-    updateDate: updateDate,
-
-    title: title,
-    excerpt: excerpt,
-    image: image,
-
-    category: category,
-    tags: tags,
-    author: author,
-
-    draft: draft,
-
-    metadata,
-
-    Content: Content,
-    // or 'content' in case you consume from API
-
-    readingTime: remarkPluginFrontmatter?.readingTime,
+    tags : _tags,
+    name,
+    type,
+    thumbnail,
+    image1 ,
+    content,
+    preview_url,
+    excerpt,
+    title,
+    status,
+    date,
+    draft,
+    modified,
+    goals,
+    tools,
+    solutions,
+    background,
+    conclusion,
+    testimonial,
+    role ,
+    initYear,
+    endYear, 
+    description,
+    present,
   };
 };
 

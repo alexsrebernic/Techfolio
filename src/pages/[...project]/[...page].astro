@@ -1,0 +1,53 @@
+---
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+
+import Layout from '@/layouts/PageLayout.astro';
+import BlogList from '@/components/projects/List.astro';
+import Pagination from '@/components/projects/Pagination.astro';
+import { getStaticPathsProjectList, blogListRobots } from "@/utils/projects.ts";
+
+export const prerender = true;
+
+export const getStaticPaths = (async ({ paginate }) => {
+  return await getStaticPathsProjectList({ paginate });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props as Props;
+const currentPage = page.currentPage ?? 1;
+// const allCategories = await findCategories();
+// const allTags = await findTags();
+
+const metadata = {
+  title: `Project${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+  robots: {
+    index: blogListRobots?.index && currentPage === 1,
+    follow: blogListRobots?.follow,
+  },
+  openGraph: {
+    type: 'Projects',
+  },
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="">
+    <div class="space-y-4 font-[600] mb-10">
+      <h1 class="text-3xl font-[600] ">
+        Proyectos
+      </h1>
+      <p class="text-md font-[400] text-subtitle">
+        Una muestra de las soluciones que e creado/co-creado
+      </p>
+    </div>
+    <section data-aos="fade-up">
+      <BlogList posts={page.data} />
+      <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    </section>
+    <!--
+      <PostTags tags={allCategories} class="mb-2" title="Search by Categories:" isCategory />
+      <PostTags tags={allTags}  title="Search by Tags:" />
+    -->
+  </section>
+</Layout>
