@@ -18,16 +18,14 @@ export interface MetaDataConfig extends Omit<MetaData, 'title'> {
   };
 }
 export interface I18NConfig {
+  isEnabled: boolean,
   defaultLocale: string;
-  locales: string[];
+  locales: { [key: string]: string };
   textDirection: string;
   prefixDefaultLocale: boolean;
   dateFormatter?: Intl.DateTimeFormat;
 }
-export interface Wordpress {
-  domain: string;
-  enabled: boolean;
-}
+
 export interface AppBlogConfig {
   isWordpressEnabled: boolean;
   isEnabled: boolean;
@@ -205,16 +203,20 @@ const getMetadata = () => {
 
 const getI18N = () => {
   const _default = {
+    isEnabled: true,
     defaultLocale: 'en',
     prefixDefaultLocale: true,
-    locales: ['en','es'],
+    locales: {
+      en: 'en-US',
+      es: 'es-ES'
+    },
     textDirection: 'ltr',
   };
 
   const value = merge({}, _default, config?.i18n ?? {});
 
   return Object.assign(value, {
-    dateFormatter: new Intl.DateTimeFormat(value.language, {
+    dateFormatter: new Intl.DateTimeFormat(value.defaultLocale, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -371,14 +373,7 @@ const getAnalytics = () => {
 
   return merge({}, _default, config?.analytics ?? {}) as AnalyticsConfig;
 };
-const getWordpress = () => {
-  const _default = {
-      domain: 'techfolio.local',
-      enabled: true,
-  }
-  return merge({}, _default, config?.wordpress ?? {} as Wordpress) ;
-}
-export const WORDPRESS = getWordpress()
+
 export const SITE = getSite();
 export const I18N = getI18N();
 export const METADATA = getMetadata();

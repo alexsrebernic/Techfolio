@@ -8,17 +8,19 @@ import Pagination from '@/components/blog/Pagination.astro';
 
 import { blogListRobots, getStaticPathsBlogList } from '@/utils/blog';
 import { I18N } from '@/utils/config';
+import { useTranslations } from '@/i18n/translator';
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const lang = Astro.currentLocale!
-  return await getStaticPathsBlogList({ paginate }, lang);
+  return await getStaticPathsBlogList({ paginate });
 }) satisfies GetStaticPaths;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
+const locale = Astro.currentLocale
+const t = useTranslations(locale)
 
 // const allCategories = await findCategories();
 // const allTags = await findTags();
@@ -46,8 +48,8 @@ const metadata = {
       </p>
     </div>
     <section data-aos="fade-up">
-      <BlogList posts={page.data} />
-      <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+      <BlogList posts={page.data.map(p => p.locales[locale])}  />
+      <Pagination prevUrl={page.url.prev} nextUrl={page.url.next}  />
     </section>
     <!--
       <PostTags tags={allCategories} class="mb-2" title="Search by Categories:" isCategory />

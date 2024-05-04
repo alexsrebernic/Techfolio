@@ -1,34 +1,42 @@
 ---
-import {Sidebar} from '@/components/widgets/Sidebar/Sidebar.tsx';
+import Header from '@/components/widgets/Header.astro';
+import Sidebar from '@/components/widgets/Sidebar.astro';
 import Layout from '@/layouts/Layout.astro';
-import SidebarAuthorQuery from '@/graphql/SidebarAuthorQuery';
-import { wpquery } from '@/data/wordpress';
 import type { MetaData } from '@/types';
 import ToggleTheme from '@/components/common/ToggleTheme.astro'
 import { fetchAuthor } from '@/utils/author';
 import { I18N } from '@/utils/config';
+import { getHeaderData, getFooterData } from '~/navigation';
+import { getLocaleFromUrl } from '~/i18n/translator';
 export interface Props {
   metadata?: MetaData;
 }
 
+const lang = getLocaleFromUrl(Astro.url)
+const authorSidebarData = (await fetchAuthor(lang))[0]
+console.log(authorSidebarData)
+const headerData = getHeaderData(getLocaleFromUrl(Astro.url));
+// const footerData = getFooterData(getLocaleFromUrl(Astro.url));
+export interface Props {
+  metadata?: MetaData;
+}
 const { metadata } = Astro.props;
-const lang = Astro.currentLocale!
-const authorSidebarData = await fetchAuthor(lang)
+const showLanguagePicker = I18N.isEnabled;
 ---
 
 <Layout metadata={metadata}>
   <slot name="announcement">
   </slot>
   <div class="flex flex-col md:flex-row min-h-[80vh]">
-    <Sidebar 
-    lang={lang} 
-    author={authorSidebarData} 
-    client:only="react"
-    >
-      <ToggleTheme />
-    </Sidebar>
+    <slot name="header">
+      <!-- <Header {...headerData} isSticky showRssFeed showToggleTheme showLanguagePicker={showLanguagePicker} /> -->
+    </slot>
+    <slot name="sidebar">
+      <Sidebar author={authorSidebarData} {...headerData} isSticky showRssFeed showToggleTheme showLanguagePicker={showLanguagePicker} />
+    </slot>
+
     
-    <div class="md:pl-[80px] sidebar:pl-[300px] flex-1 px-2">
+    <div class=" flex-1 px-2">
 
       <main class="w-full   h-full bg-white dark:bg-[#1A1A1A]  rounded-xl shadow-md md:m-2">
         <div class="md:w-[80%] pt-4 md:pt-12 px-4 pb-4 md:pb-20 md:px-0  lg:pt-24 lg:w-[60%] mx-auto">

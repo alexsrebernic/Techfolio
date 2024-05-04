@@ -64,12 +64,13 @@ const postCollection = defineCollection({
   }),
 });
 const authorCollection = defineCollection({
-  type: 'data',
+  type: 'content',
   schema: ({image}) => z.object({
     photo: image(),
     first_name: z.string(),
     last_name: z.string(),
     brief_introduction: z.string(),
+    phone_number: z.string(),
     achievements: z.string(),
     slogan: z.string(),
     role: z.string(),
@@ -78,20 +79,20 @@ const authorCollection = defineCollection({
     available_for_work: z.boolean(),
     ubication: z.string(),
     email: z.string(),
-    instagram: z.string().optional(),
-    twitter: z.string().optional(),
-    facebook: z.string().optional(),
-    linkedin: z.string().optional(),
-    github: z.string().optional(),
-    stackoverflow: z.string().optional(),
-    twitch: z.string().optional(),
-    whatsapp : z.string().optional(),
-    youtube: z.string().optional(),
-    pinterest: z.string().optional(),
+    instagram_url: z.string().optional(),
+    twitter_url: z.string().optional(),
+    facebook_url: z.string().optional(),
+    linkedin_url: z.string().optional(),
+    github_url: z.string().optional(),
+    stackoverflow_url: z.string().optional(),
+    twitch_url: z.string().optional(),
+    whatsapp_url : z.string().optional(),
+    youtube_url: z.string().optional(),
+    pinterest_url: z.string().optional(),
   }),
 });
 const educationCollection = defineCollection({
-  type: 'data',
+  type: 'content',
   schema: ({image}) => z.object({
     init_year: z.date(),
     end_year: z.date().optional(),
@@ -103,7 +104,7 @@ const educationCollection = defineCollection({
   }),
 });
 const experienceCollection = defineCollection({
-  type: 'data',
+  type: 'content',
   schema: z.object({
     init_year: z.date(),
     end_year: z.date().optional(),
@@ -114,7 +115,7 @@ const experienceCollection = defineCollection({
   }),
 });
 const testimonialCollection = defineCollection({
-  type: 'data',
+  type: 'content',
   schema: ({image}) => z.object({
     name: z.string(),
     position: z.string(),
@@ -159,8 +160,8 @@ const storeCollection = defineCollection({
 })
 export const collections = {
   post: postCollection,
-  educations: educationCollection,
-  experiences: experienceCollection,
+  education: educationCollection,
+  experience: experienceCollection,
   testimonials: testimonialCollection,
   projects: projectCollection,
   store: storeCollection,

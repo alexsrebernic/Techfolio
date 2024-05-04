@@ -10,6 +10,7 @@ import compress from 'astro-compress';
 import tasks from './src/utils/tasks';
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter.mjs';
 import { ANALYTICS, SITE, I18N } from './src/utils/config.ts';
+import { i18n, filterSitemapByDefaultLocale } from "astro-i18n-aut/integration";
 import react from "@astrojs/react";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) => ANALYTICS.vendors.googleAnalytics.id && ANALYTICS.vendors.googleAnalytics.partytown ? Array.isArray(items) ? items.map(item => item()) : [items()] : [];
@@ -20,21 +21,29 @@ export default defineConfig({
   base: SITE.base,
   trailingSlash: SITE.trailingSlash ? 'always' : 'never',
   output: 'static',
-  i18n: {
-    defaultLocale: I18N.defaultLocale,
-    locales: I18N.locales,
-    routing: {
-      prefixDefaultLocale: I18N.prefixDefaultLocale,
-    }
-  },
   integrations: [tailwind({
     applyBaseStyles: false
-  }), sitemap({
-    i18n: {
-      locales: I18N.locales,
-      defaultLocale: I18N.defaultLocale,
-    },
-  }), mdx(), icon({
+  }), 
+  ...(I18N.isEnabled
+    ? [
+        i18n({
+          locales: I18N.locales,
+          defaultLocale: I18N.defaultLocale,
+          exclude: ["pages/api/**/*", "pages/rss.xml.ts","pages/**/rss.xml.ts"]
+        }),
+        sitemap({
+          i18n: {
+            locales: I18N.locales,
+            defaultLocale: I18N.defaultLocale,
+          },
+          filter: filterSitemapByDefaultLocale({ defaultLocale: I18N.defaultLocale }),
+        }),
+      ]
+    : [
+        sitemap({}),
+      ]),
+  , mdx(), icon({
+    iconDir: "src/assets/icons",
     include: {
       tabler: ['*'],
       'flat-color-icons': ['template', 'gallery', 'approval', 'document', 'advertising', 'currency-exchange', 'voice-presentation', 'business-contact', 'database']

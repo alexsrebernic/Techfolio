@@ -12,7 +12,7 @@ export const get = async () => {
     });
   }
 
-  const posts = await fetchPosts('es');
+  const posts = await fetchPosts(I18N.defaultLocale);
 
   const { body } = await rss({
     title: `${SITE.name}’s Blog`,

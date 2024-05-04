@@ -6,20 +6,21 @@ import BlogList from '@/components/store/List.astro';
 import Pagination from '@/components/store/Pagination.astro';
 // import PostTags from "@/components/blog/Tags.astro";
 
-import { getStaticPathsBlogList,storeListRobots } from '@/utils/store';
+import { blogListRobots, getStaticPathsStoreItemList } from '@/utils/store';
 import { I18N } from '@/utils/config';
+import { useTranslations } from '@/i18n/translator';
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const lang = Astro.currentLocale!
-  return await getStaticPathsBlogList({ paginate }, lang);
+  return await getStaticPathsStoreItemList({ paginate });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
+const locale = Astro.currentLocale!
+const t = useTranslations(locale)
 
 // const allCategories = await findCategories();
 // const allTags = await findTags();
@@ -27,11 +28,11 @@ const currentPage = page.currentPage ?? 1;
 const metadata = {
   title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
-    index: storeListRobots?.index && currentPage === 1,
-    follow: storeListRobots?.follow,
+    index: blogListRobots?.index && currentPage === 1,
+    follow: blogListRobots?.follow,
   },
   openGraph: {
-    type: 'blog',
+    type: 'store',
   },
 };
 ---
@@ -47,7 +48,7 @@ const metadata = {
       </p>
     </div>
     <section data-aos="fade-up">
-      <BlogList posts={page.data} />
+      <BlogList posts={page.data.map(p => p.locales[locale])} />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
     </section>
     <!--

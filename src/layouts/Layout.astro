@@ -13,16 +13,19 @@ import BasicScripts from '@/components/common/BasicScripts.astro';
 // Uncomment line below to activate View Transitions
 import type { MetaData as MetaDataType } from '@/types';
 import 'aos/dist/aos.css'
+import { getLocaleByPath } from 'astro:i18n';
+import { getLocale } from "astro-i18n-aut";
 export interface Props {
   metadata?: MetaDataType;
 }
 
 const { metadata = {} } = Astro.props;
-const { language, textDirection } = I18N;
+const { defaultLocale, textDirection } = I18N;
+const locale = getLocale(Astro.url.pathname)
 ---
 
 <!doctype html>
-<html lang={language} dir={textDirection} class="2xl:text-[20px] ">
+<html lang={locale} dir={textDirection} class="2xl:text-[20px] ">
   <head>
     <CommonMeta />
     <Favicons />

@@ -7,44 +7,14 @@ import { cleanSlug } from './permalinks';
 
 const getNormalizedPost = async (post: CollectionEntry<'author'>): Promise<Author> => {
   const { id, slug: rawSlug = '', data } = post;
-
   const {
     photo,
-  firstName,
-  lastName,
-  slogan,
-  email,
-  ubication,
-  phonenumber,
-  role,
-  instagram_url,
-  facebook_url,
-  twitter_url,
-  linkedin_url,
-  stackoverflow_url,
-  dribbble_url,
-  github_url,
-  pinterest_url,
-  twitch_url,
-  youtube_url,
-  availableForWork,
-  brief_introduction,
-  achievements,
-  services,
-  tools
-  } = data;
-
-  const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
-
-  return {
-    slug: slug,
-    photo,
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     slogan,
     email,
     ubication,
-    phonenumber,
+    phone_number,
     role,
     instagram_url,
     facebook_url,
@@ -56,7 +26,38 @@ const getNormalizedPost = async (post: CollectionEntry<'author'>): Promise<Autho
     pinterest_url,
     twitch_url,
     youtube_url,
-    availableForWork,
+    available_for_work,
+    brief_introduction,
+    achievements,
+    services,
+    tools
+  } = data;
+
+  const locale = id.split('/')[0];
+  const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
+
+  return {
+    id: id,
+    slug: slug,
+    photo,
+    first_name,
+    last_name,
+    slogan,
+    email,
+    ubication,
+    phone_number,
+    role,
+    instagram_url,
+    facebook_url,
+    twitter_url,
+    linkedin_url,
+    stackoverflow_url,
+    dribbble_url,
+    github_url,
+    pinterest_url,
+    twitch_url,
+    youtube_url,
+    available_for_work,
     brief_introduction,
     achievements,
     services,
@@ -69,7 +70,6 @@ const load = async function (): Promise<Author[]> {
   const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))
-  console.log(results)
 
 
   return results;
@@ -82,10 +82,10 @@ let _localizedAuthors : Array<LocalizedAuthor>;
 export const fetchLocalizedAuthors = async (): Promise<Array<LocalizedAuthor>> => {
   if (!_authors) {
     _authors = await load();
-    const common_slugs = [...new Set(_authors.map((post) => post.slug.split('/')[1]))];
+    const common_slugs = [...new Set(_authors.map((post) => post.id.split('/')[1]))];
     _localizedAuthors = common_slugs.map((id) => {
       const postsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
-        const post = _authors.find((post) => post.slug === `${locale}/${id}`);
+        const post = _authors.find((post) => post.id === `${locale}/${id}`);
         map[locale] = post;
         return map;
     }, {});
@@ -95,7 +95,6 @@ export const fetchLocalizedAuthors = async (): Promise<Array<LocalizedAuthor>> =
       }
     });
   }
-
   return _localizedAuthors;
 };
 

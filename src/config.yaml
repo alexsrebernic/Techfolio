@@ -28,11 +28,12 @@ metadata:
     cardType: summary_large_image
 
 i18n:
+  isEnabled: true,
   defaultLocale: es
   prefixDefaultLocale: true
   locales: 
-  - en
-  - es
+    en: en-US
+    es: es-ES
   textDirection: ltr
 wordpress:
   domain: techfolio.local

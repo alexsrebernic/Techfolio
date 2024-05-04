@@ -14,14 +14,14 @@ import { fetchTestimonials } from '@/utils/testimonial';
 import type NormalizedTestimonial from '@/interfaces/NormalizedTestimonial';
 import { fetchAuthor } from '@/utils/author';
 import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
-import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { getLangFromUrl, getLocaleFromUrl, useTranslations } from '@/i18n/translator';
 import type { Author, LocalizedAuthor } from '@/types';
 const metadata = {
   title: "Inicio | Alex Srebernic",
   ignoreTitleTemplate: true,
 };
-const lang = Astro.currentLocale
-const author : Author = (await fetchAuthor(lang as string))
+const lang = getLocaleFromUrl(Astro.url)
+const author : Author = (await fetchAuthor(lang as string))[0]
 console.log(author)
 const testimonials : NormalizedTestimonial[] = await fetchTestimonials(lang as string)
 const projects : NormalizedProject[] = await fetchProjects(lang as string)
@@ -34,7 +34,7 @@ const posts : NormalizedPost[] = await fetchPosts(lang as string)
       <div class="space-y-8">
         <div>
           {
-          author.availableForWork?
+          author.available_for_work?
             <div class="bg-[#b6ffde] dark:bg-opacity-20 dark:text-[#12C971] bg-opacity-50 flex w-fit rounded-xl text-xs items-center justify-center space-x-2 px-3 font-[400] text-green-700 py-0.5">
               <div class="w-1.5 h-1.5 rounded-full bg-green-700 dark:text-[#12C971]">
               </div>
@@ -55,7 +55,7 @@ const posts : NormalizedPost[] = await fetchPosts(lang as string)
         <div class="space-y-2 font-[600]">
           <h1 class="text-3xl font-[600] ">
             Hola! Yo soy
-            {author.firstName} 👏 <br>
+            {author.first_name} 👏 <br>
           </h1>
           <h2 class="text-3xl font-[600] text-subtitle">
             {author.slogan}

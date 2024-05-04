@@ -8,7 +8,7 @@ import SinglePost from '@/components/store/SingleStoreItem.astro';
 import ToBlogLink from '@/components/store/ToStoreLink.astro';
 
 import { getCanonical, getPermaStoreLink } from '@/utils/permalinks';
-import { getStaticPathsBlogNormalizedStoreItem, storeNormalizedStoreItemRobots } from '@/utils/store';
+import { getStaticPathsStoreItemPost, blogPostRobots } from '@/utils/store';
 import { findImage } from '@/utils/images';
 import type { MetaData } from '@/types';
 import RelatedPosts from '@/components/store/RelatedStoreItems.astro';
@@ -17,23 +17,24 @@ import { I18N } from '@/utils/config';
 export const prerender = true;
 
 export const getStaticPaths = (async () => {
-  const lang = Astro.currentLocale!
-  return await getStaticPathsBlogNormalizedStoreItem(lang);
+  return await getStaticPathsStoreItemPost();
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { storeItem } = Astro.props as Props;
 
-const url = getCanonical(getPermaStoreLink(storeItem.permalink, 'storeItem'));
-const image = (await findImage(storeItem.image)) as ImageMetadata | string | undefined;
+const { post } = Astro.props as Props;
+const locale = Astro.currentLocale!
+const localizedPost = post.locales[locale];
+const url = getCanonical(getPermaStoreLink(post.permalink, 'storeItem'));
+const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
 const metadata = merge(
   {
-    title: storeItem.title,
-    description: storeItem.brief_description,
+    title: localizedPost.title,
+    description: localizedPost.brief_description,
     robots: {
-      index: storeNormalizedStoreItemRobots?.index,
-      follow: storeNormalizedStoreItemRobots?.follow,
+      index: blogPostRobots?.index,
+      follow: blogPostRobots?.follow,
     },
     openGraph: {
       type: 'article',

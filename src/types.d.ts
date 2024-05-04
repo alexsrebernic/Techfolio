@@ -52,14 +52,15 @@ export interface LocalizedPost {
   };
 }
 export  interface Author  {
-  slug: string,
+  id?: string,
+  slug?:string,
   photo: string ,
-  firstName: string ,
-  lastName: string ,
+  first_name: string ,
+  last_name: string ,
   slogan : string,
   email: string ,
   ubication: string ,
-  phonenumber: string,
+  phone_number: string,
   role: string ,
   instagram_url?: string | null,
   facebook_url?: string | null,
@@ -71,7 +72,7 @@ export  interface Author  {
   pinterest_url?: string | null,
   twitch_url?: string | null,
   youtube_url?: string | null,
-  availableForWork?: boolean | null,
+  available_for_work?: boolean | null,
   brief_introduction?: string | null,
   achievements?: string | null,
   services?: string[] | null,
@@ -84,12 +85,13 @@ export  interface LocalizedAuthor  {
   };
 }
 export  interface Testimonial {
-  slug:string,
+  id?: string,
+  slug?:string,
   name: string,
   position: string,
   project: string,
   testimonial: string,
-  photo: string
+  photo: ImageMetadata
 }
 export  interface LocalizedTestimonial {
   common_slug: string;
@@ -98,7 +100,8 @@ export  interface LocalizedTestimonial {
   };
 }
 export  interface Experience {
-  slug:string,
+  id?: string,
+  slug?:string,
   initYear: Date,
   endYear: Date,
   position: string,
@@ -115,6 +118,8 @@ export  interface LocalizedExperience {
   };
 }
 export  interface Education {
+  id?: string,
+  slug?:string,
   degree: string,
   establishment: string,
   initYear: Date,
@@ -132,13 +137,15 @@ export  interface LocalizedEducation {
   };
 }
 export  interface Project {
+  id?: string,
+  slug?:string,
   name: string,
   permalink: string;
   publishDate: Date;
   updateDate?: Date;
   category: string,
   tags: string[],
-  thumbnail: string,
+  thumbnail: ImageMetadata,
   image1 : string,
   content: string,
   slug:string,
@@ -170,13 +177,15 @@ export  interface LocalizedProject {
   };
 }
 export  interface StoreItem {
+  id?: string,
+  slug?:string,
   name: string,
   category: string,
   tags: string[],
   permalink: string;
   publishDate: Date;
   updateDate?: Date;
-  thumbnail: string,
+  thumbnail: ImageMetadata,
   price: number,
   currency: string,
   content: string,
@@ -192,10 +201,10 @@ export  interface StoreItem {
   id: string,
   buy_link: string,
   preview_link: string,
-  image_1? :  string,
-  image_2? : string,
-  image_3? : string,
-  image_4? : string,
+  image_1? :  ImageMetadata,
+  image_2? : ImageMetadata,
+  image_3? : ImageMetadata,
+  image_4? : ImageMetadata,
 
 }
 export  interface LocalizedStoreItem {

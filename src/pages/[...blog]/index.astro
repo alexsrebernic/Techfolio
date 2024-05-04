@@ -18,20 +18,22 @@ export const prerender = true;
 
 export const getStaticPaths = (async () => {
   const lang = Astro.currentLocale!
-  return await getStaticPathsBlogPost(lang);
+  return await getStaticPathsBlogPost();
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props as Props;
+const locale = Astro.currentLocale
+const localizedPost = post.locales[locale];
 
-const url = getCanonical(getPermalink(post.permalink, 'post'));
-const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
+const url = getCanonical(getPermalink(localizedPost.permalink, 'localizedPost'));
+const image = (await findImage(localizedPost.image)) as ImageMetadata | string | undefined;
 
 const metadata = merge(
   {
-    title: post.title,
-    description: post.excerpt,
+    title: localizedPost.title,
+    description: localizedPost.excerpt,
     robots: {
       index: blogPostRobots?.index,
       follow: blogPostRobots?.follow,
@@ -41,13 +43,13 @@ const metadata = merge(
       ...(image ? { images: [{ url: image, width: (image as ImageMetadata)?.width, height: (image as ImageMetadata)?.height }] } : {}),
     },
   },
-  { ...(post?.metadata ? { ...post.metadata, canonical: post.metadata?.canonical || url } : {}) }
+  { ...(localizedPost?.metadata ? { ...localizedPost.metadata, canonical: localizedPost.metadata?.canonical || url } : {}) }
 ) as MetaData;
 ---
 
 <Layout metadata={metadata}>
   <ToBlogLink />
-  <SinglePost post={{ ...post, image: image }} url={url} />
+  <SinglePost localizedPost={{ ...localizedPost, image: image }} url={url} />
   <ToBlogLink />
-  <RelatedPosts post={post} />
+  <RelatedPosts localizedPost={localizedPost} />
 </Layout>

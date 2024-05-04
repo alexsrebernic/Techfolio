@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 import ThemeBlack from '../icons/ThemeBlack';
 import ThemeWhite from '../icons/ThemeWhite';
-import { LanguageToggle } from '@/components/common/LanguageToggle';
+import LanguagePicker from '@/components/common/LanguagePicker.astro';
 interface SidebarFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   collapsed?: boolean;
@@ -51,7 +51,7 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ children, collapse
       {collapsed ? (
         <StyledCollapsedSidebarFooter >
           <div className='flex   items-center justify-center  md:flex-col xl:flex-row xl:space-x-4'>
-            <LanguageToggle/>
+            <LanguagePicker/>
             <span onClick={toggleTheme}>
               {children}
             </span>
@@ -61,7 +61,7 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ children, collapse
       ) : (
         <StyledSidebarFooter {...rest}>
            <div className='flex   items-center justify-center  md:flex-col xl:flex-row xl:space-x-4'>
-            <LanguageToggle/>
+            <LanguagePicker/>
             <span onClick={toggleTheme}>
               {children}
             </span>
