@@ -190,7 +190,6 @@ export const findLatestPosts = async ({ count }: { count?: number }, locale: str
 export const getStaticPathsBlogList = async ({ paginate }) => {
   if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
   const _postsLocalized = await fetchLocalizedPosts();
-
   return paginate(_postsLocalized, {
     params: { blog: BLOG_BASE || undefined },
     pageSize: blogPostsPerPage,

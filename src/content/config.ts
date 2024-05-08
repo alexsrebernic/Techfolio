@@ -100,7 +100,7 @@ const educationCollection = defineCollection({
     degree: z.string(),
     establishment: z.string(),
     details: z.string(),
-    certification: image()
+    certification: image().optional()
   }),
 });
 const experienceCollection = defineCollection({
@@ -147,7 +147,7 @@ const storeCollection = defineCollection({
     publishDate: z.date().optional(),
     updateDate: z.date().optional(),
     draft: z.boolean().optional(),
-    preview_url: z.string(),
+    preview_link: z.string(),
     buy_link: z.string(),
     brief_description: z.string(),
     currency: z.string(),
@@ -156,6 +156,11 @@ const storeCollection = defineCollection({
     category: z.string(),
     description: z.string(),
     tags: z.array(z.string()).optional(),
+    image_1: image().optional(),
+    image_2: image().optional(),
+    image_3: image().optional(),
+    image_4: image().optional(),
+
   }),
 })
 export const collections = {

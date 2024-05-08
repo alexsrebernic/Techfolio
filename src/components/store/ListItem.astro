@@ -8,14 +8,15 @@ import { APP_STORE } from '@/utils/config';
 
 import { getPermaStoreLink } from '@/utils/permalinks';
 import { findImage } from '@/utils/images';
-import type NormalizedStoreItem from '@/interfaces/NormalizedStoreItem';
+import type { StoreItem } from '@/types';
 
 export interface Props {
-  post: NormalizedStoreItem;
+  post: StoreItem;
 }
 
 const { post } = Astro.props;
-const image = (await findImage(post.image)) as ImageMetadata | undefined;
+console.log(post)
+const image = (await findImage(post.thumbnail.src)) as ImageMetadata | undefined;
 const link = APP_STORE?.post?.isEnabled ? getPermaStoreLink(post.permalink, 'post') : '';
 ---
 <article class="flex gap-4  md:space-y-0  flex-col">
@@ -30,7 +31,7 @@ const link = APP_STORE?.post?.isEnabled ? getPermaStoreLink(post.permalink, 'pos
                 widths={[400, 900]}
                 width={900}
                 sizes="(max-width: 900px) 400px, 900px"
-                alt={post.title}
+                alt={post.name}
                 aspectRatio="16:9"
                 loading="lazy"
                 decoding="async"
@@ -46,18 +47,18 @@ const link = APP_STORE?.post?.isEnabled ? getPermaStoreLink(post.permalink, 'pos
           {
             link ? (
               <a class="hover:text-primary dark:hover:text-gray-800 transition ease-in duration-200 break-all" href={link}>
-                {post.title}
+                {post.name}
               </a>
             ) : (
-              post.title
+              post.name
             )
           }
         </h2>    
         <div class="text-sm">
          
-          {post.excerpt && 
+          {post.description && 
              <p class=" overflow-hidden line-clamp-3">
-              {post.excerpt}
+              {post.description}
             </p>
           }
         </div>

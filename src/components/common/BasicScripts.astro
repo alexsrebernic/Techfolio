@@ -1,8 +1,8 @@
 ---
-import { UI } from '@/utils/config';
+import { UI, I18N, SITE } from '@/utils/config';
 ---
 <script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script type="module"  is:inline define:vars={{ defaultTheme: UI.theme }}>
+<script type="module"  is:inline define:vars={{ defaultTheme: UI.theme, locales: I18N.locales, trailingSlash: SITE.trailingSlash }}>
   (() => {
     if (window.basic_script) {
     return;
@@ -45,26 +45,29 @@ import { UI } from '@/utils/config';
     let lastKnownScrollPosition = window.scrollY;
     let ticking = true;
 
-    attachEvent('#header nav', 'click', function () {
+    attachEvent('#sidebar nav', 'click', function () {
       document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
       document.body.classList.remove('overflow-hidden');
-      document.getElementById('header')?.classList.remove('h-screen');
-      document.getElementById('header')?.classList.remove('expanded');
-      document.getElementById('header')?.classList.remove('bg-page');
-      document.querySelector('#header nav')?.classList.add('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
+      document.getElementById('sidebar')?.classList.remove('h-screen');
+      document.getElementById('sidebar')?.classList.remove('expanded');
+      document.getElementById('sidebar')?.classList.remove('bg-page');
+      document.querySelector('#sidebar nav')?.classList.add('hidden');
+      document.querySelector('#sidebar > div > div:last-child')?.classList.add('hidden');
     });
 
     attachEvent('[data-aw-toggle-menu]', 'click', function (_, elem) {
       elem.classList.toggle('expanded');
       document.body.classList.toggle('overflow-hidden');
-      document.getElementById('header')?.classList.toggle('h-screen');
-      document.getElementById('header')?.classList.toggle('expanded');
-      document.getElementById('header')?.classList.toggle('bg-page');
-      document.querySelector('#header nav')?.classList.toggle('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
+      document.getElementById('sidebar')?.classList.toggle('hidden');
+      document.getElementById('sidebar')?.classList.toggle('h-screen');
+      document.getElementById('sidebar nav')?.classList.toggle('w-[300px]');
+      document.getElementById('sidebar')?.classList.toggle('expanded');
+      document.getElementById('sidebar')?.classList.toggle('bg-page');
+      document.querySelector('#sidebar nav')?.classList.toggle('hidden');
+      document.querySelector('#sidebar > div > div:last-child')?.classList.toggle('hidden');
     });
     attachEvent('[data-aw-select-language]', 'change', function (_, elem) {
+      console.log('test')
       const newLang = elem.value;
       const oldUrl = window.location.href;
       const supportedLangs = Object.keys(locales);

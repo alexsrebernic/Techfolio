@@ -1,16 +1,15 @@
 ---
-import { useTranslations } from "@/i18n/translator"
-import type NormalizedTestimonial from "@/interfaces/NormalizedTestimonial"
-import type Testimonial from "@/interfaces/Testimonial"
+import { getLocaleFromUrl, useTranslations } from "@/i18n/translator"
+import type { Testimonial } from "@/types"
 import { I18N } from "@/utils/config"
 import Image from "astro/components/Image.astro"
 interface Props {
-  item: NormalizedTestimonial
+  item: Testimonial
 }
 const {item} : Props = Astro.props
-const {photo, name, project, position,linkedin_url, testimonial} = item
-const lang = Astro.currentLocale!
-const translate = useTranslations(lang)
+const {photo, name, project, position,testimonial} = item
+const lang = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(lang)
 ---
 <div class="bg-[#EFEFF0] dark:bg-[#282828] px-8 py-6 rounded-xl flex flex-col justify-between items-start space-y-4 shadow-md">
   <p class="text-[#111111] text-sm">
@@ -18,9 +17,9 @@ const translate = useTranslations(lang)
   </p>
   <div class="flex space-x-4">
     <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={photo} width={75} height={75} alt={`Image of ${name}`}/>
-    <a href={linkedin_url} class="flex-1 space-y-1">
+    <div class="flex-1 space-y-1">
       <p class="text-[#111111] text-sm dark:text-white">{name}</p>
-      <p class="text-xs">{position} {translate('testimonial.of')} {project}</p>
-    </a>
+      <p class="text-xs">{position} {t('homepage.testimonial_of')} {project}</p>
+    </div>
   </div>
 </div>

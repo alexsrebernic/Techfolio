@@ -4,7 +4,8 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 import Layout from '@/layouts/PageLayout.astro';
 import BlogList from '@/components/projects/List.astro';
 import Pagination from '@/components/projects/Pagination.astro';
-import { getStaticPathsProjectList, blogListRobots } from "@/utils/projects.ts";
+import { getStaticPathsProjectList, projectListRobots } from "@/utils/projects.ts";
+import { getLocaleFromUrl, useTranslations } from '@/i18n/translator';
 
 export const prerender = true;
 
@@ -16,17 +17,19 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
+const locale = getLocaleFromUrl(Astro.url)
+const { t } = useTranslations(locale)
 // const allCategories = await findCategories();
 // const allTags = await findTags();
 
 const metadata = {
   title: `Project${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
-    index: blogListRobots?.index && currentPage === 1,
-    follow: blogListRobots?.follow,
+    index: projectListRobots?.index && currentPage === 1,
+    follow: projectListRobots?.follow,
   },
   openGraph: {
-    type: 'Projects',
+    type: 'project',
   },
 };
 ---
@@ -35,14 +38,14 @@ const metadata = {
   <section class="">
     <div class="space-y-4 font-[600] mb-10">
       <h1 class="text-3xl font-[600] ">
-        Proyectos
+        {t('projects.title')}
       </h1>
       <p class="text-md font-[400] text-subtitle">
-        Una muestra de las soluciones que e creado/co-creado
+        {t('projects.subtitle')}
       </p>
     </div>
     <section data-aos="fade-up">
-      <BlogList posts={page.data} />
+      <BlogList posts={page.data.map(p => p.locales[locale])} />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
     </section>
     <!--

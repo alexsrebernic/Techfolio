@@ -11,40 +11,66 @@ export const en  = {
     "built_in": "Built in",
     "made_by": "Made by",
     "get_template_for_free": "Get template for free",
-  } ,
+  },
+  buttons: {
+    about: 'About',
+    copy_email: 'Copy email',
+    load_more: 'Load more',
+    read_more: 'Read more',
+    see_more: 'See more',
+    schedule_call: 'Schedule a call',
+    send: 'Send',
+  },
   homepage: {
+    metadata: {
+      title: "Homepage | Alex Srebernic Portfolio"
+    },
     "available_work": 'Available for work',
     "not_available_work": 'Not available for work',
     "presentation": "Hello! I'm",
-    "button.about": 'About',
-    "button.copy_email": 'Copy email',
-    "button.load_more": 'Load more',
-    "button.read_more": 'Read more',
-    "button.see_more": 'See more',
-    "button.schedule_call": 'Schedule a call',
-    "button.contact.form": 'Send',
-    "projects.title": 'Selected work',
-    "testimonials.title": 'What co-workers/clients say',
-    "blog.title": 'Blog',
-    "testimonial.of": 'of',
+    "projects_title": 'Selected work',
+    "testimonials_title": 'What co-workers/clients say',
+    "blog_title": 'Blog',
+    "testimonial_of": 'of',
+  },
+  projects: {
+    metadata: {
+      title: "Projects | Alex Srebernic Portafolio"
+    },
+    title: "Projects",
+    subtitle: "Take a look at the projects I worked on",
   },
   blog: {
-    "blog.title": 'Blog',
-    "blog.subtitle": 'The place where I share resources and tools I use',
+    metadata: {
+      title: "Blog | Alex Srebernic Portfolio"
+    },
+    "title": 'Blog',
+    "subtitle": 'The place where I share resources and tools I use',
   },
   about: {
-    "services.title": 'Services',
-    "tools.title": 'Tools and locales I work with',
-    "experience.title": 'Experience',
-    "education.title": 'Education',
+    metadata: {
+      title: "About | Alex Srebernic Portfolio"
+    },
+    "services_title": 'Services',
+    "tools_title": 'Tools and locales I work with',
+    "experience_title": 'Experience',
+    "education_title": 'Education',
   },
   store: {
+    metadata: {
+      title: "Store | Alex Srebernic Portfolio"
+    },
     "title": 'Store',
     "subtitle": 'Check my useful resources',
   },
   contact: {
+    metadata: {
+      title: "Contact | Alex Srebernic Portfolio"
+    },
+    "email": "Email address",
+    "phone_number": "Phone number",
     "title": 'Contact',
     "subtitle": 'Get in touch for web development inquiries',
-    "form.title": 'Send a message',
+    "form_title": 'Send a message',
   }
 } 

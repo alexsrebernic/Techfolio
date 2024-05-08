@@ -1,8 +1,8 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { StoreItem, LocalizedStoreItem } from '~/types';
-import { APP_PROJECTS, I18N } from '~/utils/config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import { APP_STORE, I18N } from '~/utils/config';
+import { cleanSlug, trimSlash, STORE_BASE, POST_PERMALINK_PATTERN, CATEGORY_STORE_BASE, TAG_STORE_BASE } from './permalinks';
 
 const generatePermalink = async ({
   id,
@@ -39,7 +39,7 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreItem> => {
+const getNormalizedPost = async (post: CollectionEntry<'store'>): Promise<StoreItem> => {
   const { id, slug: rawSlug = '', data } = post;
 
   const {
@@ -48,19 +48,11 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreIt
     tags: rawTags = [],
     category: rawCategory,
     name,
-    type,
     thumbnail,
     price,
     currency,
-    content,
-    draft,
-    link,
     brief_description,
-    items ,
     description,
-    status,
-    date,
-    modified,
     buy_link,
     preview_link,
     image_1,
@@ -76,7 +68,6 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreIt
   const category = rawCategory ? cleanSlug(rawCategory) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
   const permalink = await generatePermalink({ id, slug, publishDate, category });
-
   return {
     id: id,
     slug: slug,
@@ -86,19 +77,11 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreIt
     category: category,
     tags: tags,
     name,
-    type,
     thumbnail,
     price,
     currency,
-    content,
-    draft,
-    link,
     brief_description,
-    items ,
     description,
-    status,
-    date,
-    modified,
     buy_link,
     preview_link,
     image_1,
@@ -109,9 +92,8 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<StoreIt
 };
 
 const load = async function (): Promise<Array<StoreItem>> {
-  const projects = await getCollection('post');
-  const normalizedStoreItems = projects.map(async (post) => await getNormalizedPost(post));
-
+  const storeItems = await getCollection('store');
+  const normalizedStoreItems = storeItems.map(async (post) => await getNormalizedPost(post));
   const results = (await Promise.all(normalizedStoreItems))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
     .filter((post) => !post.draft);
@@ -119,50 +101,52 @@ const load = async function (): Promise<Array<StoreItem>> {
   return results;
 };
 
-let _projects: Array<StoreItem>;
-let _projectsLocalized : Array<LocalizedStoreItem>;
+let _storeItems: Array<StoreItem>;
+let _storeItemsLocalized : Array<LocalizedStoreItem>;
 export const paginatedStoreItemsByLang = new Map<string, Array<StoreItem>>();
 
 /** */
-export const isStoreItemEnabled = APP_PROJECTS.isEnabled;
-export const isStoreItemListRouteEnabled = APP_PROJECTS.list.isEnabled;
-export const isStoreItemPostRouteEnabled = APP_PROJECTS.post.isEnabled;
-export const isStoreItemCategoryRouteEnabled = APP_PROJECTS.category.isEnabled;
-export const isStoreItemTagRouteEnabled = APP_PROJECTS.tag.isEnabled;
+export const isStoreItemEnabled = APP_STORE.isEnabled;
+export const isStoreItemListRouteEnabled = APP_STORE.list.isEnabled;
+export const isStoreItemPostRouteEnabled = APP_STORE.post.isEnabled;
+export const isStoreItemCategoryRouteEnabled = APP_STORE.category.isEnabled;
+export const isStoreItemTagRouteEnabled = APP_STORE.tag.isEnabled;
 
-export const blogListRobots = APP_PROJECTS.list.robots;
-export const blogPostRobots = APP_PROJECTS.post.robots;
-export const blogCategoryRobots = APP_PROJECTS.category.robots;
-export const blogTagRobots = APP_PROJECTS.tag.robots;
+export const blogListRobots = APP_STORE.list.robots;
+export const blogPostRobots = APP_STORE.post.robots;
+export const blogCategoryRobots = APP_STORE.category.robots;
+export const blogTagRobots = APP_STORE.tag.robots;
 
-export const blogStoreItemsPerPage = APP_PROJECTS?.postsPerPage;
+export const blogStoreItemsPerPage = APP_STORE?.postsPerPage;
 
 /** */
 export const fetchLocalizedStoreItems = async (): Promise<Array<LocalizedStoreItem>> => {
-  if (!_projects) {
-    _projects = await load();
+  if (!_storeItems) {
+    _storeItems = await load();
 
-    const common_slugs = [...new Set(_projects.map((post) => post.slug.split('/')[1]))];
-    _projectsLocalized = common_slugs.map((id) => {
-      const projectsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
-        const post = _projects.find((post) => post.slug === `${locale}/${id}`);
+    const common_slugs = [...new Set(_storeItems.map((post) => post.slug.split('/')[1]))];
+
+    _storeItemsLocalized = common_slugs.map((id) => {
+      const storeItemsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
+        const post = _storeItems.find((post) => post.slug === `${locale}/${id}`);
+
         map[locale] = post;
         return map;
     }, {});
       return {
         common_slug: id,
-        locales: projectsLocalizedMap
+        locales: storeItemsLocalizedMap
       }
     });
   }
 
-  return _projectsLocalized;
+  return _storeItemsLocalized;
 };
 
 /** */
 export const fetchStoreItems = async (locale: string): Promise<Array<StoreItem>> => {
-  const _projectsLocalized = await fetchLocalizedStoreItems();
-  return _projectsLocalized
+  const _storeItemsLocalized = await fetchLocalizedStoreItems();
+  return _storeItemsLocalized
     .map((post) => post.locales[locale])
     .filter((post): post is StoreItem => post !== undefined);
 };
@@ -171,10 +155,10 @@ export const fetchStoreItems = async (locale: string): Promise<Array<StoreItem>>
 export const findStoreItemsBySlugs = async (slugs: Array<string>, locale: string): Promise<Array<StoreItem>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const projects = await fetchStoreItems(locale);
+  const storeItems = await fetchStoreItems(locale);
 
   return slugs.reduce(function (r: Array<StoreItem>, slug: string) {
-    projects.some(function (post: StoreItem) {
+    storeItems.some(function (post: StoreItem) {
       return slug === post.slug && r.push(post);
     });
     return r;
@@ -185,10 +169,10 @@ export const findStoreItemsBySlugs = async (slugs: Array<string>, locale: string
 export const findStoreItemsByIds = async (ids: Array<string>, locale: string): Promise<Array<StoreItem>> => {
   if (!Array.isArray(ids)) return [];
 
-  const projects = await fetchStoreItems(locale);
+  const storeItems = await fetchStoreItems(locale);
 
   return ids.reduce(function (r: Array<StoreItem>, id: string) {
-    projects.some(function (post: StoreItem) {
+    storeItems.some(function (post: StoreItem) {
       return id === post.id && r.push(post);
     });
     return r;
@@ -198,18 +182,18 @@ export const findStoreItemsByIds = async (ids: Array<string>, locale: string): P
 /** */
 export const findLatestStoreItems = async ({ count }: { count?: number }, locale: string): Promise<Array<StoreItem>> => {
   const _count = count || 4;
-  const projects = await fetchStoreItems(locale);
+  const storeItems = await fetchStoreItems(locale);
 
-  return projects ? projects.slice(0, _count) : [];
+  return storeItems ? storeItems.slice(0, _count) : [];
 };
 
 /** */
 export const getStaticPathsStoreItemList = async ({ paginate }) => {
   if (!isStoreItemEnabled || !isStoreItemListRouteEnabled) return [];
-  const _projectsLocalized = await fetchLocalizedStoreItems();
-
-  return paginate(_projectsLocalized, {
-    params: { blog: BLOG_BASE || undefined },
+  const _storeItemsLocalized = await fetchLocalizedStoreItems();
+  (_storeItemsLocalized[0])
+  return paginate(_storeItemsLocalized, {
+    params: { store: STORE_BASE || undefined },
     pageSize: blogStoreItemsPerPage,
     });
 };
@@ -217,11 +201,11 @@ export const getStaticPathsStoreItemList = async ({ paginate }) => {
 /** */
 export const getStaticPathsStoreItemPost = async () => {
   if (!isStoreItemEnabled || !isStoreItemPostRouteEnabled) return [];
-  const _projectsLocalized = await fetchLocalizedStoreItems();
+  const _storeItemsLocalized = await fetchLocalizedStoreItems();
 
-  return _projectsLocalized.map((post) => ({
+  return _storeItemsLocalized.map((post) => ({
     params: {
-      blog: post.common_slug,
+      store: post.common_slug,
     },
     props: { post },
   }));
@@ -231,10 +215,10 @@ export const getStaticPathsStoreItemPost = async () => {
 export const getStaticPathsStoreItemCategory = async ({ paginate }) => {
   if (!isStoreItemEnabled || !isStoreItemCategoryRouteEnabled) return [];
 
-  const _projectsLocalized = await fetchLocalizedStoreItems();
+  const _storeItemsLocalized = await fetchLocalizedStoreItems();
 
   const categoriesSet = new Set(
-    _projectsLocalized.flatMap(post =>
+    _storeItemsLocalized.flatMap(post =>
       Object.values(post.locales)
         .map(locale => locale?.category?.toLowerCase())  // Use optional chaining
         .filter(category => typeof category === 'string')
@@ -243,14 +227,14 @@ export const getStaticPathsStoreItemCategory = async ({ paginate }) => {
 
   return Array.from(categoriesSet).flatMap(category =>
     paginate(
-      _projectsLocalized.filter(post =>
+      _storeItemsLocalized.filter(post =>
         Object.values(post.locales).some(
           locale =>
             locale?.category?.toLowerCase() === category  // Use optional chaining
         )
       ),
       {
-        params: { category, blog: CATEGORY_BASE || undefined },
+        params: { category, store: CATEGORY_STORE_BASE || undefined },
         pageSize: blogStoreItemsPerPage,
         props: { category },
       }
@@ -262,10 +246,10 @@ export const getStaticPathsStoreItemCategory = async ({ paginate }) => {
 export const getStaticPathsStoreItemTag = async ({ paginate }) => {
   if (!isStoreItemEnabled || !isStoreItemTagRouteEnabled) return [];
 
-  const _projectsLocalized = await fetchLocalizedStoreItems();
+  const _storeItemsLocalized = await fetchLocalizedStoreItems();
 
   const tagsSet = new Set(
-    _projectsLocalized.flatMap(post =>
+    _storeItemsLocalized.flatMap(post =>
       Object.values(post.locales)
         .filter(locale => locale) // Filter out undefined locales
         .flatMap(locale => locale?.tags || []) // Use optional chaining and provide an empty array for undefined tags
@@ -276,7 +260,7 @@ export const getStaticPathsStoreItemTag = async ({ paginate }) => {
 
   return Array.from(tagsSet).flatMap(tag =>
     paginate(
-      _projectsLocalized.filter(post =>
+      _storeItemsLocalized.filter(post =>
         Object.values(post.locales).some(
           locale =>
             locale &&
@@ -285,7 +269,7 @@ export const getStaticPathsStoreItemTag = async ({ paginate }) => {
         )
       ),
       {
-        params: { tag, blog: TAG_BASE || undefined },
+        params: { tag, store: TAG_STORE_BASE || undefined },
         pageSize: blogStoreItemsPerPage,
         props: { tag },
       }

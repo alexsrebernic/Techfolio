@@ -13,6 +13,7 @@ import BasicScripts from '@/components/common/BasicScripts.astro';
 // Uncomment line below to activate View Transitions
 import type { MetaData as MetaDataType } from '@/types';
 import 'aos/dist/aos.css'
+import ViewTransitions from 'astro/components/ViewTransitions.astro';
 import { getLocaleByPath } from 'astro:i18n';
 import { getLocale } from "astro-i18n-aut";
 export interface Props {
@@ -36,7 +37,7 @@ const locale = getLocale(Astro.url.pathname)
     <Analytics />
 
     <!-- Uncomment line below to activate View Transitions -->
-    <!-- <ViewTransitions fallback="swap" /> -->
+    <ViewTransitions fallback="swap" />
   </head>
 
   <body class="antialiased text-default bg-page tracking-tight ">

@@ -1,26 +1,23 @@
 ---
 import Layout from '@/layouts/PageLayout.astro';
-import type Education from '@/interfaces/Education';
 
 
-import type NormalizedAuthor from '@/interfaces/NormalizedAuthor';
-import Image from 'astro/components/Image.astro';
+import Image from '@/components/common/Image.astro';
 import Button from '@/components/ui/Button.astro';
 import { Icon } from 'astro-icon/components';
 import {fetchAuthor} from '@/utils/author'
-import { I18N } from '@/utils/config';
-import { fetchExperiences } from '@/utils/experience';
-import type NormalizedExperience from '@/interfaces/NormalizedExperience';
+import { fetchExperiences, fetchLocalizedExperiences } from '@/utils/experience';
 import {fetchEducations} from '@/utils/education'
-import { getLangFromUrl } from '@/i18n/translator';
+import { getLocaleFromUrl, useTranslations } from '@/i18n/translator';
 const metadata = {
   title: "Sobre mi | Alex Srebernic",
   ignoreTitleTemplate: true,
 };
-const lang = getLangFromUrl(Astro.url.pathname)
-const author : NormalizedAuthor = await fetchAuthor(lang as string)
-const jobExperiences : NormalizedExperience[] = await fetchExperiences(lang as string)
-const educations : Education[] = await fetchEducations(lang as string)
+const lang = getLocaleFromUrl(Astro.url)
+const author  = (await fetchAuthor(lang as string))[0]
+const jobExperiences = await fetchExperiences(lang)
+const educations = await fetchEducations(lang as string)
+const {t} = useTranslations(lang)
 ---
 
 <Layout metadata={metadata}>
@@ -30,7 +27,7 @@ const educations : Education[] = await fetchEducations(lang as string)
         <div class="space-y-8 flex-1">
           <div class="space-y-2 font-[600]">
             <h1 class="text-3xl font-[600] ">
-              {author.firstName} {author.lastName}
+              {author.first_name} {author.last_name}
             </h1>
             <h2 class="text-3xl font-[600] text-subtitle">
               {author.role}
@@ -46,7 +43,7 @@ const educations : Education[] = await fetchEducations(lang as string)
           </div>
         </div>
         <div class="flex-initial rounded-xl hidden md:block">
-          <Image alt='A photo of me smiling :)' class='rounded-xl shadow-xl' width={200} height={200} src={author.photo}/>
+          <Image alt='A photo of me smiling' class='rounded-xl shadow-xl' width={200} height={200} src={author.photo}/>
         </div>
       </div>
     </section>
@@ -56,7 +53,7 @@ const educations : Education[] = await fetchEducations(lang as string)
     <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
-          <h2 class="text-xl font-[500]">Servicios</h2>
+          <h2 class="text-xl font-[500]">{t('about.services_title')}</h2>
         </div>
         <div
          id="services-grid"
@@ -72,13 +69,13 @@ const educations : Education[] = await fetchEducations(lang as string)
         </div>
       </div>
       <div class="flex items-center justify-center mt-4">
-        <Button id="button-see-more-services" variant="secondary" class="mx-auto" text="Ver más"/>
+        <Button id="button-see-more-services" variant="secondary" class="mx-auto" text={t('buttons.see_more')}/>
       </div>
     </section>
     <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
-          <h2 class="text-xl font-[500]">Herramientas y lenguages que uso</h2>
+          <h2 class="text-xl font-[500]">{t('about.tools_title')}</h2>
         </div>
         <div
          id="tools-grid"
@@ -98,24 +95,24 @@ const educations : Education[] = await fetchEducations(lang as string)
         </div>
       </div>
       <div class="flex items-center justify-center mt-4">
-        <Button id="button-see-more-tools" variant="secondary" class="mx-auto" text="Ver más"/>
+        <Button id="button-see-more-tools" variant="secondary" class="mx-auto" text={t('buttons.see_more')}/>
       </div>
     </section>
     <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
-          <h2 class="text-xl font-[500]">Experiencia</h2>
+          <h2 class="text-xl font-[500]">{t('about.experience_title')}</h2>
         </div>
         <div class="space-y-8">
           {
             jobExperiences.map(experience => (
               <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-6 border-b py-5 dark:border-b-[#424242]">
                 <div class="flex-initial text-sm md:w-[230px] dark:text-[#929292]">
-                  <span>{new Date(experience.initYear).toLocaleString('es-ES', {month: 'long',year: 'numeric'})}</span> - {experience.present? 'Presente' : new Date(experience.endYear).toLocaleString('es-ES', {month: 'long',year: 'numeric'}) }
+                  <span>{new Date(experience.init_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'})}</span> - {experience.present? 'Presente' : new Date(experience.end_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'}) }
                 </div>
                 <div class="space-y-6 flex-1">
                   <div class="flex flex-col ">
-                    <span>{experience.companyName}</span>
+                    <span>{experience.company}</span>
                     <p class="text-sm">{experience.position}</p>
                   </div>
                   <p class="text-sm">
@@ -131,14 +128,14 @@ const educations : Education[] = await fetchEducations(lang as string)
     <section data-aos="fade-up">
       <div class="space-y-10">
         <div>
-          <h2 class="text-xl font-[500]">Educacion</h2>
+          <h2 class="text-xl font-[500]">{t('about.education_title')}</h2>
         </div>
         <div class="space-y-8">
           {
             educations.map(education => (
               <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-6 border-b py-5 dark:border-b-[#424242]">
                 <div class="flex-initial text-sm md:w-[230px] dark:text-[#929292]">
-                  <span>{new Date(education.initYear).toLocaleString('es-ES', {month: 'long',year: 'numeric'})}</span> - {education.present? 'Presente' : new Date(education.endYear).toLocaleString('es-ES', {month: 'long',year: 'numeric'}) }
+                  <span>{new Date(education.init_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'})}</span> - {education.present? 'Presente' : new Date(education.end_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'}) }
                 </div>
                 <div class="space-y-6 flex-1">
                   <div class="flex flex-col ">
@@ -165,15 +162,16 @@ const educations : Education[] = await fetchEducations(lang as string)
 
   }
 </style>
-<script>
-  const buttonServices = document.getElementById('button-see-more-services')
+<script >
+  function init(){
+    const buttonServices = document.getElementById('button-see-more-services')
   const buttonTools = document.getElementById('button-see-more-tools')
   buttonServices?.addEventListener('click', () => {
     const element = document.getElementById('services-grid')
     const elementGradient = document.getElementById('element-gradient')
     element?.classList.remove('max-h-[300px]')
     element?.classList.add(`max-h-[3000px]`)
-    elementGradient?.classList.remove('bg-gradient-to-black')
+    elementGradient?.classList.remove('dark:bg-gradient-to-black')
     elementGradient?.classList.remove('bg-gradient-to-white')
     buttonServices.classList.add('hidden')
   })
@@ -182,8 +180,13 @@ const educations : Education[] = await fetchEducations(lang as string)
     const elementGradient = document.getElementById('tools-gradient')
     element?.classList.remove('max-h-[300px]')
     element?.classList.add(`max-h-[3000px]`)
-    elementGradient?.classList.remove('bg-gradient-to-black')
+    elementGradient?.classList.remove('dark:bg-gradient-to-black')
     elementGradient?.classList.remove('bg-gradient-to-white')
     buttonTools.classList.add('hidden')
   })
+  }
+  init()
+  document.addEventListener('astro:after-swap',
+  () => init())
+
 </script>

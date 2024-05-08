@@ -8,7 +8,7 @@ import Pagination from '@/components/store/Pagination.astro';
 
 import { blogListRobots, getStaticPathsStoreItemList } from '@/utils/store';
 import { I18N } from '@/utils/config';
-import { useTranslations } from '@/i18n/translator';
+import { getLocaleFromUrl, useTranslations } from '@/i18n/translator';
 
 export const prerender = true;
 
@@ -19,12 +19,10 @@ export const getStaticPaths = (async ({ paginate }) => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
-const locale = Astro.currentLocale!
-const t = useTranslations(locale)
-
+const locale = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(locale)
 // const allCategories = await findCategories();
 // const allTags = await findTags();
-
 const metadata = {
   title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
@@ -41,10 +39,10 @@ const metadata = {
   <section class="">
     <div class="space-y-4 font-[600] mb-10">
       <h1 class="text-3xl font-[600] ">
-        Tienda
+        {t('store.title')}
       </h1>
       <p class="text-md font-[400] text-subtitle">
-        Mira mis exclusivos recursos
+        {t('store.subtitle')}
       </p>
     </div>
     <section data-aos="fade-up">

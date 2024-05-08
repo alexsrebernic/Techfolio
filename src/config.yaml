@@ -76,7 +76,7 @@ apps:
 
     post:
       isEnabled: true
-      permalink: 'project/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      permalink: 'projects/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
         index: true
 

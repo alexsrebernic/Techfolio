@@ -11,13 +11,11 @@ const getNormalizedPost = async (post: CollectionEntry<'education'>): Promise<Ed
   const {
     degree,
     establishment,
-    initYear,
-    endYear,
-    position,
+    init_year,
+    end_year,
+    certification,
     details,
-    link,
     present,
-    content,
   } = data;
 
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
@@ -26,13 +24,11 @@ const getNormalizedPost = async (post: CollectionEntry<'education'>): Promise<Ed
     slug: slug,
     degree,
     establishment,
-    initYear,
-    endYear,
-    position,
+    init_year,
+    end_year,
+    certification,
     details,
-    link,
     present,
-    content,
   };
 };
 

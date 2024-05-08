@@ -66,7 +66,6 @@ export interface AppBlogConfig {
   };
 }
 export interface AppProjectsConfig {
-  isWordpressEnabled: boolean;
   isEnabled: boolean;
   postsPerPage: number;
   isRelatedPostsEnabled: boolean;
@@ -228,7 +227,7 @@ const getI18N = () => {
 const getAppBlog = () => {
   const _default = {
     isWordpressEnabled: false,
-    isEnabled: false,
+    isEnabled: true,
     postsPerPage: 6,
     isRelatedPostsEnabled: false,
     relatedPostsCount: 4,
@@ -269,10 +268,9 @@ const getAppBlog = () => {
 };
 const getAppProjects = () => {
   const _default = {
-    isWordpressEnabled: false,
-    isEnabled: false,
+    isEnabled: true,
     postsPerPage: 6,
-    isRelatedPostsEnabled: false,
+    isRelatedPostsEnabled: true,
     relatedPostsCount: 4,
     post: {
       isEnabled: true,

@@ -7,6 +7,7 @@ interface Props {
 }
 const {post} = Astro.props
 const {title,excerpt,slug,featuredImage} = post
+(post)
 ---
 <div class="flex gap-6 xl:gap-16 md:space-y-0 md:flex-row  flex-col-reverse">
 
@@ -24,10 +25,8 @@ const {title,excerpt,slug,featuredImage} = post
     class='rounded-xl shadow-xl  h-full min-w-full  md:max-w-full md:h-auto'
     width={250}
     height={250}
-    srcset={featuredImage.node.srcSet}
-    sizes={featuredImage.node.sizes}
-    src={featuredImage.node.mediaItemUrl}
-    alt={featuredImage.node.altText}
+    src={featuredImage.image.src}
+    alt={excerpt}
     />
   </a>
 </div>

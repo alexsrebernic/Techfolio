@@ -18,12 +18,12 @@ function getValueFromPath(obj: NestedObject, path: string): NestedObject | strin
 
   for (const key of keys) {
     if (typeof value === 'object' && value !== null && key in value) {
+
       value = value[key];
     } else {
       return undefined; // Key not found
     }
   }
-
   return value;
 }
 
@@ -53,7 +53,6 @@ export function getLocaleFromUrl(url: URL) {
 
 export function useTranslations(lang: keyof typeof locales) {
   let translations: Translations;
-
   switch (lang) {
     case 'en':
       translations = en;
@@ -62,10 +61,9 @@ export function useTranslations(lang: keyof typeof locales) {
       translations = es;
       break;
     default:
-      translations = en;
+      translations = es;
       break;
   }
-
   return {
     t: function (key: string) {
       const value = getStringFromPath(translations, key);

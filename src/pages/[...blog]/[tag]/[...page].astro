@@ -6,6 +6,7 @@ import Layout from '@/layouts/PageLayout.astro';
 import BlogList from '@/components/blog/List.astro';
 import Headline from '@/components/blog/Headline.astro';
 import Pagination from '@/components/blog/Pagination.astro';
+import { getLocaleFromUrl } from '@/i18n/translator';
 
 export const prerender = true;
 
@@ -18,7 +19,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { page, tag } = Astro.props as Props;
 
 const currentPage = page.currentPage ?? 1;
-
+const locale = getLocaleFromUrl(Astro.url)
 const metadata = {
   title: `Posts by tag '${tag}'${currentPage > 1 ? ` — Page ${currentPage} ` : ''}`,
   robots: {
@@ -32,7 +33,7 @@ const metadata = {
   <section class="px-4 md:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
     <Headline>Tag: {tag}</Headline>
     <section data-aos="fade-up">
-      <BlogList posts={page.data} />
+      <BlogList posts={page.data.map(p => p.locales[locale])} />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
     </section>
   </section>

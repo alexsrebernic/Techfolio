@@ -1,10 +1,10 @@
-import rss from '@astrojs/rss';
+import rss, { getRssString } from '@astrojs/rss';
 
 import { SITE, METADATA, APP_BLOG, I18N } from '~/utils/config';
 import { fetchPosts } from '~/utils/blog';
 import { getPermalink } from '~/utils/permalinks';
 
-export const get = async () => {
+export const GET = async () => {
   if (!APP_BLOG.isEnabled) {
     return new Response(null, {
       status: 404,
@@ -13,8 +13,7 @@ export const get = async () => {
   }
 
   const posts = await fetchPosts(I18N.defaultLocale);
-
-  const { body } = await rss({
+  const rss = await getRssString({
     title: `${SITE.name}’s Blog`,
     description: METADATA?.description || "",
     site: import.meta.env.SITE,
@@ -25,12 +24,14 @@ export const get = async () => {
       description: post.excerpt,
       pubDate: post.publishDate,
     })),
-
+    customData: `<language>${I18N.defaultLocale}</language>`,
     trailingSlash: SITE.trailingSlash,
   });
 
-  return new Response(body, {
-    status: 200,
-    statusText: "OK",
+
+  return new Response(rss,  {
+    headers: {
+      'Content-Type': 'application/xml',
+    },
   });
 };

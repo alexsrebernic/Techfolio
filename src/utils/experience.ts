@@ -9,28 +9,25 @@ const getNormalizedPost = async (post: CollectionEntry<'experience'>): Promise<E
   const { id, slug: rawSlug = '', data } = post;
 
   const {
-    initYear,
-  endYear,
+  init_year,
+  end_year,
   position,
-  companyName,
+  company,
   details,
-  link,
-  present,
-  content,
+  present = false,
   } = data;
 
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
 
   return {
+    id,
     slug: slug,
-    companyName,
-    initYear,
-    endYear,
+    init_year,
+    end_year,
     position,
+    company,
     details,
-    link,
-    present,
-    content,
+    present ,
   };
 };
 
@@ -44,18 +41,18 @@ const load = async function (): Promise<Experience[]> {
   return results;
 };
 
-let _educations: Experience[];
-let _localizedEducations : Array<LocalizedExperience>;
+let _experiences: Experience[];
+let _localizedExperiences : Array<LocalizedExperience>;
 
 /** */
-export const fetchLocalizedEducations = async (): Promise<Array<LocalizedExperience>> => {
-  if (!_educations) {
-    _educations = await load();
+export const fetchLocalizedExperiences = async (): Promise<Array<LocalizedExperience>> => {
+  if (!_experiences) {
+    _experiences = await load();
 
-    const common_slugs = [...new Set(_educations.map((post) => post.slug.split('/')[1]))];
-    _localizedEducations = common_slugs.map((id) => {
+    const common_slugs = [...new Set(_experiences.map((post) => post.slug.split('/')[1]))];
+    _localizedExperiences = common_slugs.map((id) => {
       const postsLocalizedMap = Object.keys(I18N.locales).reduce((map, locale) => {
-        const post = _educations.find((post) => post.slug === `${locale}/${id}`);
+        const post = _experiences.find((post) => post.slug === `${locale}/${id}`);
         map[locale] = post;
         return map;
     }, {});
@@ -66,13 +63,13 @@ export const fetchLocalizedEducations = async (): Promise<Array<LocalizedExperie
     });
   }
 
-  return _localizedEducations;
+  return _localizedExperiences;
 };
 
 /** */
-export const fetchEducations = async (locale: string): Promise<Experience[]> => {
-  const _localizedEducations = await fetchLocalizedEducations();
-  return _localizedEducations
+export const fetchExperiences = async (locale: string): Promise<Experience[]> => {
+  const _localizedExperiences = await fetchLocalizedExperiences();
+  return _localizedExperiences
     .map((post) => post.locales[locale])
     .filter((post): post is Experience => post !== undefined);
 };

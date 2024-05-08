@@ -2,7 +2,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { Project, LocalizedProject } from '~/types';
 import { APP_PROJECTS, I18N } from '~/utils/config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import { cleanSlug, trimSlash,  POST_PERMALINK_PATTERN, CATEGORY_PROJECT_BASE, TAG_PROJECT_BASE, PROJECTS_BASE } from './permalinks';
 
 const generatePermalink = async ({
   id,
@@ -39,78 +39,53 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Project> => {
+const getNormalizedPost = async (post: CollectionEntry<'projects'>): Promise<Project> => {
   const { id, slug: rawSlug = '', data } = post;
   const { Content, remarkPluginFrontmatter } = await post.render();
 
   const {
   name,
-  publishDate,
-  category,
+  publishDate: rawPublishDate,
+  updateDate: rawUpdateDate,
+  category: rawCategory,
+  tags: rawTags,
   type,
   thumbnail,
   image1 ,
   content,
   preview_url,
-  excerpt,
-  title,
-  status,
-  date,
-  draft,
-  modified,
-  goals,
-  tools,
-  tags,
-  solutions,
-  background,
-  conclusion,
-  testimonial,
-  role ,
-  initYear,
-  endYear, 
   description,
-  present,
+  draft,
+
   } = data;
 
   const locale = id.split('/')[0];
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
-  const _tags = tags.map((tag: string) => cleanSlug(tag));
+  const publishDate = new Date(rawPublishDate);
+  const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
+  const category = rawCategory ? cleanSlug(rawCategory) : undefined;
+  const tags = rawTags.map((tag: string) => cleanSlug(tag));
   const permalink = await generatePermalink({ id, slug, publishDate, category });
-
+  (category)
   return {
     id: id,
     slug: slug,
     publishDate,
     permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
-    tags : _tags,
-    name,
+    tags,
+    title: name,
     type,
-    thumbnail,
+    image: thumbnail,
     image1 ,
     content,
     preview_url,
-    excerpt,
-    title,
-    status,
-    date,
-    draft,
-    modified,
-    goals,
-    tools,
-    solutions,
-    background,
-    conclusion,
-    testimonial,
-    role ,
-    initYear,
-    endYear, 
-    description,
-    present,
+    excerpt : description,
+    category,
   };
 };
 
 const load = async function (): Promise<Array<Project>> {
-  const projects = await getCollection('post');
+  const projects = await getCollection('projects');
   const normalizedProjects = projects.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedProjects))
@@ -131,12 +106,12 @@ export const isProjectPostRouteEnabled = APP_PROJECTS.post.isEnabled;
 export const isProjectCategoryRouteEnabled = APP_PROJECTS.category.isEnabled;
 export const isProjectTagRouteEnabled = APP_PROJECTS.tag.isEnabled;
 
-export const blogListRobots = APP_PROJECTS.list.robots;
-export const blogPostRobots = APP_PROJECTS.post.robots;
-export const blogCategoryRobots = APP_PROJECTS.category.robots;
-export const blogTagRobots = APP_PROJECTS.tag.robots;
+export const projectListRobots = APP_PROJECTS.list.robots;
+export const projectPostRobots = APP_PROJECTS.post.robots;
+export const projectCategoryRobots = APP_PROJECTS.category.robots;
+export const projectTagRobots = APP_PROJECTS.tag.robots;
 
-export const blogProjectsPerPage = APP_PROJECTS?.postsPerPage;
+export const projectProjectsPerPage = APP_PROJECTS?.postsPerPage;
 
 /** */
 export const fetchLocalizedProjects = async (): Promise<Array<LocalizedProject>> => {
@@ -210,8 +185,8 @@ export const getStaticPathsProjectList = async ({ paginate }) => {
   const _projectsLocalized = await fetchLocalizedProjects();
 
   return paginate(_projectsLocalized, {
-    params: { blog: BLOG_BASE || undefined },
-    pageSize: blogProjectsPerPage,
+    params: { projects: PROJECTS_BASE || undefined },
+    pageSize: projectProjectsPerPage,
     });
 };
 
@@ -222,7 +197,7 @@ export const getStaticPathsProjectPost = async () => {
 
   return _projectsLocalized.map((post) => ({
     params: {
-      blog: post.common_slug,
+      projects: post.common_slug,
     },
     props: { post },
   }));
@@ -251,8 +226,8 @@ export const getStaticPathsProjectCategory = async ({ paginate }) => {
         )
       ),
       {
-        params: { category, blog: CATEGORY_BASE || undefined },
-        pageSize: blogProjectsPerPage,
+        params: { category, projects: CATEGORY_PROJECT_BASE || undefined },
+        pageSize: projectProjectsPerPage,
         props: { category },
       }
     )
@@ -286,8 +261,8 @@ export const getStaticPathsProjectTag = async ({ paginate }) => {
         )
       ),
       {
-        params: { tag, blog: TAG_BASE || undefined },
-        pageSize: blogProjectsPerPage,
+        params: { tag, projects: TAG_PROJECT_BASE || undefined },
+        pageSize: projectProjectsPerPage,
         props: { tag },
       }
     )
