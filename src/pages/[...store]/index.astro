@@ -1,53 +1,42 @@
 ---
-import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
-
 import merge from 'lodash.merge';
 import type { ImageMetadata } from 'astro';
-import Layout from '@/layouts/PageLayout.astro';
-import SinglePost from '@/components/store/SingleStoreItem.astro';
-import ToBlogLink from '@/components/store/ToStoreLink.astro';
+import Layout from '~/layouts/PageLayout.astro';
+import SinglePost from '~/components/store/SingleStoreItem.astro';
+import ToBlogLink from '~/components/store/ToStoreLink.astro';
 
-import { getCanonical, getPermaStoreLink } from '@/utils/permalinks';
-import { getStaticPathsStoreItemPost, blogPostRobots } from '@/utils/store';
-import { findImage } from '@/utils/images';
-import type { MetaData } from '@/types';
-import RelatedPosts from '@/components/store/RelatedStoreItems.astro';
-import { I18N } from '@/utils/config';
+import { getCanonical, getPermalink } from '~/utils/permalinks';
+import { getStaticPathsStoreItemPost, blogPostRobots } from '~/utils/store';
+import { findImage } from '~/utils/images';
+import { getLocaleFromUrl } from '~/i18n/translator';
 
-export const prerender = true;
-
-export const getStaticPaths = (async () => {
+export async function getStaticPaths () {
   return await getStaticPathsStoreItemPost();
-}) satisfies GetStaticPaths;
+}
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-
-const { post } = Astro.props as Props;
-const locale = Astro.currentLocale!
-const localizedPost = post.locales[locale];
-const url = getCanonical(getPermaStoreLink(post.permalink, 'storeItem'));
-const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
+const { post } = Astro.props;
+const localizedPost = post.locales[getLocaleFromUrl(Astro.url)];
+console.log(localizedPost)
+const url = getCanonical(getPermalink(localizedPost.permalink, 'post'));
+const image = (await findImage(localizedPost.image)) as ImageMetadata | undefined;
 const metadata = merge(
   {
     title: localizedPost.title,
-    description: localizedPost.brief_description,
+    description: localizedPost.excerpt,
     robots: {
-      index: blogPostRobots?.index,
-      follow: blogPostRobots?.follow,
+      index: false,
+      follow: false,
     },
     openGraph: {
       type: 'article',
-      ...(image ? { images: [{ url: image, width: (image as ImageMetadata)?.width, height: (image as ImageMetadata)?.height }] } : {}),
+      ...(image ? { images: [{ url: image, width: image?.width, height: image?.height }] } : {}),
     },
   },
-  { ...(storeItem?.metadata ? { ...storeItem.metadata, canonical: storeItem.metadata?.canonical || url } : {}) }
-) as MetaData;
+  { ...(localizedPost?.metadata ? { ...localizedPost.metadata, canonical: post.metadata?.canonical || url } : {}) }
+);
 ---
 
 <Layout metadata={metadata}>
+  <SinglePost storeItem={{ ...localizedPost, image: image }} url={url} />
   <ToBlogLink />
-  <SinglePost storeItem={{ ...storeItem, image: image }} url={url} />
-  <ToBlogLink />
-  <RelatedPosts storeItem={storeItem} />
 </Layout>

@@ -186,7 +186,7 @@ metadata:
   openGraph:
     site_name: Alex Srebernic's portfolio
     images:
-      - url: '@/assets/images/default.png'
+      - url: '~/assets/images/default.png'
         width: 1200
         height: 628
     type: website

@@ -1,8 +1,8 @@
 ---
-import { getLocaleFromUrl, useTranslations } from "@/i18n/translator"
-import type { Testimonial } from "@/types"
-import { I18N } from "@/utils/config"
-import Image from "astro/components/Image.astro"
+import { getLocaleFromUrl, useTranslations } from "~/i18n/translator"
+import type { Testimonial } from "~/types"
+import { I18N } from "~/utils/config"
+import Image from "../common/Image.astro"
 interface Props {
   item: Testimonial
 }
@@ -19,7 +19,7 @@ const {t} = useTranslations(lang)
     <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={photo} width={75} height={75} alt={`Image of ${name}`}/>
     <div class="flex-1 space-y-1">
       <p class="text-[#111111] text-sm dark:text-white">{name}</p>
-      <p class="text-xs">{position} {t('homepage.testimonial_of')} {project}</p>
+      <p class="text-xs text-nowrap">{position} {t('homepage.testimonial_of')} {project}</p>
     </div>
   </div>
 </div>

@@ -147,19 +147,16 @@ export  interface Project {
   tags: string[],
   image: ImageMetadata,
   image1 : ImageMetadata,
+  excerpt: string,
   content: string,
   slug:string,
   preview_url: string,
   id: string,
-  title: string,
-  status: string,
   date: Date,
-  draft: boolean,
   modified: Date,
-  goals: string,
-  tools: string,
-  role : string ,
-  description: string,
+  Content?: unknown;
+  content?: string;
+  readingTime?: number;
 }
 
 export  interface LocalizedProject {
@@ -177,27 +174,22 @@ export  interface StoreItem {
   permalink: string;
   publishDate: Date;
   updateDate?: Date;
-  thumbnail: ImageMetadata,
   price: number,
   currency: string,
   content: string,
-  draft: boolean,
-  link: string,
   slug: string,
-  brief_description: string,
-  items:string ,
-  description: string,
-  status: string,
-  date: Date,
-  modified: Date,
   id: string,
   buy_link: string,
   preview_link: string,
+  excerpt?: string;
+  image: ImageMetadata, 
   image_1? :  ImageMetadata,
   image_2? : ImageMetadata,
   image_3? : ImageMetadata,
   image_4? : ImageMetadata,
-
+  Content?: unknown;
+  content?: string;
+  readingTime?: number;
 }
 export  interface LocalizedStoreItem {
   common_slug: string;

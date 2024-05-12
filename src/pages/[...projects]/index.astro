@@ -1,52 +1,42 @@
 ---
-import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
-
 import merge from 'lodash.merge';
 import type { ImageMetadata } from 'astro';
-import Layout from '@/layouts/PageLayout.astro';
-import SinglePost from '@/components/projects/ProjectLayout.astro';
-import ToBlogLink from '@/components/projects/ToProjectsLink.astro';
+import Layout from '~/layouts/PageLayout.astro';
+import SinglePost from '~/components/projects/SingleProject.astro';
+import ToBlogLink from '~/components/projects/ToProjectsLink.astro';
 
-import { getCanonical, getPermaProjectsLink } from '@/utils/permalinks';
-import { blogPostRobots, getStaticPathsProjectList, getStaticPathsProjectPost } from '@/utils/projects';
-import { findImage } from '@/utils/images';
-import type { MetaData } from '@/types';
-import RelatedPosts from '@/components/projects/RelatedProjects.astro';
+import { getCanonical, getPermalink } from '~/utils/permalinks';
+import { getStaticPathsProjectPost, projectPostRobots } from '~/utils/projects';
+import { findImage } from '~/utils/images';
+import { getLocaleFromUrl } from '~/i18n/translator';
 
-export const prerender = true;
-
-export const getStaticPaths = (async () => {
+export async function getStaticPaths () {
   return await getStaticPathsProjectPost();
-}) satisfies GetStaticPaths;
+}
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { post } = Astro.props as Props;
-const locale = Astro.currentLocale!
-const localizedPost = post.locales[locale];
-const url = getCanonical(getPermaProjectsLink(localizedPost.permalink, 'post'));
-const image = (await findImage(localizedPost.image)) as ImageMetadata | string | undefined;
-
+const { post } = Astro.props;
+const localizedPost = post.locales[getLocaleFromUrl(Astro.url)];
+console.log(localizedPost)
+const url = getCanonical(getPermalink(localizedPost.permalink, 'post'));
+const image = (await findImage(localizedPost.image)) as ImageMetadata | undefined;
 const metadata = merge(
   {
     title: localizedPost.title,
     description: localizedPost.excerpt,
     robots: {
-      index: blogPostRobots?.index,
-      follow: blogPostRobots?.follow,
+      index: false,
+      follow: false,
     },
     openGraph: {
       type: 'article',
-      ...(image ? { images: [{ url: image, width: (image as ImageMetadata)?.width, height: (image as ImageMetadata)?.height }] } : {}),
+      ...(image ? { images: [{ url: image, width: image?.width, height: image?.height }] } : {}),
     },
   },
-  { ...(localizedPost?.metadata ? { ...localizedPost.metadata, canonical: localizedPost.metadata?.canonical || url } : {}) }
-) as MetaData;
+  { ...(localizedPost?.metadata ? { ...localizedPost.metadata, canonical: post.metadata?.canonical || url } : {}) }
+);
 ---
 
 <Layout metadata={metadata}>
-  <ToBlogLink />
   <SinglePost project={{ ...localizedPost, image: image }} url={url} />
   <ToBlogLink />
-  <RelatedPosts post={localizedPost} />
 </Layout>

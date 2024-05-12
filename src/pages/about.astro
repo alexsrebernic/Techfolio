@@ -1,14 +1,14 @@
 ---
-import Layout from '@/layouts/PageLayout.astro';
+import Layout from '~/layouts/PageLayout.astro';
 
 
-import Image from '@/components/common/Image.astro';
-import Button from '@/components/ui/Button.astro';
+import Image from '~/components/common/Image.astro';
+import Button from '~/components/ui/Button.astro';
 import { Icon } from 'astro-icon/components';
-import {fetchAuthor} from '@/utils/author'
-import { fetchExperiences, fetchLocalizedExperiences } from '@/utils/experience';
-import {fetchEducations} from '@/utils/education'
-import { getLocaleFromUrl, useTranslations } from '@/i18n/translator';
+import {fetchAuthor} from '~/utils/author'
+import { fetchExperiences, fetchLocalizedExperiences } from '~/utils/experience';
+import {fetchEducations} from '~/utils/education'
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
 const metadata = {
   title: "Sobre mi | Alex Srebernic",
   ignoreTitleTemplate: true,

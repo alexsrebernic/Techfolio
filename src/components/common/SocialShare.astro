@@ -1,4 +1,5 @@
 ---
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
 import { Icon } from 'astro-icon/components';
 
 export interface Props {
@@ -8,10 +9,12 @@ export interface Props {
 }
 
 const { text, url, class: className = 'inline-block' } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(locale)
 ---
 
 <div class={className}>
-  <span class="align-super font-bold text-gray-400 dark:text-slate-400">Share:</span>
+  <span class="align-super font-bold text-gray-400 dark:text-slate-400">{t('buttons.share')}:</span>
   <button class="ml-2 rtl:ml-0 rtl:mr-2" title="Twitter Share" data-aw-social-share="twitter" data-aw-url={url} data-aw-text={text}
     ><Icon
       name="tabler:brand-x"

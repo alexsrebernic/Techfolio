@@ -17,3 +17,107 @@ tags:
 init_year: "14/2/2022"
 end_year: "28/5/2023"
 ---
+import ProjectLayout from '~/components/projects/ProjectLayout.astro'
+import { Icon } from "astro-icon/components"
+import Image from "~/components/common/Image.astro"
+import testimonialImg from '~/assets/images/franco-srebernic.jpg'
+import projectImg from '~/assets/images/play-to-learn-2.jpg'
+
+<ProjectLayout image_1={projectImg} initYear="10/7/2023" endYear="28/5/2023" present={false}>
+  <span slot="role">Full-stack developer</span>
+  <p slot="background">
+    Amidst the fervor surrounding cryptocurrencies, there arises a crucial need for accessible knowledge and education. It's essential to provide a straightforward and effective means for everyone to comprehend what cryptocurrencies are, how they function, and how they can benefit individuals. This initiative aims to empower individuals with the necessary understanding to navigate the world of crypto safely and efficiently. By streamlining the learning process, we endeavor to equip people with the tools to utilize cryptocurrencies optimally, avoiding unnecessary time spent on inefficient platforms.
+  </p>
+  <Fragment slot="goals">
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">1</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Facilitating Universal Understanding of Cryptocurrencies</span>
+        <p class="text-sm">This endeavor aims to overcome the widespread lack of understanding of cryptocurrencies by providing an accessible platform. It acknowledges that while cryptocurrencies are transformative, many find them difficult to grasp. Through clear explanations and intuitive resources, the initiative seeks to empower individuals of all ages to comprehend the basics of crypto effortlessly.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">2</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Cultivating a Collaborative Community for Crypto Advancement</span>
+        <p class="text-sm">Recognizing that the progression of cryptocurrencies relies on both technological innovation and community engagement, this objective focuses on nurturing a supportive ecosystem. Enthusiasts, developers, and novices are encouraged to converge, share insights, and exchange ideas. By fostering inclusivity and active involvement, the initiative aims to drive ongoing enhancements and expansion within the crypto realm.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">3</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Establishing an Inclusive Learning Environment for Cryptocurrency Education</span>
+        <p class="text-sm">Within the technological landscape, cryptocurrencies have emerged as a disruptive force, yet understanding remains elusive for many. This initiative seeks to bridge the knowledge gap by offering an inclusive platform. By simplifying the intricacies of cryptocurrencies and catering to individuals of all ages, the goal is to equip everyone with essential knowledge. Through clear communication and user-friendly tools, widespread adoption and utilization of cryptocurrencies are fostered.</p>
+      </div>
+    </div>
+  </Fragment>
+  <Fragment slot="solutions">
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">1</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Revolutionizing Learning Platforms with Enhanced User Engagement</span>
+        <p class="text-sm">This article explores how technological advancements such as artificial intelligence (AI) and machine learning are reshaping learning platforms. By incorporating these cutting-edge technologies, the platform aims to create a more interactive learning environment. It discusses the impact of AI and machine learning on user engagement, highlighting their role in facilitating dynamic learning experiences.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">2</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Empowering Content Management with Flexibility and Customization</span>
+        <p class="text-sm">The platform offers content creators a customizable management system, accommodating various types of content seamlessly. Whether managing comments, videos, likes, or resources, the system provides flexibility and ease of organization. Emphasizing innovation, it equips creators with tools for efficient content curation and distribution, empowering them to tailor their content to meet diverse needs.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">3</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Streamlining Product Delivery with Exceptional Speed and Efficiency</span>
+        <p class="text-sm">In response to the demand for fast and reliable product delivery, the platform ensures exceptional speed and efficiency. Its pay delivery service stands out for its rapidity, guaranteeing prompt delivery to customers. Leveraging advanced technology and logistics, the platform promises a seamless delivery experience that surpasses expectations, addressing the needs of today's fast-paced consumer market.</p>
+      </div>
+    </div>
+  </Fragment>
+  <Fragment slot="tools">
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/typescript`}/>
+      <span class="flex-1">Typescript</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/nuxt.js`}/>
+      <span class="flex-1">Nuxt.js</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/firebase`}/>
+      <span class="flex-1">Firebase</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/stripe`}/>
+      <span class="flex-1">Stripe</span>
+    </div>
+  </Fragment>
+  <p slot="conclusion">
+    A cutting-edge e-learning platform has surfaced, specializing in catering to cryptocurrency enthusiasts of all proficiencies. Distinguished by its commitment to delivering a seamless learning journey amidst the intricate realm of crypto and its derivatives, this platform excels in both quality and user-centricity. With its intuitive design and extensive resources, users can effortlessly navigate the complexities of cryptocurrency, acquiring invaluable insights and expertise. Whether novice or seasoned trader, this platform guarantees a superior learning experience, establishing a benchmark in crypto education.
+  </p>
+  <div slot="testimonial" class="bg-[#EFEFF0] dark:bg-[#282828] px-8 py-6 rounded-xl flex flex-col justify-between items-start space-y-4 shadow-md">
+  <p class="text-[#111111] text-sm">
+    As the CEO of Play to Learn, I must commend Alex for their exceptional dedication and outstanding work on our project. Their diligence and skillful contributions have been instrumental to our success. Alex's commitment to excellence and ability to deliver results have set a high standard for our team. I wholeheartedly recommend Alex for their remarkable talents and commendable work ethic.
+  </p>
+  <div class="flex space-x-4">
+    <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={testimonialImg} width={75} height={75} alt="Photo of Franco S."/>
+    <div class="flex-1 space-y-1">
+      <p class="text-[#111111] text-sm dark:text-white">Franco S.</p>
+      <p class="text-xs text-nowrap">CEO of Play To Learn</p>
+    </div>
+  </div>
+</div>
+
+</ProjectLayout>

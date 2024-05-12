@@ -41,6 +41,7 @@ const generatePermalink = async ({
 
 const getNormalizedPost = async (post: CollectionEntry<'store'>): Promise<StoreItem> => {
   const { id, slug: rawSlug = '', data } = post;
+  const { Content, remarkPluginFrontmatter } = await post.render();
 
   const {
     publishDate: rawPublishDate = new Date(),
@@ -48,13 +49,12 @@ const getNormalizedPost = async (post: CollectionEntry<'store'>): Promise<StoreI
     tags: rawTags = [],
     category: rawCategory,
     name,
-    thumbnail,
     price,
     currency,
-    brief_description,
-    description,
+    excerpt,
     buy_link,
     preview_link,
+    image,
     image_1,
     image_2,
     image_3,
@@ -74,20 +74,21 @@ const getNormalizedPost = async (post: CollectionEntry<'store'>): Promise<StoreI
     permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
     publishDate: publishDate,
     updateDate: updateDate,
-    category: category,
+    category: category!,
     tags: tags,
     name,
-    thumbnail,
+    image,
     price,
     currency,
-    brief_description,
-    description,
+    excerpt,
     buy_link,
     preview_link,
     image_1,
     image_2,
     image_3,
     image_4,
+    Content: Content,
+    readingTime: remarkPluginFrontmatter?.readingTime,
   };
 };
 

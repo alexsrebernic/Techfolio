@@ -2,22 +2,23 @@
 import type { ImageMetadata } from 'astro';
 import { Icon } from 'astro-icon/components';
 Image
-import PostTags from '@/components/projects/Tags.astro';
+import PostTags from '~/components/projects/Tags.astro';
 
-import { APP_PROJECTS } from '@/utils/config';
+import { APP_PROJECTS } from '~/utils/config';
 
-import { getPermaProjectsLink } from '@/utils/permalinks';
-import { findImage } from '@/utils/images';
-import { getFormattedDate } from '@/utils/utils';
+import { getPermaProjectsLink } from '~/utils/permalinks';
+import { findImage } from '~/utils/images';
+import { getFormattedDate } from '~/utils/utils';
 import Button from '../ui/Button.astro';
 import { Image } from 'astro:assets';
-import type { Project } from '@/types';
+import type { Project } from '~/types';
 
 export interface Props {
   post: Project;
 }
 
 const { post } = Astro.props;
+console.log(post)
 const image = (await findImage(post.image)) as ImageMetadata | undefined;
 const link = APP_PROJECTS?.post?.isEnabled ? getPermaProjectsLink(post.permalink, 'post') : '';
 ---
@@ -33,7 +34,7 @@ const link = APP_PROJECTS?.post?.isEnabled ? getPermaProjectsLink(post.permalink
               widths={[400, 900]}
               width={900}
               sizes="(max-width: 900px) 400px, 900px"
-              alt={post.title}
+              alt={post.name}
               aspectRatio="16:9"
               loading="lazy"
               decoding="async"
@@ -49,10 +50,10 @@ const link = APP_PROJECTS?.post?.isEnabled ? getPermaProjectsLink(post.permalink
         {
           link ? (
             <a class="hover:text-primary dark:hover:text-gray-800 transition ease-in duration-200 break-all" href={link}>
-              {post.title}
+              {post.name}
             </a>
           ) : (
-            post.title
+            post.name
           )
         }
       </h2>    

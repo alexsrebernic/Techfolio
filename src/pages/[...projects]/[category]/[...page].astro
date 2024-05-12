@@ -6,7 +6,7 @@ import BlogList from '~/components/blog/List.astro';
 import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
 import { getLocaleFromUrl } from '~/i18n/translator';
-import { getStaticPathsProjectCategory, getStaticPathsProjectList,projectCategoryRobots } from '@/utils/projects';
+import { getStaticPathsProjectCategory, getStaticPathsProjectList,projectCategoryRobots } from '~/utils/projects';
 
 export async function getStaticPaths ({ paginate }) {
   return await getStaticPathsProjectCategory({ paginate });

@@ -18,3 +18,120 @@ tags:
 init_year: "10/7/2023"
 present: true
 ---
+import ProjectLayout from '~/components/projects/ProjectLayout.astro'
+import { Icon } from "astro-icon/components"
+import Image from "~/components/common/Image.astro"
+import testimonialImg from '~/assets/images/franco-srebernic.jpg'
+import projectImg from '~/assets/images/play-to-learn-2.jpg'
+
+<ProjectLayout image_1={projectImg} initYear="10/7/2023" present={true} >
+  <span slot="role">Co-founder</span>
+  <p slot="background">
+    In today's rapidly evolving landscape, many agencies find themselves struggling with outdated tools and approaches that no longer meet the demands of the modern era. Recognizing this pressing need for innovation and adaptability, PatagoniaOnline Marketing emerges as a beacon of fresh perspectives and custom solutions.
+    At PatagoniaOnline Marketing, we pride ourselves on delivering high-quality services tailored to the unique needs of entrepreneurs and businesses alike. Our team is dedicated to crafting solid and authoritative online presences that not only stand the test of time but also propel our clients toward success in the digital realm. With a commitment to innovation and a keen understanding of the ever-changing online landscape, we offer a breath of fresh air in an industry often stifled by outdated methodologies.
+  </p>
+  <Fragment slot="goals">
+  <div  class="flex gap-4 flex-col md:flex-row">
+  <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+    <span class="color-brand">1</span>
+  </div>
+  <div class="flex-1 space-y-3">
+    <span>Maximizing Business Impact: Strategic Marketing for Enhanced Online Presence</span>
+    <p class="text-sm">Enhance Business Presence: Elevate online visibility and performance through strategic marketing, driving growth and profitability.</p>
+  </div>
+  </div>
+
+  <div class="flex gap-4 flex-col md:flex-row">
+  <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+    <span class="color-brand">2</span>
+  </div>
+  <div class="flex-1 space-y-3">
+    <span>Empowering Success: Advanced Software Solutions for Future-Ready Businesses</span>
+    <p class="text-sm">Deliver Top-Quality Software: Provide cutting-edge solutions that anticipate future challenges, empowering clients with reliable tools for productivity and competitiveness.</p>
+  </div>
+  </div>
+
+  <div class="flex gap-4 flex-col md:flex-row">
+  <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+    <span class="color-brand">3</span>
+  </div>
+  <div class="flex-1 space-y-3">
+    <span>Leading with Innovation: Leveraging AI and Modern Tools for Sustainable Growth</span>
+    <p class="text-sm">Harness Modern Tools, Including AI: Utilize the latest technology to streamline processes, save time, and unlock growth opportunities for clients, staying ahead in the digital age.</p>
+  </div>
+  </div>
+  </Fragment>
+  <Fragment slot="solutions">
+  <div class="flex gap-4 flex-col md:flex-row">
+  <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+    <span class="color-brand">1</span>
+  </div>
+  <div class="flex-1 space-y-3">
+    <span>Maximizing Business Impact: Strategic Marketing for Enhanced Online Presence</span>
+    <p class="text-sm">High-Quality Landing Pages and Lead Generation: Craft compelling landing pages to capture leads effectively</p>
+  </div>
+  </div>
+
+  <div class="flex gap-4 flex-col md:flex-row">
+  <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+    <span class="color-brand">2</span>
+  </div>
+  <div class="flex-1 space-y-3">
+    <span>Empowering Success: Advanced Software Solutions for Future-Ready Businesses</span>
+    <p class="text-sm">Social Media Ads and Email Marketing: Utilize targeted ads and personalized email campaigns to boost sales and generate leads.</p>
+  </div>
+  </div>
+
+  <div class="flex gap-4 flex-col md:flex-row">
+  <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+    <span class="color-brand">3</span>
+  </div>
+  <div class="flex-1 space-y-3">
+    <span>Leading with Innovation: Leveraging AI and Modern Tools for Sustainable Growth</span>
+    <p class="text-sm">Automated Software and AI Integration: Implement AI-driven tools and automation to optimize processes and save time for other critical tasks.</p>
+  </div>
+  </div>
+  </Fragment>
+  <Fragment slot="tools">
+  <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+    <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/typescript`}/>
+    <span class="flex-1">Typescript</span>
+  </div>
+
+  <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+    <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/astro.js`}/>
+    <span class="flex-1">Astro.js</span>
+  </div>
+
+  <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+    <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/wordpress`}/>
+    <span class="flex-1">Wordpress</span>
+  </div>
+
+  <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+    <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/make`}/>
+    <span class="flex-1">Make</span>
+  </div>
+
+  <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+    <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/googleanalytics`}/>
+    <span class="flex-1">Google analytics</span>
+  </div>
+  </Fragment>
+  <p slot="conclusion">
+    Patagonia Online Marketing offers tailored strategies to enhance businesses' online presence, driving growth and profitability. Through top-quality software solutions and modern tools like AI, we streamline processes, save time, and unlock new opportunities for success in the digital age. With a commitment to innovation, we empower clients to thrive in a rapidly evolving landscape.
+  </p>
+
+  <div slot="testimonial" class="bg-[#EFEFF0] dark:bg-[#282828] px-8 py-6 rounded-xl flex flex-col justify-between items-start space-y-4 shadow-md">
+    <p class="text-[#111111] text-sm">
+      As the owner of a cozy tea house, I'm grateful for Alex's expertise in enhancing our online presence. Their tailored strategy led to a noticeable increase in leads and exposure, bringing more visitors to our establishment. I highly recommend Alex to any business seeking to boost their online visibility and connect with their audience effectively
+    </p>
+    <div class="flex space-x-4">
+      <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={testimonialImg} width={75} height={75} alt="Photo of Nancy Sastre"/>
+      <div class="flex-1 space-y-1">
+        <p class="text-[#111111] text-sm dark:text-white">Nancy Sastre</p>
+        <p class="text-xs text-nowrap">Owner of Los Chalets Casita de te</p>
+      </div>
+    </div>
+  </div>
+</ProjectLayout>

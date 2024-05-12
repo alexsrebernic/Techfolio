@@ -1,17 +1,19 @@
 ---
-import { APP_PROJECTS } from "@/utils/config";
+import { APP_PROJECTS } from "~/utils/config";
 
-import { fetchNormalizedProjects, getRelatedNormalizedProjects } from "@/utils/projects";
-import BlogHighlightedPosts from "../projects/BlogHighlightedPosts.astro";
-import type NormalizedProject from '@/interfaces/NormalizedProject'
-import { getProjectsPermaLink } from "@/utils/permalinks";
+import { fetchNormalizedProjects, fetchProjects, getRelatedNormalizedProjects } from "~/utils/projects";
+import BlogHighlightedPosts from "./BlogHighlightedPosts.astro";
+import { getProjectsPermaLink } from "~/utils/permalinks";
+import type { Project } from "~/types";
+import { getLocaleFromUrl } from "~/i18n/translator";
 
 export interface Props {
-  post: NormalizedProject;
+  post: Project;
 }
 
 const { post } = Astro.props;
-const fetchedPosts = await fetchNormalizedProjects();
+const locale = getLocaleFromUrl(Astro.url)
+const fetchedPosts = await fetchProjects(locale);
 const relatedPosts = post.tags ? getRelatedNormalizedProjects(fetchedPosts, post.slug, post.tags) : [];
 ---
 

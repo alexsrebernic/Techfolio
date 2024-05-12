@@ -5,9 +5,6 @@
     "allowJs": true,
     "baseUrl": "/home/alex/projects/alex/new_portfolio",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
       "~/*": ["src/*"]
     },
     "jsx": "react-jsx",

@@ -1,7 +1,7 @@
 ---
 import Item from "../widgets/TestimonialItem.astro"
 import { twMerge } from 'tailwind-merge';
-import type { ItemGrid } from '@/types';
+import type { ItemGrid } from '~/types';
 import Button from "./Button.astro";
 
 const { path, title, items = [], columns} = Astro.props as ItemGrid;

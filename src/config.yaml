@@ -18,7 +18,7 @@ metadata:
   openGraph:
     site_name: Alex Srebernic's portfolio
     images:
-      - url: '@/assets/images/default.png'
+      - url: '~/assets/images/default.png'
         width: 1200
         height: 628
     type: website
@@ -73,7 +73,6 @@ apps:
   projects:
     isEnabled: true
     postsPerPage: 6
-
     post:
       isEnabled: true
       permalink: 'projects/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
@@ -107,7 +106,7 @@ apps:
 
     post:
       isEnabled: true
-      permalink: 'blog/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
         index: true
 

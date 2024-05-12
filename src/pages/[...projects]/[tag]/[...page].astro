@@ -1,12 +1,12 @@
 ---
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
-import Layout from '@/layouts/PageLayout.astro';
-import BlogList from '@/components/projects/List.astro';
-import Headline from '@/components/blog/Headline.astro';
-import Pagination from '@/components/projects/Pagination.astro';
-import { getStaticPathsProjectTag, projectTagRobots } from '@/utils/projects';
-import { getLocaleFromUrl } from '@/i18n/translator';
+import Layout from '~/layouts/PageLayout.astro';
+import BlogList from '~/components/projects/List.astro';
+import Headline from '~/components/blog/Headline.astro';
+import Pagination from '~/components/projects/Pagination.astro';
+import { getStaticPathsProjectTag, projectTagRobots } from '~/utils/projects';
+import { getLocaleFromUrl } from '~/i18n/translator';
 
 export const prerender = true;
 

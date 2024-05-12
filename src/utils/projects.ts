@@ -49,10 +49,7 @@ const getNormalizedPost = async (post: CollectionEntry<'projects'>): Promise<Pro
   updateDate: rawUpdateDate,
   category: rawCategory,
   tags: rawTags,
-  type,
-  thumbnail,
-  image1 ,
-  content,
+  image,
   preview_url,
   description,
   draft,
@@ -66,21 +63,20 @@ const getNormalizedPost = async (post: CollectionEntry<'projects'>): Promise<Pro
   const category = rawCategory ? cleanSlug(rawCategory) : undefined;
   const tags = rawTags.map((tag: string) => cleanSlug(tag));
   const permalink = await generatePermalink({ id, slug, publishDate, category });
-  (category)
   return {
     id: id,
     slug: slug,
     publishDate,
+    updateDate,
     permalink: locale === I18N.defaultLocale ? permalink.split('/')[1] : permalink,
     tags,
-    title: name,
-    type,
-    image: thumbnail,
-    image1 ,
-    content,
+    name,
+    image,
     preview_url,
     excerpt : description,
-    category,
+    category : category,
+    Content, 
+    remarkPluginFrontmatter
   };
 };
 

@@ -1,11 +1,11 @@
 ---
-import Header from '@/components/widgets/Header.astro';
-import Sidebar from '@/components/widgets/Sidebar.astro';
-import Layout from '@/layouts/Layout.astro';
-import type { MetaData } from '@/types';
-import ToggleTheme from '@/components/common/ToggleTheme.astro'
-import { fetchAuthor } from '@/utils/author';
-import { I18N } from '@/utils/config';
+import Header from '~/components/widgets/Header.astro';
+import Sidebar from '~/components/widgets/Sidebar.astro';
+import Layout from '~/layouts/Layout.astro';
+import type { MetaData } from '~/types';
+import ToggleTheme from '~/components/common/ToggleTheme.astro'
+import { fetchAuthor } from '~/utils/author';
+import { I18N } from '~/utils/config';
 import { getHeaderData, getFooterData } from '~/navigation';
 import { getLocaleFromUrl } from '~/i18n/translator';
 export interface Props {

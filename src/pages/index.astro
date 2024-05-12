@@ -1,15 +1,15 @@
 ---
-import Layout from '@/layouts/PageLayout.astro';
-import ItemsGrid from '@/components/projects/List.astro';
-import TestimonialGrid from '@/components/ui/TestimonialGrid.astro';
-import Button from '@/components/ui/Button.astro';
-import { fetchPosts } from '@/utils/blog';
-import List from '@/components/blog/List.astro';
-import { fetchTestimonials } from '@/utils/testimonial';
-import { fetchAuthor } from '@/utils/author';
-import { getLocaleFromUrl, useTranslations } from '@/i18n/translator';
-import type { Author, LocalizedAuthor } from '@/types';
-import { fetchProjects } from '@/utils/projects';
+import Layout from '~/layouts/PageLayout.astro';
+import ItemsGrid from '~/components/projects/List.astro';
+import TestimonialGrid from '~/components/ui/TestimonialGrid.astro';
+import Button from '~/components/ui/Button.astro';
+import { fetchPosts } from '~/utils/blog';
+import List from '~/components/blog/List.astro';
+import { fetchTestimonials } from '~/utils/testimonial';
+import { fetchAuthor } from '~/utils/author';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
+import type { Author, LocalizedAuthor } from '~/types';
+import { fetchProjects } from '~/utils/projects';
 import { getLocaleUrl } from 'astro-i18n-aut';
 
 const locale = getLocaleFromUrl(Astro.url)

@@ -13,6 +13,7 @@ export const es  = {
     "made_by": "Hecho por",
     "get_template_for_free": "Obtener template gratis",
   },
+
   buttons: {
     about: 'Acerca',
     copy_email: 'Copiar email',
@@ -21,6 +22,11 @@ export const es  = {
     see_more: 'Ver más',
     schedule_call: 'Agendar llamada',
     send: 'Enviar',
+    preview: 'Previsualizar',
+    buy_for: 'Comprar por',
+    buy_for_free: 'Comprar gratis',
+    back_to_list: 'Volver a la lista',
+    share: 'Compartir',
   },
   homepage: {
     metadata: {
@@ -35,6 +41,14 @@ export const es  = {
     "testimonial_of": 'de',
   },
   projects: {
+    role: "Rol",
+    timeline: "Fechas",
+    background: "Fondo",
+    goals: 'Objetivos',
+    solutions: "Soluciones",
+    tools: 'Herramientas',
+    conclusion: 'Conclusion',
+    code: 'es-ES',
     metadata: {
       title: "Proyectos | Alex Srebernic Portafolio"
     },
@@ -58,6 +72,7 @@ export const es  = {
     "education_title": 'Educacion',
   },
   store: {
+    overview: 'Descripcion',
     metadata: {
       title: "Tienda | Alex Srebernic Portafolio"
     },

@@ -1,0 +1,103 @@
+---
+import { Icon } from 'astro-icon/components';
+
+import Image from '~/components/common/Image.astro';
+import PostTags from '~/components/blog/Tags.astro';
+import SocialShare from '~/components/common/SocialShare.astro';
+import TestimonialItem from '~/components/widgets/TestimonialItem.astro'
+import { getLocalizedProjectPermalink, getPermaProjectsLink } from '~/utils/permalinks';
+import Button from '../ui/Button.astro';
+import type { Project } from '~/types';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
+
+export interface Props {
+  project: Project;
+  url: string | URL;
+}
+import { getPermalink } from '~/utils/permalinks';
+import { getFormattedDate } from '~/utils/utils';
+const { project, url } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(locale)
+
+const {name,tags} = project
+---
+
+<section class="   mx-auto">
+  <article   class="">
+    <header data-aos="fade-up"  class={project.image ? 'space-y-10' : ''}>
+      <div class="flex items-start  space-x-0 justify-start sm:space-x-5 flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-0 sm:items-center">
+        <Button variant="tertiary" class="px-3 md:px-3" href={getLocalizedProjectPermalink(locale)}>
+          <Icon name="tabler:chevron-left" class="w-5 h-5 mr-1 -ml-1.5 rtl:-mr-1.5 rtl:ml-1" />
+          {t('buttons.back_to_list')}
+        </Button>
+        <p>
+          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
+          <time datetime={String(project.publishDate)} class="inline-block">{getFormattedDate(project.publishDate)}</time>
+          {
+            project.category && (
+              <>
+                {' '}
+                ·{' '}
+                <a class="capitalize hover:underline inline-block" href={getPermalink(project.category, 'category')}>
+                  {project.category.replaceAll('-', ' ')}
+                </a>
+              </>
+            )
+          }
+          {project.readingTime && <> · {project.readingTime} min read</>}
+        </p>
+      </div>
+    <div class="space-y-6">
+        <h1
+        class=" mx-auto text-4xl md:text-5xl font-medium leading-tighter tracking-tighter font-heading break-all"
+      >
+        {name}
+      </h1>
+      <p
+        class=" mx-auto mt-4 mb-8  text-md   dark:text-slate-400 text-justify"
+      >
+      {project.excerpt && project.excerpt.replace(/<\/?p>/g, '')    }
+
+      </p>
+      <Button variant="primary" text={t('buttons.preview')} href={project.preview_url}/>
+    </div>
+    
+
+      {
+        project.image ? (
+          <Image
+            src={project.image}
+            class="max-w-full   mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+            widths={[400, 900]}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={project?.excerpt || ''}
+            width={900}
+            height={506}
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="border-t dark:border-slate-700" />
+          </div>
+        )
+      }
+    </header>
+    <main>
+      {
+        project.Content ? (
+          <project.Content />
+        ) : (
+          <Fragment set:html={project.Content} />
+        )
+      }
+     
+   
+    </main>
+    <div data-aos="fade-up" class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
+      <PostTags tags={tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
+      <SocialShare url={url} text={name} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
+    </div>
+  </article>
+</section>

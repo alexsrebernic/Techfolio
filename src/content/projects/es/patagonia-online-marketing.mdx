@@ -18,3 +18,113 @@ tags:
 init_year: "10/7/2023"
 present: true
 ---
+import ProjectLayout from '~/components/projects/ProjectLayout.astro'
+import { Icon } from "astro-icon/components"
+import Image from "~/components/common/Image.astro"
+import testimonialImg from '~/assets/images/nancy-sastre.jpg'
+import projectImg from '~/assets/images/patagoniaonlinemarketing-2.jpg'
+
+<ProjectLayout image_1={projectImg} initYear="10/7/2023" present={true} >
+  <span slot="role">Co-fundador</span>
+  <p slot="background">
+    En el paisaje empresarial en constante evolución de hoy en día, muchas agencias se encuentran luchando con herramientas y enfoques obsoletos que ya no satisfacen las demandas de la era moderna. Reconociendo esta necesidad apremiante de innovación y adaptabilidad, PatagoniaOnline Marketing emerge como un faro de perspectivas frescas y soluciones personalizadas.
+    En PatagoniaOnline Marketing, nos enorgullecemos de ofrecer servicios de alta calidad adaptados a las necesidades únicas de emprendedores y empresas por igual. Nuestro equipo está dedicado a crear presencias en línea sólidas y autorizadas que no solo resisten el paso del tiempo, sino que también impulsan a nuestros clientes hacia el éxito en el ámbito digital. Con un compromiso con la innovación y una comprensión aguda del paisaje en línea en constante cambio, ofrecemos un soplo de aire fresco en una industria a menudo sofocada por metodologías obsoletas.
+  </p>
+  <Fragment slot="goals">
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">1</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Maximizando el Impacto Empresarial: Marketing Estratégico para una Mayor Presencia en Línea</span>
+        <p class="text-sm">Mejora de la Presencia Empresarial: Eleva la visibilidad en línea y el rendimiento a través del marketing estratégico, impulsando el crecimiento y la rentabilidad.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">2</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Empoderando el Éxito: Soluciones Avanzadas de Software para Empresas Preparadas para el Futuro</span>
+        <p class="text-sm">Entrega de Software de Alta Calidad: Proporciona soluciones de vanguardia que anticipen los desafíos futuros, empoderando a los clientes con herramientas confiables para la productividad y la competitividad.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">3</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Liderando con Innovación: Aprovechando la IA y Herramientas Modernas para un Crecimiento Sostenible</span>
+        <p class="text-sm">Aprovechamiento de Herramientas Modernas, Incluida la IA: Utiliza la última tecnología para optimizar procesos, ahorrar tiempo y desbloquear oportunidades de crecimiento para los clientes, manteniéndose a la vanguardia en la era digital.</p>
+      </div>
+    </div>
+  </Fragment>
+
+  <Fragment slot="solutions">
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">1</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Maximizando el Impacto Empresarial: Marketing Estratégico para una Mayor Presencia en Línea</span>
+        <p class="text-sm">Páginas de Aterrizaje de Alta Calidad y Generación de Leads: Crea páginas de aterrizaje convincentes para capturar leads de manera efectiva.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">2</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Empoderando el Éxito: Soluciones Avanzadas de Software para Empresas Preparadas para el Futuro</span>
+        <p class="text-sm">Anuncios en Redes Sociales y Marketing por Correo Electrónico: Utiliza anuncios dirigidos y campañas de correo electrónico personalizadas para aumentar las ventas y generar leads.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">3</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Liderando con Innovación: Aprovechando la IA y Herramientas Modernas para un Crecimiento Sostenible</span>
+        <p class="text-sm">Software Automatizado e Integración de IA: Implementa herramientas impulsadas por IA y automatización para optimizar procesos y ahorrar tiempo para otras tareas críticas.</p>
+      </div>
+    </div>
+  </Fragment>
+
+  <Fragment slot="tools">
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name="tools/typescript"/>
+      <span class="flex-1">Typescript</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name="tools/astro.js"/>
+      <span class="flex-1">Astro.js</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name="tools/wordpress"/>
+      <span class="flex-1">Wordpress</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name="tools/make"/>
+      <span class="flex-1">Make</span>
+    </div>
+      <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name="tools/googleanalytics"/>
+      <span class="flex-1">Google analytics</span>
+    </div>
+  </Fragment >
+  <p slot="conclusion">
+    Patagonia Online Marketing ofrece estrategias personalizadas para mejorar la presencia en línea de las empresas, impulsando el crecimiento y la rentabilidad. A través de soluciones de software de alta calidad y herramientas modernas como la IA, optimizamos procesos, ahorramos tiempo y desbloqueamos nuevas oportunidades de éxito en la era digital. Con un compromiso con la innovación, capacitamos a los clientes para prosperar en un paisaje en constante evolución.
+  </p>
+  <div slot="testimonial" class="bg-[#EFEFF0] dark:bg-[#282828] px-8 py-6 rounded-xl flex flex-col justify-between items-start space-y-4 shadow-md">
+  <p class="text-[#111111] text-sm">
+    Como propietaria de un acogedor salón de té, estoy agradecido por la experiencia de Alex en mejorar nuestra presencia en línea. Su estrategia personalizada llevó a un aumento notable en exposición, atrayendo a más visitantes a nuestro establecimiento. Recomiendo encarecidamente a Alex a cualquier negocio que busque aumentar su visibilidad en línea y conectarse eficazmente con su audiencia
+  </p>
+  <div class="flex space-x-4">
+    <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={testimonialImg} width={75} height={75} alt="Photo of Nancy Sastre"/>
+    <div class="flex-1 space-y-1">
+      <p class="text-[#111111] text-sm dark:text-white">Nancy Sastre</p>
+      <p class="text-xs text-nowrap">Dueña de Los Chalets Casita de te</p>
+    </div>
+  </div>
+</div>
+</ProjectLayout>

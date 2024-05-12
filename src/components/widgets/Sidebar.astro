@@ -8,9 +8,9 @@ import Image from "../common/Image.astro";
 import { getLocalizedHomePermalink } from "~/utils/permalinks";
 import { trimSlash, getAsset } from "~/utils/permalinks";
 import { socialMediaDataHeader } from "./Sidebar/icons/SocialMedia";
-import { getLocaleFromUrl } from '@/i18n/translator';
+import { getLocaleFromUrl } from '~/i18n/translator';
 import { getLocaleUrl } from "astro-i18n-aut";
-import type { Author } from "@/types";
+import type { Author } from "~/types";
 
 
 interface Link {
@@ -95,7 +95,7 @@ id="sidebar"
 class="hidden md:block"
   class:list={[
     { sticky: isSticky, relative: !isSticky, dark: isDark },
-    "top-0 sticky z-40  flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity]   md:h-screen md:max-w-[100px] transition-width xl:max-w-[300px] transition ease-in-out bg-page",
+    "top-0 sticky z-40  flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity]   md:h-screen md:max-h-screen md:max-w-[100px] transition-width xl:max-w-[300px] transition ease-in-out bg-page",
   ]}
 >
   <div class="absolute inset-0"></div>

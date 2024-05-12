@@ -29,7 +29,6 @@ export default defineConfig({
         i18n({
           locales: I18N.locales,
           defaultLocale: I18N.defaultLocale,
-          include: ["pages/api/**/*", "pages/rss.xml.ts","pages/**/rss.xml.ts"]
         }),
         sitemap({
           i18n: {

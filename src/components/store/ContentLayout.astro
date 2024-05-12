@@ -1,0 +1,28 @@
+---
+import { getLocaleFromUrl, useTranslations } from "~/i18n/translator"
+import Button from "../ui/Button.astro";
+const locale = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(locale);
+
+const {price, url} = Astro.props
+---
+<div data-aos="fade-up"  class="flex mt-16 space-y-10 lg:space-y-0 lg:space-x-10 flex-col lg:flex-row space-x-0 ">
+  <div class="flex-1 space-y-5">
+    <h2
+    class=" mx-auto text-2xl md:text-3xl font-medium leading-tighter tracking-tighter font-heading break-all"
+  >{t('store.overview')}
+  </h2>
+  <div class="list-styles">
+    <slot name="body"/>
+  </div>
+  </div>
+  <div class="flex-initial lg:min-w-[300px] xl:min-w-[340px] ">
+    <div class="bg-[#EFEFF0] px-8 py-10 space-y-2 rounded-xl sticky top-10 left-0  mb-10 dark:bg-[#282828]">
+      <Button  class="w-full" variant="primary" text={price ? `${t('buttons.buy_for')} ${price}` : t('buttons.buy_for_free')} href={url}/>
+      <Button class="w-full" variant="secondary" text={t('buttons.preview')} href={url}/>
+      <div class="py-3">
+         <slot name="card"/>
+        </div>
+    </div>
+  </div>
+</div>

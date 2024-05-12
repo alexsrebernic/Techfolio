@@ -12,6 +12,7 @@ export const en  = {
     "made_by": "Made by",
     "get_template_for_free": "Get template for free",
   },
+
   buttons: {
     about: 'About',
     copy_email: 'Copy email',
@@ -20,6 +21,11 @@ export const en  = {
     see_more: 'See more',
     schedule_call: 'Schedule a call',
     send: 'Send',
+    preview: 'Preview',
+    buy_for: 'Buy for',
+    buy_for_free: 'Buy for free',
+    back_to_list: 'Back to list',
+    share: 'Share',
   },
   homepage: {
     metadata: {
@@ -39,6 +45,14 @@ export const en  = {
     },
     title: "Projects",
     subtitle: "Take a look at the projects I worked on",
+    background: "Background",
+    timeline: "Timeline",
+    code: 'en-US',
+    role: 'Role',
+    goals: 'Goals',
+    solutions: "Solutions",
+    tools: 'Tools',
+    conclusion: 'Conclusion',
   },
   blog: {
     metadata: {
@@ -57,6 +71,7 @@ export const en  = {
     "education_title": 'Education',
   },
   store: {
+    overview: 'Overview',
     metadata: {
       title: "Store | Alex Srebernic Portfolio"
     },

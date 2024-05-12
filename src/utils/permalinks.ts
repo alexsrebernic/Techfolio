@@ -1,8 +1,8 @@
 import slugify from 'limax';
 
-import { SITE, APP_BLOG, APP_STORE, APP_PROJECTS, I18N } from '@/utils/config';
+import { SITE, APP_BLOG, APP_STORE, APP_PROJECTS, I18N } from '~/utils/config';
 
-import { trim } from '@/utils/utils';
+import { trim } from '~/utils/utils';
 
 export const trimSlash = (s: string) => trim(trim(s, '/'));
 const createPath = (...params: string[]) => {
@@ -154,3 +154,7 @@ export const getLocalizedHomePermalink = (locale): string => getLocalizedPermali
 
 /** */
 export const getLocalizedBlogPermalink = (locale): string => getLocalizedPermalink(locale, BLOG_BASE);
+
+export const getLocalizedProjectPermalink = (locale): string => getLocalizedPermalink(locale, PROJECTS_BASE);
+
+export const getLocalizedStorePermalink = (locale): string => getLocalizedPermalink(locale, STORE_BASE);

@@ -1,12 +1,12 @@
 ---
-import { APP_PROJECTS } from "@/utils/config";
+import { APP_PROJECTS } from "~/utils/config";
 
-import Grid from "@/components/projects/Grid.astro";
+import Grid from "~/components/projects/Grid.astro";
 
-import { getProjectsPermaLink } from "@/utils/permalinks";
-import { findNormalizedProjectsByIds } from "@/utils/projects";
-import WidgetWrapper from "@/components/ui/WidgetWrapper.astro";
-import type { Widget } from "@/types";
+import { getProjectsPermaLink } from "~/utils/permalinks";
+import { findNormalizedProjectsByIds } from "~/utils/projects";
+import WidgetWrapper from "~/components/ui/WidgetWrapper.astro";
+import type { Widget } from "~/types";
 
 export interface Props extends Widget {
   title?: string;

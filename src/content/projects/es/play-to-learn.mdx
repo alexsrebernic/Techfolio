@@ -17,3 +17,109 @@ tags:
 init_year: "14/2/2022"
 end_year: "28/5/2023"
 ---
+import ProjectLayout from '~/components/projects/ProjectLayout.astro'
+import { Icon } from "astro-icon/components"
+import Image from "~/components/common/Image.astro"
+import testimonialImg from '~/assets/images/franco-srebernic.jpg'
+import projectImg from '~/assets/images/play-to-learn-2.jpg'
+
+<ProjectLayout image_1={projectImg} initYear="10/7/2023" endYear="28/5/2023" >
+  <span slot="role">Desarrollador full-stack</span>
+  <p slot="background">
+    En medio del fervor que rodea a las criptomonedas, surge una necesidad crucial de conocimientos y educación accesibles. Es esencial proporcionar un medio directo y efectivo para que todos comprendan qué son las criptomonedas, cómo funcionan y cómo pueden beneficiar a las personas. Esta iniciativa tiene como objetivo capacitar a las personas con el entendimiento necesario para navegar de manera segura y eficiente en el mundo de las criptomonedas. Al simplificar el proceso de aprendizaje, nos esforzamos por dotar a las personas con las herramientas para utilizar las criptomonedas de manera óptima, evitando el tiempo innecesario invertido en plataformas ineficientes.
+  </p>
+  <Fragment slot="goals">
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">1</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Facilitando la Comprensión Universal de las Criptomonedas</span>
+        <p class="text-sm">Este esfuerzo tiene como objetivo superar la falta generalizada de comprensión de las criptomonedas al proporcionar una plataforma accesible. Reconoce que aunque las criptomonedas son transformadoras, muchas personas encuentran difícil entenderlas. A través de explicaciones claras y recursos intuitivos, la iniciativa busca capacitar a personas de todas las edades para que comprendan los conceptos básicos de las criptos sin esfuerzo.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">2</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Cultivando una Comunidad Colaborativa para el Avance de las Criptomonedas</span>
+        <p class="text-sm">Reconociendo que el progreso de las criptomonedas depende tanto de la innovación tecnológica como de la participación comunitaria, este objetivo se centra en fomentar un ecosistema de apoyo. Se alienta a entusiastas, desarrolladores y novatos a converger, compartir ideas y intercambiar opiniones. Al fomentar la inclusividad y la participación activa, la iniciativa tiene como objetivo impulsar mejoras continuas y expansión dentro del ámbito de las criptomonedas.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">3</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Estableciendo un Ambiente de Aprendizaje Inclusivo para la Educación en Criptomonedas</span>
+        <p class="text-sm">Dentro del panorama tecnológico, las criptomonedas han surgido como una fuerza disruptiva, sin embargo, la comprensión sigue siendo esquiva para muchos. Esta iniciativa busca cerrar la brecha de conocimiento ofreciendo una plataforma inclusiva. Al simplificar las complejidades de las criptomonedas y atender a personas de todas las edades, el objetivo es equipar a todos con conocimientos esenciales. A través de una comunicación clara y herramientas fáciles de usar, se fomenta la adopción y utilización generalizada de las criptomonedas.</p>
+      </div>
+    </div>
+  </Fragment>
+  <Fragment slot="solutions">
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">1</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Revolucionando Plataformas de Aprendizaje con Mayor Compromiso del Usuario</span>
+        <p class="text-sm">Este artículo explora cómo los avances tecnológicos como la inteligencia artificial (IA) y el aprendizaje automático están remodelando las plataformas de aprendizaje. Al incorporar estas tecnologías de vanguardia, la plataforma busca crear un entorno de aprendizaje más interactivo. Se discute el impacto de la IA y el aprendizaje automático en el compromiso del usuario, destacando su papel en facilitar experiencias de aprendizaje dinámicas.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">2</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Empoderando la Gestión de Contenidos con Flexibilidad y Personalización</span>
+        <p class="text-sm">La plataforma ofrece a los creadores de contenido un sistema de gestión personalizable, que permite acomodar diversos tipos de contenido de manera fluida. Ya sea gestionando comentarios, videos, likes o recursos, el sistema proporciona flexibilidad y facilidad de organización. Enfatizando la innovación, equipa a los creadores con herramientas para una curación y distribución de contenido eficientes, capacitándolos para adaptar su contenido para satisfacer diversas necesidades.</p>
+      </div>
+    </div>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <div class="rounded-full w-7 h-7 flex-initial bg-color-brand-light flex items-center justify-center p-2">
+        <span class="color-brand">3</span>
+      </div>
+      <div class="flex-1 space-y-3">
+        <span>Optimizando la Entrega de Productos con Velocidad y Eficiencia Excepcionales</span>
+        <p class="text-sm">
+        En respuesta a la demanda de una entrega de productos rápida y confiable, la plataforma garantiza velocidad y eficiencia excepcionales. Su servicio de entrega de pago se destaca por su rapidez, garantizando una entrega rápida a los clientes. Aprovechando
+      la tecnología avanzada y la logística, la plataforma promete una experiencia de entrega sin problemas que supere las expectativas, abordando las necesidades del mercado de consumidores de hoy en día, que se mueve a un ritmo acelerado.
+      </p>
+      </div>
+    </div>
+  </Fragment>
+  <Fragment slot="tools">
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/typescript`}/>
+      <span class="flex-1">Typescript</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/nuxt.js`}/>
+      <span class="flex-1">Nuxt.js</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/firebase`}/>
+      <span class="flex-1">Firebase</span>
+    </div>
+    <div class="bg-[#EFEFF0] w-full h-full py-3.5 px-8 text-sm flex items-center justify-start space-x-3 dark:bg-[#282828]">
+      <Icon width={32} color='#999999' class="flex-initial" height={32} name={`tools/stripe`}/>
+      <span class="flex-1">Stripe</span>
+    </div>
+  </Fragment>
+  <p slot="conclusion">
+    Ha surgido una plataforma de e-learning de vanguardia, especializada en atender a entusiastas de las criptomonedas de todas las competencias. Distinguida por su compromiso de ofrecer un viaje de aprendizaje fluido en medio del intrincado mundo de las criptos y sus derivados, esta plataforma destaca tanto por su calidad como por su enfoque centrado en el usuario. Con su diseño intuitivo y recursos extensos, los usuarios pueden navegar sin esfuerzo por las complejidades de las criptomonedas, adquiriendo conocimientos e información invaluable. Ya sea un trader novato o experimentado, esta plataforma garantiza una experiencia de aprendizaje superior, estableciendo un estándar en la educación sobre criptomonedas.
+  </p>
+  <div slot="testimonial" class="bg-[#EFEFF0] dark:bg-[#282828] px-8 py-6 rounded-xl flex flex-col justify-between items-start space-y-4 shadow-md">
+    <p class="text-[#111111] text-sm">
+      Como CEO de Play to Learn, debo elogiar a Alex por su excepcional dedicación y excelente trabajo en nuestro proyecto. Su diligencia y contribuciones hábiles han sido fundamentales para nuestro éxito. El compromiso de Alex con la excelencia y su capacidad para ofrecer resultados han establecido un alto estándar para nuestro equipo. Recomiendo sinceramente a Alex por sus talentos notables y su encomiable ética de trabajo.
+    </p>
+    <div class="flex space-x-4">
+      <Image class="rounded-xl flex-initial w-[60px] h-[60px] shadow-md" src={testimonialImg} width={75} height={75} alt="Foto de Franco S."/>
+      <div class="flex-1 space-y-1">
+        <p class="text-[#111111] text-sm dark:text-white">Franco S.</p>
+        <p class="text-xs text-nowrap">CEO de Play To Learn</p>
+      </div>
+    </div>
+  </div>
+</ProjectLayout>

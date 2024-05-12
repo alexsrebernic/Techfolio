@@ -1,11 +1,11 @@
 ---
-import Layout from '@/layouts/PageLayout.astro';
-import type { Author } from '@/types';
-import Button from '@/components/ui/Button.astro';
-import Form from '@/components/ui/Form.astro';
-import { fetchAuthor } from '@/utils/author';
-import { I18N } from '@/utils/config';
-import { getLocaleFromUrl, useTranslations } from '@/i18n/translator';
+import Layout from '~/layouts/PageLayout.astro';
+import type { Author } from '~/types';
+import Button from '~/components/ui/Button.astro';
+import Form from '~/components/ui/Form.astro';
+import { fetchAuthor } from '~/utils/author';
+import { I18N } from '~/utils/config';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
 
 
 const lang = getLocaleFromUrl(Astro.url)

@@ -3,9 +3,9 @@ publishDate: 2024-05-12T00:00:00Z
 draft: false 
 name: Techfolio
 type: template
-thumbnail: ~/assets/images/techfolio-1.jpg
+image: ~/assets/images/techfolio-1.jpg
 brief_description: Plantilla de portafolio minimalista diseñada con Astro y WordPress. Con un diseño elegante y funcionalidades completas, este template ofrece todo lo que un desarrollador o cualquier persona necesita para mostrar su trabajo de manera efectiva. Con una integración perfecta y características esenciales, es la plataforma perfecta para resaltar tus talentos y logros con estilo.
-description: Descubre nuestra versátil plantilla de portafolio, desarrollada con Astro y WordPress, que combina funcionalidad, elegancia y versatilidad. Este diseño minimalista ofrece la posibilidad de presentar tu trabajo de manera efectiva, con la ventaja de ser completamente responsive, adaptándose a cualquier dispositivo. Además, cuenta con la capacidad de cambiar entre un tema oscuro y un tema claro según tus preferencias. No solo eso, también incorpora la opción de múltiples idiomas, permitiéndote alcanzar una audiencia global sin barreras lingüísticas. Desde desarrolladores hasta profesionales de diversas áreas, esta plantilla proporciona todas las herramientas necesarias para destacar tus habilidades y logros de manera impactante y fácil de navegar.
+excerpt: Descubre nuestra versátil plantilla de portafolio, desarrollada con Astro y WordPress, que combina funcionalidad, elegancia y versatilidad. Este diseño minimalista ofrece la posibilidad de presentar tu trabajo de manera efectiva, con la ventaja de ser completamente responsive, adaptándose a cualquier dispositivo. Además, cuenta con la capacidad de cambiar entre un tema oscuro y un tema claro según tus preferencias. No solo eso, también incorpora la opción de múltiples idiomas, permitiéndote alcanzar una audiencia global sin barreras lingüísticas. Desde desarrolladores hasta profesionales de diversas áreas, esta plantilla proporciona todas las herramientas necesarias para destacar tus habilidades y logros de manera impactante y fácil de navegar.
 items: 
   - Multisecciones
   - Testimonios
@@ -16,19 +16,89 @@ items:
 category: template
 price: 0
 currency: USD
+tags:
+  - Portafolio
 buy_link: https://alexsrebernic.com
 preview_link: https://alexsrebernic.com
 image_1: ~/assets/images/techfolio-2.jpg
 ---
-<ul>
-    <li><strong>Blog:</strong> Comparte tus ideas, actualizaciones y pensamientos con tu audiencia a través de un blog integrado.</li>
-    <li><strong>Tienda:</strong> Monetiza tu portafolio vendiendo productos o servicios directamente a tus visitantes con una tienda en línea intuitiva.</li>
-    <li><strong>Sección Acerca de:</strong> Preséntate, muestra tus habilidades y tu trayectoria en una sección dedicada para personalizar tu portafolio.</li>
-    <li><strong>Sección de Contacto:</strong> Proporciona una forma sencilla para que potenciales clientes o colaboradores se pongan en contacto contigo a través de una sección de contacto amigable para el usuario.</li>
-    <li><strong>Testimonios:</strong> Muestra comentarios positivos de clientes o colaboradores para construir credibilidad y confianza con tu audiencia.</li>
-    <li><strong>Diseño Responsivo:</strong> Asegura que tu portafolio luzca excelente y funcione perfectamente en todos los dispositivos, desde computadoras de escritorio hasta teléfonos inteligentes.</li>
-    <li><strong>WordPress como CMS:</strong> Aprovecha el poder y la flexibilidad de WordPress como sistema de gestión de contenido (CMS) para tu portafolio, ofreciendo funciones robustas y una gestión fácil.</li>
-    <li><strong>Fácil de Actualizar:</strong> Mantén tu portafolio fresco y relevante con actualizaciones sin esfuerzo, asegurando que tu contenido se mantenga al día.</li>
-    <li><strong>Crear y Eliminar Datos:</strong> Gestiona el contenido de tu portafolio fácilmente creando o eliminando datos según sea necesario, dándote control total sobre tu presentación.</li>
+import ContentLayout from '~/components/store/ContentLayout.astro'
+import { Icon } from 'astro-icon/components';
+
+<ContentLayout price="$0" url=''>
+<ul slot='body' class="space-y-5 font-normal !list-disc pl-5 marker:text-gray-600">
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Blog:</strong> Comparte tus ideas, actualizaciones y pensamientos con tu audiencia a través de un blog integrado.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Tienda:</strong> Monetiza tu portafolio vendiendo productos o servicios directamente a tus visitantes con una tienda en línea intuitiva.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Sección Acerca de:</strong> Preséntate, muestra tus habilidades y tu trayectoria en una sección dedicada para personalizar tu portafolio.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Sección de Contacto:</strong> Proporciona una forma sencilla para que potenciales clientes o colaboradores se pongan en contacto contigo a través de una sección de contacto amigable para el usuario.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Testimonios:</strong> Muestra comentarios positivos de clientes o colaboradores para construir credibilidad y confianza con tu audiencia.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Diseño Responsivo:</strong> Asegura que tu portafolio luzca excelente y funcione perfectamente en todos los dispositivos, desde computadoras de escritorio hasta teléfonos inteligentes.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>WordPress como CMS:</strong> Aprovecha el poder y la flexibilidad de WordPress como sistema de gestión de contenido (CMS) para tu portafolio, ofreciendo funciones robustas y una gestión fácil.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Fácil de Actualizar:</strong> Mantén tu portafolio fresco y relevante con actualizaciones sin esfuerzo, asegurando que tu contenido se mantenga al día.</p>
+    </span>
+  </li>
+  <li class="py-1 list-type justify-between items-center text-sm list-item">
+    <span>
+      <p><strong>Crear y Eliminar Datos:</strong> Gestiona el contenido de tu portafolio fácilmente creando o eliminando datos según sea necesario, dándote control total sobre tu presentación.</p>
+    </span>
+  </li>
 </ul>
+<ul slot='card' class="space-y-5 font-normal">
+    <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+    <p>Multisecciones</p>
+    <Icon color="gray" name='check'/>
+  </li>
+  <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+    <p>Testimonios</p>
+    <Icon color="gray" name='check'/>
+  </li>
+  <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+    <p>Diseño Responsivo</p>
+    <Icon color="gray" name='check'/>
+  </li>
+  <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+    <p>WordPress como CMS</p>
+    <Icon color="gray" name='check'/>
+  </li>
+  <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+    <p>Fácil de Actualizar</p>
+    <Icon color="gray" name='check'/>
+  </li>
+  <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
+    <p>Crear y Eliminar Datos</p>
+    <Icon color="gray" name='check'/>
+  </li>
+</ul>
+</ContentLayout>
+
 

@@ -1,11 +1,11 @@
 ---
-import type { Form } from '@/types';
-import Button from '@/components/ui/Button.astro';
+import type { Form } from '~/types';
+import Button from '~/components/ui/Button.astro';
 
 const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } = Astro.props as Form;
 ---
 
-<form data-astro-reload action="" method="post">
+<form data-astro-reload action="https://formsubmit.co/alexsrebernic@gmail.com" method="post">
   {
     inputs &&
       inputs.map(
@@ -29,7 +29,6 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } 
           )
       )
   }
-
   {
     textarea && (
       <div>
