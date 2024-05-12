@@ -119,8 +119,8 @@ function init(){
   }
   button.addEventListener('click', copyEmailToClipboard)
 }
+init()
 
-  init()
-  document.addEventListener('astro:after-swap',
-  () => init())
+document.addEventListener('astro:after-swap',() => init())
+
 </script>

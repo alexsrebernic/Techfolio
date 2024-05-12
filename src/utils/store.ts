@@ -258,7 +258,7 @@ export const getStaticPathsStoreItemTag = async ({ paginate }) => {
         .filter(tag => typeof tag === 'string')
     )
   );
-
+  (TAG_STORE_BASE)
   return Array.from(tagsSet).flatMap(tag =>
     paginate(
       _storeItemsLocalized.filter(post =>

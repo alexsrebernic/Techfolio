@@ -148,13 +148,17 @@ export const getLocalizedPermalink = (locale, slug = '', type = 'page'): string 
   const permalink = getPermalink(slug, type);
   return locale === I18N.defaultLocale ? permalink : createPath(locale, permalink);
 }
-
+export const getLocalizedProjectPermalink = (locale, slug = '', type = 'page'): string => {
+  const permalink = getPermaProjectsLink(slug, type);
+  return locale === I18N.defaultLocale ? permalink : createPath(locale, permalink);
+}
+export const getLocalizedStorePermalink = (locale, slug = '', type = 'page'): string => {
+  const permalink = getPermaStoreLink(slug, type);
+  return locale === I18N.defaultLocale ? permalink : createPath(locale, permalink);
+}
 /** */
 export const getLocalizedHomePermalink = (locale): string => getLocalizedPermalink(locale, '/');
 
 /** */
 export const getLocalizedBlogPermalink = (locale): string => getLocalizedPermalink(locale, BLOG_BASE);
 
-export const getLocalizedProjectPermalink = (locale): string => getLocalizedPermalink(locale, PROJECTS_BASE);
-
-export const getLocalizedStorePermalink = (locale): string => getLocalizedPermalink(locale, STORE_BASE);

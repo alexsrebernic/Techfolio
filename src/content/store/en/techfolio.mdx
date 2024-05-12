@@ -3,14 +3,13 @@ publishDate: 2024-05-12T00:00:00Z
 draft: false 
 name: Techfolio
 type: template
-image: ~/assets/images/techfolio-1.jpg
+image: ~/assets/images/techfolio.jpg
 brief_description: Sleek and streamlined portfolio template crafted with Astro . Designed with simplicity and functionality in mind, this minimalist template offers everything a developer or individual needs to showcase their work effectively. With seamless integration and essential features, it's the perfect platform to highlight your talents and accomplishments with style.
 excerpt: Explore our versatile portfolio template, crafted with Astro , seamlessly blending functionality, elegance, and adaptability. This minimalist design offers the ability to showcase your work effectively, with the added bonus of being fully responsive, ensuring seamless display across all devices. Furthermore, it features the flexibility to switch between a dark and light theme according to your preferences. Not only that, it also incorporates multilingual support, enabling you to reach a global audience without language barriers. Whether you're a developer or professional from any field, this template provides all the necessary tools to showcase your skills and achievements in a striking and easily navigable manner.
 items: 
   - Multisections
   - Testimonials
   - Responsive Design
-  - WordPress as CMS
   - Easy to Update
   - Create and Delete Data
 category: template
@@ -18,11 +17,14 @@ price: 0
 currency: USD
 tags:
   - Portfolio
-buy_link: https://alexsrebernic.com
+buy_link: https://github.com/alexsrebernic/Techfolio
 preview_link: https://alexsrebernic.com
 image_1: ~/assets/images/techfolio-2.jpg
+image_2: ~/assets/images/techfolio-3.jpg
+image_3: ~/assets/images/techfolio-4.jpg
+
 ---
-import ContentLayout from '~/components/store/ContentLayout.astro'
+import ContentLayout from '~/components/store/StoreLayout.astro'
 import { Icon } from 'astro-icon/components';
 
 <ContentLayout price="$0" url=''>
@@ -72,13 +74,6 @@ import { Icon } from 'astro-icon/components';
   <li class="py-1 list-type justify-between items-center text-sm list-item">
     <span>
       <p>
-        <strong>WordPress as CMS:</strong> Leverage the power and flexibility of WordPress as the content management system (CMS) for your portfolio, offering robust features and easy management.
-      </p>
-    </span>
-  </li>
-  <li class="py-1 list-type justify-between items-center text-sm list-item">
-    <span>
-      <p>
         <strong>Easy to Update:</strong> Keep your portfolio fresh and relevant with effortless updates, ensuring your content stays current.
       </p>
     </span>
@@ -102,10 +97,6 @@ import { Icon } from 'astro-icon/components';
   </li>
   <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
     <p>Responsive Design</p>
-    <Icon color="gray" name='check'/>
-  </li>
-  <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">
-    <p>WordPress as CMS</p>
     <Icon color="gray" name='check'/>
   </li>
   <li class="py-2 border-b-gray-400 dark:border-b-gray-700 border-b flex justify-between items-center text-sm">

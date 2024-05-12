@@ -1,9 +1,8 @@
 ---
-import Item from '~/components/blog/ListItem.astro';
-import type NormalizedPost from '~/interfaces/NormalizedPost';
-
+import type { Post } from '~/types';
+import ListItem from './ListItem.astro';
 export interface Props {
-  posts: Array<NormalizedPost>;
+  posts: Array<Post>;
 }
 
 const { posts } = Astro.props;
@@ -13,7 +12,7 @@ const { posts } = Astro.props;
   {
     posts.map((post) => (
       <li class="mb-12 md:mb-20">
-        <Item post={post} />
+        <ListItem post={post} />
       </li>
     ))
   }

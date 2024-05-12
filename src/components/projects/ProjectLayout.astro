@@ -5,14 +5,14 @@ import Image from '~/components/common/Image.astro';
 import { getLocaleFromUrl, useTranslations } from "~/i18n/translator";
 const locale = getLocaleFromUrl(Astro.url)
 const {t} = useTranslations(locale)
-
+const lwcs = (word) => word.charAt(0).toUpperCase()+ word.slice(1)
 ---
 <>
    <div data-aos="fade-up" class="grid md:grid-cols-2  rounded-xl gap-1 pt-10">
         <div class="bg-[#EFEFF0] dark:bg-[#282828] rounded-xl md:rounded-none md:rounded-tl-xl  md:rounded-bl-xl py-7 px-8 flex items-center justify-center flex-col space-y-2">
           <Icon class='color-brand-light'  size={20} name='calendar'/>
           <slot name="dates"/>
-          <time datetime={String(initYear)} class="inline-block">{new Date(initYear).toLocaleString(t('projects.code'), {month: 'long',year: 'numeric'})} -  {present? 'Present' : new Date(endYear).toLocaleString(t('projects.code'), {month: 'long',year: 'numeric'}) }</time>
+          <time datetime={String(initYear)} class="inline-block">{lwcs(new Date(initYear).toLocaleString(t('code'), {month: 'long',year: 'numeric'}))} -  {present? t('present') : lwcs(new Date(endYear).toLocaleString(t('code'), {month: 'long',year: 'numeric'}))}</time>
           <p class="text-sm">{t('projects.timeline')}</p>
         </div>
         <div class="bg-[#EFEFF0] dark:bg-[#282828]  rounded-xl md:rounded-none md:rounded-tr-xl  md:rounded-br-xl py-7 px-8 flex items-center justify-center flex-col space-y-2">

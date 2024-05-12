@@ -1,10 +1,9 @@
 ---
 import Item from "../widgets/TestimonialItem.astro"
 import { twMerge } from 'tailwind-merge';
-import type { ItemGrid } from '~/types';
-import Button from "./Button.astro";
+import type { ItemGrid, Testimonial } from '~/types';
 
-const { path, title, items = [], columns} = Astro.props as ItemGrid;
+const { title, items = [], columns} = Astro.props as ItemGrid;
 
 
 ---
@@ -30,8 +29,8 @@ const { path, title, items = [], columns} = Astro.props as ItemGrid;
             }`,
           )}
         >
-          {items.map((item) => (
-            <Item path={path} item={item}/>
+          {items.map((item : Testimonial) => (
+            <Item  item={item}/>
           ))}
         </div>
     </div>
@@ -48,15 +47,4 @@ const { path, title, items = [], columns} = Astro.props as ItemGrid;
 
   }
 </style>
-<script>
-  const button = document.getElementById('button-see-more')
-  button?.addEventListener('click', () => {
-    const element = document.getElementById('testimonial-grid')
-    const elementGradient = document.getElementById('element-gradient')
-    element.classList.remove('max-h-[700px]')
-    element.classList.add(`max-h-[3000px]`)
-    elementGradient?.remove('bg-gradient-to-black')
-    elementGradient?.remove('bg-gradient-to-white')
-    button.classList.add('hidden')
-  })
-</script>
+

@@ -40,6 +40,8 @@ const generatePermalink = async ({
 };
 
 const getNormalizedPost = async (post: CollectionEntry<'projects'>): Promise<Project> => {
+  (CATEGORY_PROJECT_BASE)
+
   const { id, slug: rawSlug = '', data } = post;
   const { Content, remarkPluginFrontmatter } = await post.render();
 
@@ -53,6 +55,7 @@ const getNormalizedPost = async (post: CollectionEntry<'projects'>): Promise<Pro
   preview_url,
   description,
   draft,
+  similarPosts = [],
 
   } = data;
 
@@ -179,7 +182,6 @@ export const findLatestProjects = async ({ count }: { count?: number }, locale: 
 export const getStaticPathsProjectList = async ({ paginate }) => {
   if (!isProjectEnabled || !isProjectListRouteEnabled) return [];
   const _projectsLocalized = await fetchLocalizedProjects();
-
   return paginate(_projectsLocalized, {
     params: { projects: PROJECTS_BASE || undefined },
     pageSize: projectProjectsPerPage,
@@ -190,8 +192,7 @@ export const getStaticPathsProjectList = async ({ paginate }) => {
 export const getStaticPathsProjectPost = async () => {
   if (!isProjectEnabled || !isProjectPostRouteEnabled) return [];
   const _projectsLocalized = await fetchLocalizedProjects();
-
-  return _projectsLocalized.map((post) => ({
+  return _projectsLocalized.map((post ) => ({
     params: {
       projects: post.common_slug,
     },
@@ -212,7 +213,6 @@ export const getStaticPathsProjectCategory = async ({ paginate }) => {
         .filter(category => typeof category === 'string')
     )
   );
-
   return Array.from(categoriesSet).flatMap(category =>
     paginate(
       _projectsLocalized.filter(post =>

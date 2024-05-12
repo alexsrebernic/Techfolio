@@ -1,5 +1,10 @@
 
 export const es  = {
+  code: 'es-ES',
+  present: 'Presente',
+  "title_category": "Categoria",
+  "title_tag": "Tag",
+  "min_read": " minutos de lectura",
   sidebar: {
     "home": "Inicio",
     "projects": "Proyectos",
@@ -28,6 +33,8 @@ export const es  = {
     back_to_list: 'Volver a la lista',
     share: 'Compartir',
   },
+
+
   homepage: {
     metadata: {
       title: "Inicio | Alex Srebernic Portafolio"
@@ -41,6 +48,8 @@ export const es  = {
     "testimonial_of": 'de',
   },
   projects: {
+    "title_related_projects": "Proyectos similares",
+    "information_related_projects": "Pegale un vistazo a otros proyectos similares",
     role: "Rol",
     timeline: "Fechas",
     background: "Fondo",
@@ -48,7 +57,6 @@ export const es  = {
     solutions: "Soluciones",
     tools: 'Herramientas',
     conclusion: 'Conclusion',
-    code: 'es-ES',
     metadata: {
       title: "Proyectos | Alex Srebernic Portafolio"
     },
@@ -56,6 +64,8 @@ export const es  = {
     subtitle: "Echale un vistazo a los proyectos en los que e trabajado",
   },
   blog: {
+    "title_related_blog": "Articulos similares",
+    "information_related_blog": "Pegale un vistazo a otros articulos similares",
     metadata: {
       title: "Tienda | Alex Srebernic Portafolio"
     },
@@ -72,6 +82,8 @@ export const es  = {
     "education_title": 'Educacion',
   },
   store: {
+    "title_related_store": "Articulos similares",
+    "information_related_store": "Pegale un vistazo a otros articulos similares",
     overview: 'Descripcion',
     metadata: {
       title: "Tienda | Alex Srebernic Portafolio"
@@ -88,5 +100,9 @@ export const es  = {
     "title": 'Contacto',
     "subtitle": 'Hazme saber si necesitas mis servicios de desarrollo web',
     "form_title": 'Enviar mensaje',
+    "input_name": "Nombre",
+    "input_email": "Correo Electronico",
+    "input_message": "Mensaje",
+    "input_button": "Contactar",
   }
 } 

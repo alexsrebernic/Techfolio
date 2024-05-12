@@ -2,27 +2,32 @@
 import { APP_BLOG } from "~/utils/config";
 
 import { fetchPosts, getRelatedPosts } from "~/utils/blog";
-import BlogHighlightedPosts from "../widgets/BlogHighlightedPosts.astro";
-import { getStorePermaLink } from "~/utils/permalinks";
-import type NormalizedPost from "~/interfaces/NormalizedPost";
+import BlogHighlightedPosts from "./BlogHighlightedPosts.astro";
+import { getLocalizedPermalink, getStorePermaLink } from "~/utils/permalinks";
+import { getLocaleFromUrl } from "~/i18n/translator";
+import type { Post } from "~/types";
 
 export interface Props {
-  post: NormalizedPost;
+  post: Post;
 }
 
 const { post } = Astro.props;
-const fetchedPosts = await fetchPosts();
-const relatedPosts = post.tags ? getRelatedPosts(fetchedPosts, post.slug, post.tags) : [];
+const locale = getLocaleFromUrl(Astro.url)
+const relatedPosts = post.tags ? await getRelatedPosts(post, 4, locale) : [];
 ---
 
 {
   APP_BLOG.isRelatedPostsEnabled ? (
-    <BlogHighlightedPosts
+    <>
+      { relatedPosts.length > 0 &&  <BlogHighlightedPosts
       classes={{ container: "pt-0 lg:pt-0 md:pt-0" }}
       title="Related Posts"
       linkText="View All Posts"
-      linkUrl={getStorePermaLink()}
+      linkUrl={getLocalizedPermalink(locale,'/blog')}
       postIds={relatedPosts.map((post) => post.id)}
     />
+    }
+    </>
+
   ) : null
 }

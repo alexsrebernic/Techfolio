@@ -44,7 +44,37 @@ import { UI, I18N, SITE } from '~/utils/config';
   const onLoad = function () {
     let lastKnownScrollPosition = window.scrollY;
     let ticking = true;
-
+ 
+  attachEvent('#button-see-more-services', 'click', function () {
+    const element = document.getElementById('services-grid')
+    const elementGradient = document.getElementById('element-gradient')
+    let button = document.getElementById("button-see-more-services")
+    element?.classList.remove('max-h-[300px]')
+    element?.classList.add(`max-h-[3000px]`)
+    elementGradient?.classList.remove('dark:bg-gradient-to-black')
+    elementGradient?.classList.remove('bg-gradient-to-white')
+    button.classList.add('hidden')
+    });
+  attachEvent('#button-see-more-tools', 'click', function () {
+    let element = document.getElementById('tools-grid')
+    let elementGradient = document.getElementById('tools-gradient')
+    let button = document.getElementById("button-see-more-tools")
+    element?.classList.remove('max-h-[300px]')
+    element?.classList.add(`max-h-[3000px]`)
+    elementGradient?.classList.remove('dark:bg-gradient-to-black')
+    elementGradient?.classList.remove('bg-gradient-to-white')
+    button.classList.add('hidden')
+    });
+    attachEvent('#button-see-more', 'click', function () {
+      const element = document.getElementById('testimonial-grid')
+      const elementGradient = document.getElementById('element-gradient')
+      const button = document.getElementById("button-see-more")
+      element.classList.remove('max-h-[700px]')
+      element.classList.add(`max-h-[3000px]`)
+      elementGradient?.remove('bg-gradient-to-black')
+      elementGradient?.remove('bg-gradient-to-white')
+      button.classList.add('hidden')
+    });
     attachEvent('#sidebar nav', 'click', function () {
       document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
       document.body.classList.remove('overflow-hidden');

@@ -16,12 +16,11 @@ export async function getStaticPaths () {
 
 const { post } = Astro.props;
 const localizedPost = post.locales[getLocaleFromUrl(Astro.url)];
-console.log(localizedPost)
 const url = getCanonical(getPermalink(localizedPost.permalink, 'post'));
 const image = (await findImage(localizedPost.image)) as ImageMetadata | undefined;
 const metadata = merge(
   {
-    title: localizedPost.title,
+    title: localizedPost.name,
     description: localizedPost.excerpt,
     robots: {
       index: false,

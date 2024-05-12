@@ -41,6 +41,7 @@ export interface Post {
   content?: string;
 
   /**  */
+  similarPosts?: Array<string> | [];
   readingTime?: number;
 }
 
@@ -140,6 +141,7 @@ export  interface Project {
   id?: string,
   slug?:string,
   name: string,
+  similarPosts?: Array<string>;
   permalink: string;
   publishDate: Date;
   updateDate?: Date;
@@ -176,6 +178,7 @@ export  interface StoreItem {
   updateDate?: Date;
   price: number,
   currency: string,
+  similarPosts?: Array<string>;
   content: string,
   slug: string,
   id: string,
@@ -338,7 +341,7 @@ export interface CallToAction extends HTMLAttributes<a> {
 
 export interface ItemGrid {
   title? : string;
-  items?: Array<Item>;
+  items?: Array<Item> | Array<Testimonial>;
   columns?: number;
   defaultIcon?: string;
   classes?: Record<string, string>;

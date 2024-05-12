@@ -1,17 +1,19 @@
 ---
-import { getPermalink } from '~/utils/permalinks';
+import { getLocalizedPermalink, getPermalink } from '~/utils/permalinks';
 
 import {  APP_BLOG } from '~/utils/config';
-import type NormalizedPost from '~/interfaces/NormalizedPost';
+import type { Post } from '~/types';
+import { getLocaleFromUrl } from '~/i18n/translator';
 
 export interface Props {
-  tags: NormalizedPost['tags'];
+  tags: Post['tags'];
   class?: string;  
   title?: string | undefined;
   isCategory?: boolean;
 }
 
 const { tags, class: className = 'text-sm', title = undefined, isCategory = false } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url)
 ---
 
 {
@@ -27,7 +29,7 @@ const { tags, class: className = 'text-sm', title = undefined, isCategory = fals
               tag
             ) : (
               <a
-                href={getPermalink(tag, (isCategory ? 'category' : 'tag'))}
+                href={getLocalizedPermalink(locale,tag, (isCategory ? 'category' : 'tag'))}
                 class="text-muted dark:text-slate-300 hover:text-primary dark:hover:text-gray-200"
               >
                 {tag}

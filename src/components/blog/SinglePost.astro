@@ -5,10 +5,12 @@ import Image from '~/components/common/Image.astro';
 import PostTags from '~/components/blog/Tags.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
 
-import { getPermalink } from '~/utils/permalinks';
+import { getLocalizedBlogPermalink, getLocalizedPermalink, getPermalink } from '~/utils/permalinks';
 import { getFormattedDate } from '~/utils/utils';
 
 import type { Post } from '~/types';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
+import Button from '../ui/Button.astro';
 
 export interface Props {
   post: Post;
@@ -17,12 +19,18 @@ export interface Props {
 
 const { post, url } = Astro.props;
 const Content = post?.Content || null;
+const locale = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(locale)
 ---
 
 <section class="py-8 sm:pb-16 lg:pb-20 mx-auto">
   <article>
     <header class={post.image ? '' : ''}>
       <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
+        <Button variant="tertiary" class="px-3 md:px-3" href={getLocalizedBlogPermalink(locale)}>
+          <Icon name="tabler:chevron-left" class="w-5 h-5 mr-1 -ml-1.5 rtl:-mr-1.5 rtl:ml-1" />
+          {t('buttons.back_to_list')}
+        </Button>
         <p>
           <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
           <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
@@ -31,13 +39,13 @@ const Content = post?.Content || null;
               <>
                 {' '}
                 ·{' '}
-                <a class="capitalize hover:underline inline-block" href={getPermalink(post.category, 'category')}>
+                <a class="capitalize hover:underline inline-block" href={getLocalizedPermalink(locale,post.category, 'category')}>
                   {post.category.replaceAll('-', ' ')}
                 </a>
               </>
             )
           }
-          {post.readingTime && <> · {post.readingTime} min read</>}
+          {post.readingTime && <>{post.readingTime} {t('min_read')}</>}
         </p>
       </div>
       <h1

@@ -3,15 +3,16 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 import { blogTagRobots, getStaticPathsBlogTag } from '~/utils/blog';
 
 import Layout from '~/layouts/PageLayout.astro';
-import BlogList from '~/components/blog/List.astro';
+import BlogList from '~/components/store/List.astro';
 import Headline from '~/components/blog/Headline.astro';
-import Pagination from '~/components/blog/Pagination.astro';
-import { getLocaleFromUrl } from '~/i18n/translator';
+import Pagination from '~/components/store/Pagination.astro';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
+import { getStaticPathsStoreItemTag } from '~/utils/store';
 
 export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
-  return await getStaticPathsBlogTag({ paginate });
+  return await getStaticPathsStoreItemTag({ paginate });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -19,6 +20,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { page, tag } = Astro.props as Props;
 const locale = getLocaleFromUrl(Astro.url)
 const currentPage = page.currentPage ?? 1;
+const {t} = useTranslations(locale)
 
 const metadata = {
   title: `Posts by tag '${tag}'${currentPage > 1 ? ` — Page ${currentPage} ` : ''}`,
@@ -31,7 +33,7 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <section class="px-4 md:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline>Tag: {tag}</Headline>
+    <Headline>{t('title_category')}: {tag}</Headline>
     <section data-aos="fade-up">
       <BlogList posts={page.data.map(p => p.locales[locale])} />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />

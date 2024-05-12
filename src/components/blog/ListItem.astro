@@ -6,19 +6,22 @@ import PostTags from '~/components/blog/Tags.astro';
 
 import { APP_BLOG } from '~/utils/config';
 
-import { getPermalink } from '~/utils/permalinks';
+import { getLocalizedPermalink, getPermalink } from '~/utils/permalinks';
 import { findImage } from '~/utils/images';
 import { getFormattedDate } from '~/utils/utils';
 import Button from '../ui/Button.astro';
-import type NormalizedPost from '~/interfaces/NormalizedPost';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
+import type { Post } from '~/types';
 
 export interface Props {
-  post: NormalizedPost;
+  post: Post;
 }
 
 const { post } = Astro.props;
 const image = (await findImage(post.image)) as ImageMetadata | undefined;
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
+const locale = getLocaleFromUrl(Astro.url)
+const {t} = useTranslations(locale)
 ---
 <article class="flex gap-6 xl:gap-16 md:space-y-0 md:flex-row  flex-col-reverse">
   <div class="flex-1 space-y-4">
@@ -41,7 +44,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
             <>
               {' '}
               ·{' '}
-              <a class="capitalize hover:underline" href={getPermalink(post.category, 'category')}>
+              <a class="capitalize hover:underline" href={getLocalizedPermalink(locale,post.category, 'category')}>
                 {post.category.replaceAll('-', ' ')}
               </a>
             </>
@@ -67,7 +70,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
       }
     </div>
     
-    <Button href={link ?? 'javascript:void(0)'}  variant="secondary" text="Read more"/>
+    <Button href={link ?? 'javascript:void(0)'}  variant="secondary" text={t('buttons.read_more')}/>
       <footer class="mt-5">
         <PostTags tags={post.tags} />
       </footer>

@@ -1,17 +1,19 @@
 ---
-import { getPermaProjectsLink } from '~/utils/permalinks';
+import { getLocalizedProjectPermalink, getPermaProjectsLink } from '~/utils/permalinks';
 
 import {  APP_PROJECTS } from '~/utils/config';
-import type NormalizedProject from '~/interfaces/NormalizedProject';
+import { getLocaleFromUrl } from '~/i18n/translator';
+import type { Project } from '~/types';
 
 export interface Props {
-  tags: NormalizedProject['tags'];
+  tags: Project['tags'];
   class?: string;  
   title?: string | undefined;
   isCategory?: boolean;
 }
 
 const { tags, class: className = 'text-sm', title = undefined, isCategory = false } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url)
 ---
 
 {
@@ -27,7 +29,7 @@ const { tags, class: className = 'text-sm', title = undefined, isCategory = fals
               tag
             ) : (
               <a
-                href={getPermaProjectsLink(tag, (isCategory ? 'category' : 'tag'))}
+                href={getLocalizedProjectPermalink(locale,tag, (isCategory ? 'category' : 'tag'))}
                 class="text-muted dark:text-slate-300 hover:text-primary dark:hover:text-gray-200"
               >
                 {tag}

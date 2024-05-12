@@ -1,27 +1,29 @@
 ---
-import { APP_PROJECTS } from "~/utils/config";
+import { APP_BLOG } from "~/utils/config";
 
-import Grid from "~/components/projects/Grid.astro";
+import Grid from "~/components/blog/Grid.astro";
 
-import { getProjectsPermaLink } from "~/utils/permalinks";
-import { findNormalizedProjectsByIds } from "~/utils/projects";
+import { getBlogPermalink } from "~/utils/permalinks";
+import { findLatestPosts } from "~/utils/blog";
 import WidgetWrapper from "~/components/ui/WidgetWrapper.astro";
 import type { Widget } from "~/types";
+import Button from "../ui/Button.astro";
+import { getLocaleFromUrl } from "~/i18n/translator";
 
 export interface Props extends Widget {
   title?: string;
   linkText?: string;
   linkUrl?: string | URL;
   information?: string;
-  postIds: string[];
+  count?: number;
 }
-
+const locale = getLocaleFromUrl(Astro.url)
 const {
   title = await Astro.slots.render("title"),
   linkText = "View all posts",
-  linkUrl = getProjectsPermaLink(),
+  linkUrl = getBlogPermalink(),
   information = await Astro.slots.render("information"),
-  postIds = [],
+  count = 4,
 
   id,
   isDark = false,
@@ -29,11 +31,11 @@ const {
   bg = await Astro.slots.render("bg"),
 } = Astro.props;
 
-const posts = APP_PROJECTS.isEnabled ? await findNormalizedProjectsByIds(postIds) : [];
+const posts = APP_BLOG.isEnabled ? await findLatestPosts({ count },locale) : [];
 ---
 
 {
-  APP_PROJECTS.isEnabled ? (
+  APP_BLOG.isEnabled ? (
     <WidgetWrapper id={id} isDark={isDark} containerClass={classes?.container} bg={bg}>
       <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
         {title && (
@@ -42,18 +44,13 @@ const posts = APP_PROJECTS.isEnabled ? await findNormalizedProjectsByIds(postIds
               class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
               set:html={title}
             />
-            {APP_PROJECTS.list.isEnabled && linkText && linkUrl && (
-              <a
-                class="text-muted dark:text-slate-400 hover:text-primary transition ease-in duration-200 block mb-6 lg:mb-0 line-clamp-3"
-                href={linkUrl}
-              >
-                {linkText} »
-              </a>
+            {APP_BLOG.list.isEnabled && linkText && linkUrl && (
+              <Button variant="link" href={linkUrl}> {linkText} »</Button>
             )}
           </div>
         )}
 
-        {information && <p class="text-muted dark:text-slate-400 lg:text-sm lg:max-w-md line-clamp-3 text-ellipsis overflow-hidden" set:html={information} />}
+        {information && <p class="text-muted dark:text-slate-400 lg:text-sm lg:max-w-md" set:html={information} />}
       </div>
 
       <Grid posts={posts} />

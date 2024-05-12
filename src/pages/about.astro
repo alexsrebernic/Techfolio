@@ -17,6 +17,7 @@ const lang = getLocaleFromUrl(Astro.url)
 const author  = (await fetchAuthor(lang as string))[0]
 const jobExperiences = await fetchExperiences(lang)
 const educations = await fetchEducations(lang as string)
+const lwcs = (word) => word.charAt(0).toUpperCase()+ word.slice(1)
 const {t} = useTranslations(lang)
 ---
 
@@ -108,7 +109,7 @@ const {t} = useTranslations(lang)
             jobExperiences.map(experience => (
               <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-6 border-b py-5 dark:border-b-[#424242]">
                 <div class="flex-initial text-sm md:w-[230px] dark:text-[#929292]">
-                  <span>{new Date(experience.init_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'})}</span> - {experience.present? 'Presente' : new Date(experience.end_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'}) }
+                  <span>{lwcs(new Date(experience.init_year).toLocaleString(t('code'), {month: 'long',year: 'numeric'}))}</span> - {experience.present? t('present') : lwcs(new Date(experience.end_year).toLocaleString(t('code'), {month: 'long',year: 'numeric'})) }
                 </div>
                 <div class="space-y-6 flex-1">
                   <div class="flex flex-col ">
@@ -135,7 +136,7 @@ const {t} = useTranslations(lang)
             educations.map(education => (
               <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-6 border-b py-5 dark:border-b-[#424242]">
                 <div class="flex-initial text-sm md:w-[230px] dark:text-[#929292]">
-                  <span>{new Date(education.init_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'})}</span> - {education.present? 'Presente' : new Date(education.end_year).toLocaleString('es-ES', {month: 'long',year: 'numeric'}) }
+                  <span>{lwcs(new Date(education.init_year).toLocaleString(t('code'), {month: 'long',year: 'numeric'}))}</span> - {education.present? t('present') : lwcs(new Date(education.end_year).toLocaleString(t('code'), {month: 'long',year: 'numeric'})) }
                 </div>
                 <div class="space-y-6 flex-1">
                   <div class="flex flex-col ">
@@ -163,30 +164,5 @@ const {t} = useTranslations(lang)
   }
 </style>
 <script >
-  function init(){
-    const buttonServices = document.getElementById('button-see-more-services')
-  const buttonTools = document.getElementById('button-see-more-tools')
-  buttonServices?.addEventListener('click', () => {
-    const element = document.getElementById('services-grid')
-    const elementGradient = document.getElementById('element-gradient')
-    element?.classList.remove('max-h-[300px]')
-    element?.classList.add(`max-h-[3000px]`)
-    elementGradient?.classList.remove('dark:bg-gradient-to-black')
-    elementGradient?.classList.remove('bg-gradient-to-white')
-    buttonServices.classList.add('hidden')
-  })
-  buttonTools?.addEventListener('click', () => {
-    const element = document.getElementById('tools-grid')
-    const elementGradient = document.getElementById('tools-gradient')
-    element?.classList.remove('max-h-[300px]')
-    element?.classList.add(`max-h-[3000px]`)
-    elementGradient?.classList.remove('dark:bg-gradient-to-black')
-    elementGradient?.classList.remove('bg-gradient-to-white')
-    buttonTools.classList.add('hidden')
-  })
-  }
-  init()
-  document.addEventListener('astro:after-swap',
-  () => init())
 
 </script>

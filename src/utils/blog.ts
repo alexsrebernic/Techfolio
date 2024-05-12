@@ -42,7 +42,6 @@ const generatePermalink = async ({
 const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
   const { id, slug: rawSlug = '', data } = post;
   const { Content, remarkPluginFrontmatter } = await post.render();
-
   const {
     publishDate: rawPublishDate = new Date(),
     updateDate: rawUpdateDate,
@@ -54,6 +53,7 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     author,
     draft = false,
     metadata = {},
+    similarPosts = [],
   } = data;
 
   const locale = id.split('/')[0];
@@ -82,7 +82,7 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     draft: draft,
 
     metadata,
-
+    similarPosts,
     Content: Content,
     // or 'content' in case you consume from API
 
@@ -163,6 +163,42 @@ export const findPostsBySlugs = async (slugs: Array<string>, locale: string): Pr
   }, []);
 };
 
+export async function getRelatedPosts(originalPost: Post, maxResults: number = 4, locale : string): Promise<Post[]> {
+  const allPosts = await fetchPosts(locale);
+  const originalTagsSet = new Set(originalPost.tags ? originalPost.tags.map((tag) => tag) : []);
+
+  const postsWithScores = allPosts.reduce((acc: { post: Post; score: number }[], iteratedPost: Post) => {
+    if (iteratedPost.slug === originalPost.slug) return acc;
+
+    let score = 0;
+    if (iteratedPost.category && originalPost.category && iteratedPost.category === originalPost.category) {
+      score += 5;
+    }
+
+    if (iteratedPost.tags) {
+      iteratedPost.tags.forEach((tag) => {
+        if (originalTagsSet.has(tag)) {
+          score += 1;
+        }
+      });
+    }
+
+    acc.push({ post: iteratedPost, score });
+    return acc;
+  }, []);
+
+  postsWithScores.sort((a, b) => b.score - a.score);
+
+  const selectedPosts: Post[] = [];
+  let i = 0;
+  while (selectedPosts.length < maxResults && i < postsWithScores.length) {
+    selectedPosts.push(postsWithScores[i].post);
+    i++;
+  }
+
+  return selectedPosts;
+}
+
 /** */
 export const findPostsByIds = async (ids: Array<string>, locale: string): Promise<Array<Post>> => {
   if (!Array.isArray(ids)) return [];
@@ -221,7 +257,6 @@ export const getStaticPathsBlogCategory = async ({ paginate }) => {
         .filter(category => typeof category === 'string')
     )
   );
-
   return Array.from(categoriesSet).flatMap(category =>
     paginate(
       _postsLocalized.filter(post =>

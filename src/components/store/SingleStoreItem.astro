@@ -4,7 +4,7 @@ import 'swiper/swiper-bundle.css'
 import Image from '~/components/common/Image.astro';
 import PostTags from '~/components/store/Tags.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
-import { getLocalizedPermalink, getPermaStoreLink, getPermalink, getStorePermaLink } from '~/utils/permalinks';
+import { getLocalizedPermalink, getLocalizedStorePermalink, getPermaStoreLink, getPermalink, getStorePermaLink } from '~/utils/permalinks';
 import { getFormattedDate } from '~/utils/utils';
 import Button from '../ui/Button.astro';
 import type { StoreItem } from '~/types';
@@ -38,13 +38,13 @@ const {t} = useTranslations(locale)
               <>
                 {' '}
                 ·{' '}
-                <a class="capitalize hover:underline inline-block" href={getPermalink(storeItem.category, 'category')}>
+                <a class="capitalize hover:underline inline-block" href={getLocalizedStorePermalink(locale,storeItem.category, 'category')}>
                   {storeItem.category.replaceAll('-', ' ')}
                 </a>
               </>
             )
           }
-          {storeItem.readingTime && <> · {storeItem.readingTime} min read</>}
+          {storeItem.readingTime && <>{storeItem.readingTime} {t('min_read')}</>}
         </p>
       </div>
     <div class="space-y-6">

@@ -7,14 +7,15 @@ import ToggleTheme from '~/components/common/ToggleTheme.astro'
 import { fetchAuthor } from '~/utils/author';
 import { I18N } from '~/utils/config';
 import { getHeaderData, getFooterData } from '~/navigation';
-import { getLocaleFromUrl } from '~/i18n/translator';
+import { getLocaleFromUrl, useTranslations } from '~/i18n/translator';
 export interface Props {
   metadata?: MetaData;
 }
 
-const lang = getLocaleFromUrl(Astro.url)
-const authorSidebarData = (await fetchAuthor(lang))[0]
+const locale = getLocaleFromUrl(Astro.url)
+const authorSidebarData = (await fetchAuthor(locale))[0]
 const headerData = getHeaderData(getLocaleFromUrl(Astro.url));
+const {t} = useTranslations(locale)
 // const footerData = getFooterData(getLocaleFromUrl(Astro.url));
 export interface Props {
   metadata?: MetaData;
@@ -41,6 +42,21 @@ const showLanguagePicker = I18N.isEnabled;
           <slot />
         </div>
       </main>
+      <div>
+          <ul class="flex  list-disc text-xs text-gray-400 w-full space-x-6">
+            <li>
+              {t('footer.made_by')} <a class="hover:underline transition " href="https://alexsrebernic.com">Alex Srebernic</a> 
+            </li>
+            <li>
+              {t('footer.built_in')} <a class="hover:underline transition " href="https://astro.build/">Astro</a> 
+            </li>
+            <li>
+               <a class="hover:underline transition " href="https://github.com/alexsrebernic/Techfolio">
+                {t('footer.get_template_for_free')}
+              </a>
+            </li>
+          </ul>
+      </div>
     </div>
    
   </div>

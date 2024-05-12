@@ -1,9 +1,9 @@
 ---
 import Item from '~/components/blog/GridItem.astro';
-import type { Post } from '~/types';
+import type { Post, Project, StoreItem } from '~/types';
 
 export interface Props {
-  posts: Array<Post>;
+  posts: Array<Post> | Array<Project> | Array<StoreItem>;
 }
 
 const { posts } = Astro.props;

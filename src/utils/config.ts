@@ -155,7 +155,6 @@ const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   site?: SiteConfig;
   metadata?: MetaDataConfig;
   i18n?: I18NConfig;
-  wordpress?: Wordpress;
   apps?: {
     blog?: AppBlogConfig;
     projects?: AppProjectsConfig;
@@ -282,7 +281,7 @@ const getAppProjects = () => {
     },
     list: {
       isEnabled: true,
-      pathname: 'blog',
+      pathname: 'projects',
       robots: {
         index: true,
         follow: true,
@@ -300,7 +299,7 @@ const getAppProjects = () => {
       isEnabled: true,
       pathname: 'projects-tag',
       robots: {
-        index: false,
+        index: true,
         follow: true,
       },
     },

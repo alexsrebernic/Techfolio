@@ -9,6 +9,8 @@ import { getCanonical, getPermalink } from '~/utils/permalinks';
 import { getStaticPathsBlogPost, blogPostRobots } from '~/utils/blog';
 import { findImage } from '~/utils/images';
 import { getLocaleFromUrl } from '~/i18n/translator';
+import BlogHighlightedPosts from '~/components/blog/BlogHighlightedPosts.astro';
+import RelatedPosts from '~/components/blog/RelatedPosts.astro';
 
 export async function getStaticPaths () {
   return await getStaticPathsBlogPost();
@@ -40,4 +42,9 @@ const metadata = merge(
 <Layout metadata={metadata}>
   <SinglePost post={{ ...localizedPost, image: image }} url={url} />
   <ToBlogLink />
+  {localizedPost.similarPosts?.length ?
+    <BlogHighlightedPosts postIds={localizedPost.similarPosts} title='test' information='test'/> :
+    
+    <RelatedPosts post={localizedPost}/>
+  }
 </Layout>

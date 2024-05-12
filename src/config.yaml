@@ -56,7 +56,7 @@ apps:
         index: true
 
     category:
-      isEnabled: false
+      isEnabled: true
       pathname: 'store-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
         index: true
@@ -86,7 +86,7 @@ apps:
         index: true
 
     category:
-      isEnabled: false
+      isEnabled: true
       pathname: 'projects-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
         index: true

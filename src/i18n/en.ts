@@ -1,4 +1,9 @@
 export const en  = {
+  present: 'Present',
+  code: 'en-US',
+  "title_category": "Category",
+  "title_tag": "Tag",
+  "min_read": " min read",
   sidebar: {
     "home": "Homepage",
     "projects": "Projects",
@@ -12,7 +17,6 @@ export const en  = {
     "made_by": "Made by",
     "get_template_for_free": "Get template for free",
   },
-
   buttons: {
     about: 'About',
     copy_email: 'Copy email',
@@ -40,6 +44,9 @@ export const en  = {
     "testimonial_of": 'of',
   },
   projects: {
+
+    "title_related_projects": "Similar projects",
+    "information_related_projects": "Take a look at some similar projects",
     metadata: {
       title: "Projects | Alex Srebernic Portafolio"
     },
@@ -47,7 +54,6 @@ export const en  = {
     subtitle: "Take a look at the projects I worked on",
     background: "Background",
     timeline: "Timeline",
-    code: 'en-US',
     role: 'Role',
     goals: 'Goals',
     solutions: "Solutions",
@@ -55,6 +61,8 @@ export const en  = {
     conclusion: 'Conclusion',
   },
   blog: {
+    "title_related_posts": "Similar posts",
+    "information_related_posts": "Take a look at some similar posts",
     metadata: {
       title: "Blog | Alex Srebernic Portfolio"
     },
@@ -71,6 +79,9 @@ export const en  = {
     "education_title": 'Education',
   },
   store: {
+   
+    "title_related_store": "Similar items",
+    "information_related_store": "Take a look at some similar items",
     overview: 'Overview',
     metadata: {
       title: "Store | Alex Srebernic Portfolio"
@@ -87,5 +98,9 @@ export const en  = {
     "title": 'Contact',
     "subtitle": 'Get in touch for web development inquiries',
     "form_title": 'Send a message',
+    "input_name": "Name",
+    "input_email": "Email",
+    "input_message": "Message",
+    "input_button": "Contact",
   }
 } 

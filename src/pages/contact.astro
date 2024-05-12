@@ -18,17 +18,17 @@ const metadata = {
 const inputs = [
   {
     type: 'text',
-    placeholder: 'Name',
+    placeholder:  t('contact.input_name'),
     name: 'Name'
   },
   {
     type: 'email',
-    placeholder: 'Email',
+    placeholder: t('contact.input_email'),
     name: 'Email'
   },
 ]
 const textarea = {
-  placeholder:'Message'
+  placeholder:t('contact.input_message')
 }
 ---
 
@@ -77,10 +77,10 @@ const textarea = {
   </section>
   <section data-aos="fade-up" class="py-10 space-y-6">
     <h2 class="text-2xl font-[500]">{t('buttons.send')}</h2>
-    <Form inputs={inputs} textarea={textarea}/>
+    <Form button={t('contact.input_button')} inputs={inputs} textarea={textarea}/>
   </section>
 </Layout>
-<script define:vars={{email, lang}} >
+<script transition:persist define:vars={{email, lang}} >
 function init(){
   const button = document.getElementById('copyEmailButton')
   function copyEmailToClipboard() {
@@ -96,7 +96,6 @@ function init(){
   }
   button.addEventListener('click', copyEmailToClipboard)
 }
+
 init()
-  document.addEventListener('astro:after-swap',
-  () => init())
 </script>
