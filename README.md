@@ -1,7 +1,6 @@
 # 🚀 TechFolio
 
-<img src="https://example.com/path/to/techfolio/screenshot.png" align="right"
-     alt="TechFolio Screenshot" width="200" height="200">
+<img src="https://alexsrebernic.com/assets/techfolio.jpg" align="right" alt="TechFolio Screenshot" width="200" height="200">
 
 🌟 _Crafted for the tech-savvy professionals, TechFolio is your go-to portfolio template for showcasing your skills and projects._ 🌟
 
@@ -18,14 +17,14 @@
 
 <br>
 
-<img src="https://example.com/path/to/techfolio/screenshot-2.png" alt="TechFolio Theme Screenshot">
+<img src="https://alexsrebernic.com/assets/techfolio-2.png" alt="TechFolio Theme Screenshot">
 
-[![Alex Srebernic](https://custom-icon-badges.demolab.com/badge/made%20by%20-YourName-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://yourwebsite.com)
+[![Alex Srebernic](https://custom-icon-badges.demolab.com/badge/made%20by%20-Alex-Srebernic-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://yourwebsite.com)
 [![License](https://img.shields.io/github/license/yourusername/techfolio?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/alexsrebernic/techfolio/blob/main/LICENSE.md)
 [![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/alexsrebernic)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/alexsrebernic/techfolio#contributing)
-[![Stars](https://img.shields.io/github/stars/yourusername/techfolio.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/alexsrebernic/techfolio)
-[![Forks](https://img.shields.io/github/forks/yourusername/techfolio.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/alexsrebernic/techfolio)
+[![Stars](https://img.shields.io/github/stars/alexsrebernic/techfolio.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/alexsrebernic/techfolio)
+[![Forks](https://img.shields.io/github/forks/alexsrebernic/techfolio.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/alexsrebernic/techfolio)
 
 <br>
 
@@ -48,7 +47,7 @@
 
 ## Demo
 
-📌 [View Demo](https://yourtechfoliodemo.com/)
+📌 [View Demo](https://alexsrebernic.com/)
 
 <br>
 
@@ -63,84 +62,59 @@ Here's a glimpse into the structure of TechFolio:
 ```
 .
 ├── public
-│   ├── _headers
-│   └── robots.txt
-├── src
-│   ├── components
-... │   ├── CustomStyles.astro
-│   │   ├── Favicons.astro
-│   │   └── Logo.astro
-│   ├── data
-│   │   └── wordpress.ts
-│   ├── graphql
-│   │   ├── AuthorQuery.js
-│   │   ├── EducationQuery.js
-│   │   ├── JobExperienceQuery.js
-│   │   ├── PostQuery.js
-│   │   ├── ProjectQuery.js
-│   │   ├── SidebarAuthorQuery.js
-│   │   ├── StoreItemQuery.js
-│   │   └── TestimonialQuery.js
-│   ├── helpers
-│   │   ├── HexToRGBA.ts
-│   │   ├── parseHTMLToObject.js
-│   │   └── searchPropsEndingWith.ts
-│   ├── i18n
-│   │   ├── menus.ts
-│   │   ├── ui.ts
-│   │   └── utils.ts
-│   ├── interfaces
-│   │   ├── Author.ts
-│   │   ├── Education.ts
-│   │   ├── Experience.ts
-│   │   ├── NormalizedAuthor.ts
-│   │   ├── NormalizedEducation.ts
-│   │   ├── NormalizedExperience.ts
-│   │   ├── NormalizedPost.ts
-│   │   ├── NormalizedProject.ts
-│   │   ├── NormalizedStoreItem.ts
-│   │   ├── NormalizedTestimonial.ts
-│   │   ├── Post.ts
-│   │   ├── Project.ts
-│   │   ├── StoreItem.ts
-│   │   └── Testimonial.ts
-│   ├── layouts
-│   │   ├── Layout.astro
-│   │   ├── MarkdownLayout.astro
-│   │   └── PageLayout.astro
-│   ├── pages
-│   │   ├── about.astro
-│   │   ├── contact.astro
-│   │   ├── index.astro
-│   │   └── rss.xml.ts
-│   ├── utils
-│   │   ├── author.ts
-│   │   ├── blog.ts
-│   │   ├── config.ts
-│   │   ├── directories.ts
-│   │   ├── education.ts
-│   │   ├── experience.ts
-│   │   ├── frontmatter.mjs
-│   │   ├── images-optimization.ts
-│   │   ├── images.ts
-│   │   ├── permalinks.ts
-│   │   ├── projects.ts
-│   │   ├── store.ts
-│   │   ├── tasks.mjs
-│   │   ├── testimonial.ts
-│   │   └── utils.ts
-│   ├── config.yaml
-│   ├── env.d.ts
-│   └── types.d.ts
-├── astro.config.mjs
-├── LICENSE.md
-├── package.json
-├── package-lock.json
-├── README.md
-├── sandbox.config.json
-├── tailwind.config.cjs
-├── tsconfig.json
-└── vscode.tailwind.json
+└── src
+    ├── assets
+    │   ├── favicons
+    │   ├── icons
+    │   │   ├── social-media
+    │   │   └── tools
+    │   ├── images
+    │   └── styles
+    ├── components
+    │   ├── blog
+    │   ├── common
+    │   ├── projects
+    │   ├── store
+    │   ├── ui
+    │   └── widgets
+    ├── content
+    │   ├── author
+    │   │   ├── assets
+    │   │   ├── en
+    │   │   └── es
+    │   ├── education
+    │   │   ├── en
+    │   │   └── es
+    │   ├── experience
+    │   │   ├── en
+    │   │   └── es
+    │   ├── post
+    │   │   ├── en
+    │   │   └── es
+    │   ├── projects
+    │   │   ├── en
+    │   │   └── es
+    │   ├── store
+    │   │   ├── en
+    │   │   └── es
+    │   └── testimonials
+    │       ├── en
+    │       └── es
+    ├── helpers
+    ├── i18n
+    ├── layouts
+    ├── pages
+    │   ├── [...blog]
+    │   │   ├── [category]
+    │   │   └── [tag]
+    │   ├── [locale]
+    │   ├── [...projects]
+    │   │   ├── [category]
+    │   │   └── [tag]
+    │   └── [...store]
+    │       ├── [category]
+    │       └── [tag]
+    └── utils
 ```
 
 ### Commands
@@ -157,9 +131,6 @@ Execute these commands from the project root:
 | `npm run lint:eslint` | Run ESLint to lint code                            |
 | `npm run ...`         | Other Astro CLI commands such as `astro add`, `astro preview`, etc. |
 
-### Configuration
-
-Basic configuration file: `./src/config.yaml`
 
 ### Configuration
 
@@ -186,7 +157,7 @@ metadata:
   openGraph:
     site_name: Alex Srebernic's portfolio
     images:
-      - url: '~/assets/images/default.png'
+      - url: '~/assets/images/techfolio.jpg'
         width: 1200
         height: 628
     type: website
@@ -196,14 +167,13 @@ metadata:
     cardType: summary_large_image
 
 i18n:
-  language: es
+  isEnabled: true,
+  defaultLocale: es
+  prefixDefaultLocale: true
   locales: 
-  - en
-  - es
+    en: en-US
+    es: es-ES
   textDirection: ltr
-wordpress:
-  domain: techfolio.local
-  enabled: true
 apps:
   store:
     isEnabled: true
@@ -222,7 +192,7 @@ apps:
         index: true
 
     category:
-      isEnabled: false
+      isEnabled: true
       pathname: 'store-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
         index: true
@@ -239,10 +209,9 @@ apps:
   projects:
     isEnabled: true
     postsPerPage: 6
-
     post:
       isEnabled: true
-      permalink: 'project/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      permalink: 'projects/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
         index: true
 
@@ -253,7 +222,7 @@ apps:
         index: true
 
     category:
-      isEnabled: false
+      isEnabled: true
       pathname: 'projects-category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
         index: true
@@ -273,7 +242,7 @@ apps:
 
     post:
       isEnabled: true
-      permalink: 'blog/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
         index: true
 
@@ -362,20 +331,20 @@ The generated files will be in the `dist` folder, ready to be deployed to your c
 
 Deploy TechFolio to Cloudflare (recommended):
 
-[![Cloudflare Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/techfolio)
+[![Cloudflare Deploy button](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/alexsrebernic/techfolio)
 
 
 #### Netlify Deployment
 
 Deploy TechFolio to Netlify:
 
-[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/techfolio)
+[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/alexsrebernic/techfolio)
 
 #### Vercel Deployment
 
 Deploy TechFolio to Vercel:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Ftechfolio)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%alexsrebernic%2Ftechfolio)
 
 <br>
 

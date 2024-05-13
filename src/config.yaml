@@ -18,7 +18,7 @@ metadata:
   openGraph:
     site_name: Alex Srebernic's portfolio
     images:
-      - url: '~/assets/images/default.png'
+      - url: '~/assets/images/techfolio.jpg'
         width: 1200
         height: 628
     type: website
@@ -35,9 +35,6 @@ i18n:
     en: en-US
     es: es-ES
   textDirection: ltr
-wordpress:
-  domain: techfolio.local
-  enabled: true
 apps:
   store:
     isEnabled: true
