@@ -19,7 +19,7 @@
 
 <img src="https://alexsrebernic.com/assets/techfolio-2.png" alt="TechFolio Theme Screenshot">
 
-[![Alex Srebernic](https://custom-icon-badges.demolab.com/badge/made%20by%20-Alex-Srebernic-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://yourwebsite.com)
+[![Alex Srebernic](https://custom-icon-badges.demolab.com/badge/made%20by%20-Alex-Srebernic-556bf2?style=flat-square&logo=yourlogo&logoColor=white&labelColor=101827)](https://alexsrebernic.com)
 [![License](https://img.shields.io/github/license/yourusername/techfolio?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/alexsrebernic/techfolio/blob/main/LICENSE.md)
 [![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/alexsrebernic)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/alexsrebernic/techfolio#contributing)
