@@ -35,6 +35,11 @@ export const getHeaderData = (locale) => {
         href: getLocalizedPermalink('/contact'),
         icon: 'contact',
       },
+      {
+        text: t('sidebar.cv'),
+        href: '/resume-da-en.pdf',
+        icon: 'curriculum',
+      },
     ],
   };
 };

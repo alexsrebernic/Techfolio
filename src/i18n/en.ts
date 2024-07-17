@@ -11,6 +11,7 @@ export const en  = {
     "store": "Store",
     "contact": "Contact",
     "blog": "Blog",
+    "cv": "Curriculum Vitae",
   },
   footer: {
     "built_in": "Built in",
