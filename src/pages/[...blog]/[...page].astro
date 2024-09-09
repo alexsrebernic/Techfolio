@@ -47,7 +47,7 @@ const metadata = {
       </p>
     </div>
     <section data-aos="fade-up">
-      <BlogList posts={page.data.map(p => p.locales[locale])}  />
+      <BlogList posts={page.data.map(p => p.locales[locale]).filter(post => post)}  />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next}  />
     </section>
     <!--
