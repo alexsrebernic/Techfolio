@@ -27,7 +27,7 @@ const {t} = useTranslations(locale)
   <article>
     <header class={post.image ? '' : ''}>
       <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
-        <Button variant="tertiary" class="px-3 md:px-3" href={getLocalizedBlogPermalink(locale)}>
+        <Button variant="tertiary" class=" md:px-3 mr-auto" href={getLocalizedBlogPermalink(locale)}>
           <Icon name="tabler:chevron-left" class="w-5 h-5 mr-1 -ml-1.5 rtl:-mr-1.5 rtl:ml-1" />
           {t('buttons.back_to_list')}
         </Button>
